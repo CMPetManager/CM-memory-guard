@@ -1,0 +1,876 @@
+openapi: 3.0.1
+info:
+  description: This specification is intended to describe the functionality of the
+    photo album application
+  title: Photo album OpenAPI specification
+  version: 0.0.1
+servers:
+- description: Dev server
+  url: http://localhost:8080
+paths:
+  /users/login:
+    get:
+      operationId: loginUser
+      parameters:
+      - description: The email for login
+        explode: true
+        in: query
+        name: email
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: The password for login
+        explode: true
+        in: query
+        name: password
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+          description: Successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Method for user authorization
+      tags:
+      - AuthController
+      x-accepts: application/json
+      x-tags:
+      - tag: AuthController
+  /users/registr:
+    post:
+      operationId: registrUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateDto'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserReadDto'
+          description: Successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Method for registration
+      tags:
+      - AuthController
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: AuthController
+  /users/refresh:
+    post:
+      description: refresh user's auth
+      operationId: refresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshDto'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+          description: Successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Method for refresh token
+      tags:
+      - AuthController
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: AuthController
+  /users/forgot-password:
+    put:
+      description: after this method user should check his email
+      operationId: processForgotPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordDto'
+      responses:
+        default:
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Forgot password
+      tags:
+      - AuthController
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: AuthController
+  /users/reset-password:
+    put:
+      description: Method for resete password
+      operationId: processResetPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasswordDto'
+      responses:
+        default:
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Reset password
+      tags:
+      - AuthController
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: AuthController
+  /albums/{coverId}:
+    delete:
+      description: Method for delete album
+      operationId: deleteAlbum
+      parameters:
+      - description: ID of the cover that needs to be deleted
+        explode: false
+        in: path
+        name: coverId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {}
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Delete album by cover ID
+      tags:
+      - AlbumController
+      x-accepts: application/json
+      x-tags:
+      - tag: AlbumController
+    get:
+      description: Find album by cover ID
+      operationId: getAlbumByCoverId
+      parameters:
+      - description: "cover id , which need to find an album"
+        explode: false
+        in: path
+        name: coverId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumReadDto'
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Find album by cover ID
+      tags:
+      - AlbumController
+      x-accepts: application/json
+      x-tags:
+      - tag: AlbumController
+  /albums:
+    post:
+      operationId: createAlbum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlbumCreateDto'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumReadDto'
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Method for created album
+      tags:
+      - AlbumController
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: AlbumController
+  /covers:
+    post:
+      operationId: createCover
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoverCreateDto'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoverReadDto'
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Method for created cover
+      tags:
+      - CoverController
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: CoverController
+  /covers/{userId}:
+    get:
+      operationId: getAllCoverByUserId
+      parameters:
+      - description: "user id , which need to find covers"
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Covers'
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Find covers by user ID
+      tags:
+      - CoverController
+      x-accepts: application/json
+      x-tags:
+      - tag: CoverController
+  /covers/{id}:
+    delete:
+      description: Method for delete cover
+      operationId: deleteCover
+      parameters:
+      - description: ID for delete cover
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {}
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Delete cover by cover ID
+      tags:
+      - CoverController
+      x-accepts: application/json
+      x-tags:
+      - tag: CoverController
+  /covers/update/{id}:
+    put:
+      description: Method for update cover
+      operationId: updateCover
+      parameters:
+      - description: id that need to update cover
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoverCreateDto'
+        description: Update an existent cover
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoverReadDto'
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Update cover
+      tags:
+      - CoverController
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: CoverController
+  /pages:
+    post:
+      operationId: createPage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageCreateDto'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageReadDto'
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Method for created page
+      tags:
+      - PageController
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: PageController
+  /pages/{id}:
+    delete:
+      description: Method for delete page
+      operationId: deletePage
+      parameters:
+      - description: ID for delete page
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {}
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Delete page by ID
+      tags:
+      - PageController
+      x-accepts: application/json
+      x-tags:
+      - tag: PageController
+  /pages/all/{albumId}:
+    get:
+      description: Find pages by album ID
+      operationId: getAllPagesByAlbumId
+      parameters:
+      - description: "album id , which need to find pages"
+        explode: false
+        in: path
+        name: albumId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pages'
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Find all pages by album ID
+      tags:
+      - PageController
+      x-accepts: application/json
+      x-tags:
+      - tag: PageController
+  /pages/one/{id}:
+    get:
+      description: Find page by ID
+      operationId: getPage
+      parameters:
+      - description: "id , which need to find page"
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageReadDto'
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Find page by ID
+      tags:
+      - PageController
+      x-accepts: application/json
+      x-tags:
+      - tag: PageController
+  /pages/update/{id}:
+    put:
+      description: Method for update page
+      operationId: updatePage
+      parameters:
+      - description: id that need to update page
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageCreateDto'
+        description: Update an existent page in the album
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageReadDto'
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Update cover
+      tags:
+      - PageController
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: PageController
+  /images:
+    post:
+      operationId: createImage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageCreateDto'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageReadDto'
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Method for created image
+      tags:
+      - ImageController
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: ImageController
+  /images/{id}:
+    delete:
+      description: Method for delete image
+      operationId: deleteImage
+      parameters:
+      - description: ID for delete image
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {}
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: something wrong
+      summary: Delete image by ID
+      tags:
+      - ImageController
+      x-accepts: application/json
+      x-tags:
+      - tag: ImageController
+components:
+  schemas:
+    UserCreateDto:
+      example:
+        password: MyNew_pass
+        name: theUser
+        email: egor@email.com
+      properties:
+        name:
+          example: theUser
+          type: string
+        email:
+          example: egor@email.com
+          type: string
+        password:
+          example: MyNew_pass
+          type: string
+      type: object
+    UserReadDto:
+      example:
+        password: MyNew_pass
+        name: theUser
+        id: 0
+        email: egor@email.com
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          example: theUser
+          type: string
+        email:
+          example: egor@email.com
+          type: string
+        password:
+          example: MyNew_pass
+          type: string
+      type: object
+    ForgotPasswordDto:
+      example:
+        email: egor@email.com
+      properties:
+        email:
+          example: egor@email.com
+          type: string
+      type: object
+    UpdatePasswordDto:
+      example:
+        password: password
+        token: token
+      properties:
+        token:
+          type: string
+        password:
+          type: string
+      type: object
+    JwtResponse:
+      example:
+        id: 0
+        accessToken: accessToken
+        email: egor@email.com
+        refreshToken: refreshToken
+      properties:
+        id:
+          format: int64
+          type: integer
+        email:
+          example: egor@email.com
+          type: string
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+      type: object
+    RefreshDto:
+      example:
+        refreshToken: refreshToken
+      properties:
+        refreshToken:
+          type: string
+      type: object
+    PageCreateDto:
+      example:
+        color: red
+        tag_people: "Andrew,Egor"
+        template_page: Horizontal image and text field below
+        description: some words about page
+        tag_place: "Germany,Berlin"
+        animation: slide
+      properties:
+        description:
+          example: some words about page
+          type: string
+        color:
+          example: red
+          type: string
+        template_page:
+          example: Horizontal image and text field below
+          type: string
+        tag_people:
+          example: "Andrew,Egor"
+          type: string
+        tag_place:
+          example: "Germany,Berlin"
+          type: string
+        animation:
+          example: slide
+          type: string
+      type: object
+    PageReadDto:
+      example:
+        color: red
+        tag_people: "Andrew,Egor"
+        album: null
+        template_page: Horizontal image and text field below
+        description: some words about page
+        id: 11
+        tag_place: "Germany,Berlin"
+        animation: slide
+      properties:
+        id:
+          example: 11
+          format: int64
+          type: integer
+        description:
+          example: some words about page
+          type: string
+        color:
+          example: red
+          type: string
+        template_page:
+          example: Horizontal image and text field below
+          type: string
+        tag_people:
+          example: "Andrew,Egor"
+          type: string
+        tag_place:
+          example: "Germany,Berlin"
+          type: string
+        animation:
+          example: slide
+          type: string
+        album:
+          $ref: '#/components/schemas/AlbumReadDto'
+      type: object
+    AlbumCreateDto:
+      example:
+        created_at: 2000-01-23T04:56:07.000+00:00
+        cover_id: 0
+      properties:
+        created_at:
+          format: date-time
+          type: string
+        cover_id:
+          format: int64
+          type: integer
+      type: object
+    AlbumReadDto:
+      example:
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 0
+        page:
+        - color: red
+          tag_people: "Andrew,Egor"
+          album: null
+          template_page: Horizontal image and text field below
+          description: some words about page
+          id: 11
+          tag_place: "Germany,Berlin"
+          animation: slide
+        - color: red
+          tag_people: "Andrew,Egor"
+          album: null
+          template_page: Horizontal image and text field below
+          description: some words about page
+          id: 11
+          tag_place: "Germany,Berlin"
+          animation: slide
+      properties:
+        id:
+          format: int64
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        page:
+          items:
+            $ref: '#/components/schemas/PageReadDto'
+          type: array
+      type: object
+    CoverCreateDto:
+      example:
+        description: place description
+        album_id: 0
+      properties:
+        description:
+          example: place description
+          type: string
+        album_id:
+          format: int64
+          type: integer
+      type: object
+    CoverReadDto:
+      example:
+        description: place description
+        album_id: 6
+        id: 0
+      properties:
+        id:
+          format: int64
+          type: integer
+        description:
+          example: place description
+          type: string
+        album_id:
+          format: int64
+          type: integer
+      type: object
+    ImageCreateDto:
+      example:
+        page_id: 0
+        link: photo link
+        cover_id: 6
+      properties:
+        link:
+          example: photo link
+          type: string
+        page_id:
+          format: int64
+          type: integer
+        cover_id:
+          format: int64
+          type: integer
+      type: object
+    ImageReadDto:
+      example:
+        page_id: 6
+        link: photo link
+        id: 0
+        cover_id: 1
+      properties:
+        id:
+          format: int64
+          type: integer
+        link:
+          example: photo link
+          type: string
+        page_id:
+          format: int64
+          type: integer
+        cover_id:
+          format: int64
+          type: integer
+      required:
+      - link
+      type: object
+    Covers:
+      items:
+        $ref: '#/components/schemas/CoverReadDto'
+      type: array
+    Pages:
+      items:
+        $ref: '#/components/schemas/PageReadDto'
+      type: array
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
