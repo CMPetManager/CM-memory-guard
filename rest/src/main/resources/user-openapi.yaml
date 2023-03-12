@@ -1,0 +1,245 @@
+openapi: 3.0.3
+info:
+  description: This specification is intended to describe the functionality of the
+    photo album application (User's part)
+  title: Photo album OpenAPI specification
+  version: 1.0.11
+servers:
+- description: Dev server
+  url: http://localhost:8080
+paths:
+  /users/login:
+    get:
+      summary: Method for user authorization
+      tags:
+        - AuthController
+      operationId: loginUser
+      parameters:
+        - name: email
+          in: query
+          description: The email for login
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/JwtResponse'
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          
+  /users/registr:
+    post:
+      summary: Method for registration 
+      tags:
+        - AuthController
+      operationId: registrUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/ReadUser'
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/refresh:
+    post:
+      summary: Method for refresh token 
+      tags:
+        - AuthController
+      description: refresh user's auth
+      operationId: refresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Refresh'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/JwtResponse'
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+  /users/forgot-password:
+    put:
+      summary: Forgot password
+      tags:
+        - AuthController
+      description: after this method user should check his email 
+      operationId: processForgotPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+      responses:
+        default:
+          description: successful operation
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      
+  /users/reset-password:
+    put:
+      summary: Reset password
+      tags:
+        - AuthController
+      description: Method for resete password 
+      operationId: processResetPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePassword'
+      responses:
+        default:
+          description: successful operation
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    CreateUser:
+      type: object
+      properties:
+        name:
+          type: string
+          example: theUser
+        email:
+          type: string
+          example: egor@email.com
+        password:
+          type: string
+          example: MyNew_pass
+    ReadUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: theUser
+        email:
+          type: string
+          example: egor@email.com
+        password:
+          type: string
+          example: MyNew_pass
+    ForgotPassword:
+      type: object
+      properties:
+        email:
+          type: string
+          example: egor@email.com
+    UpdatePassword:
+      type: object
+      properties:
+        token:
+          type: string
+        password:
+          type: string
+    JwtResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+          example: egor@email.com
+        accessToken:
+          type: string
+        refreshToken:
+          type: string  
+    Refresh:
+      type: object
+      properties:
+        refreshToken:
+          type: string  
+    ReadPage:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 11
+        description:
+          type: string
+          example: some words about page
+        color:
+          type: string
+          example: red
+        template_page:
+          type: string
+          example: Horizontal image and text field below
+        tag_people:
+          type: string
+          example: Andrew,Egor
+        tag_place:
+          type: string
+          example: Germany,Berlin
+        animation:
+          type: string
+          example: slide
+        album:
+          $ref: '#/components/schemas/AlbumReadDto'
+    AlbumReadDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        created_at:
+          type: string
+          format: date-time
+        page:
+          $ref: '#/components/schemas/Pages'
+    Pages:
+      type: array
+      items:
+         $ref: '#/components/schemas/ReadPage'
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string      
+          
