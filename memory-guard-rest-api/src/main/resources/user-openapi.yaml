@@ -8,7 +8,7 @@ servers:
 - description: Dev server
   url: http://localhost:8080
 paths:
-  /users/login:
+  /login:
     get:
       summary: Method for user authorization
       tags:
@@ -40,10 +40,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-          
-  /users/registr:
+
+  /users:
     post:
-      summary: Method for registration 
+      summary: Method for registration
       tags:
         - AuthController
       operationId: registrUser
@@ -65,7 +65,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /users/refresh:
+
+  /refresh-token:
     post:
       summary: Method for refresh token 
       tags:
@@ -89,9 +90,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'        
+                $ref: '#/components/schemas/Error'
+
   /users/forgot-password:
-    put:
+    post:
       summary: Forgot password
       tags:
         - AuthController
@@ -113,7 +115,7 @@ paths:
                 $ref: '#/components/schemas/Error'
       
   /users/reset-password:
-    put:
+    patch:
       summary: Reset password
       tags:
         - AuthController
@@ -133,6 +135,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
 components:
   schemas:
     CreateUser:

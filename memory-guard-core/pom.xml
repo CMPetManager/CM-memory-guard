@@ -7,9 +7,12 @@
         <groupId>com.catchthemoment</groupId>
         <version>0.0.1</version>
     </parent>
+    <groupId></groupId>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>domain</artifactId>
+    <artifactId>memory-guard-core</artifactId>
     <packaging>jar</packaging>
+
+
 
 </project>

@@ -29,8 +29,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReadAlbum' 
-        '400':
+                $ref: '#/components/schemas/ReadAlbum'
+        '500':
           description: something wrong
           content:
             application/json:
@@ -168,8 +168,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  
-  /covers/{id}:
     put:
       summary: Update cover
       tags:
@@ -314,8 +312,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-                
-  /pages/{id}:
     put:
       summary: Update cover
       tags:

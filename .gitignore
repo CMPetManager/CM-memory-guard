@@ -7,4 +7,10 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-/rest/target/
+*/target/
+*/.classpath
+*/.project
+*/.settings
+*.iml
+*/.factorypath
+/.settings/
