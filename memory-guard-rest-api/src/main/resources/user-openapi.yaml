@@ -5,14 +5,14 @@ info:
   title: Photo album OpenAPI specification
   version: 1.0.11
 servers:
-- description: Dev server
-  url: http://localhost:8080
+  - description: Dev server
+    url: http://localhost:8080
 paths:
   /login:
-    get:
+    post:
       summary: Method for user authorization
       tags:
-        - AuthController
+        - SecurityController
       operationId: loginUser
       parameters:
         - name: email
@@ -23,7 +23,7 @@ paths:
             type: string
         - name: password
           in: query
-          description: The password for login 
+          description: The password for login
           required: true
           schema:
             type: string
@@ -33,7 +33,7 @@ paths:
           content:
             application/json:
               schema:
-               $ref: '#/components/schemas/JwtResponse'
+                $ref: '#/components/schemas/LoginResponse'
         '400':
           description: something wrong
           content:
@@ -45,20 +45,20 @@ paths:
     post:
       summary: Method for registration
       tags:
-        - AuthController
-      operationId: registrUser
+        - SecurityController
+      operationId: registrationUser
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUser'
+              $ref: '#/components/schemas/User'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-               $ref: '#/components/schemas/ReadUser'
+                $ref: '#/components/schemas/User'
         '400':
           description: something wrong
           content:
@@ -68,23 +68,23 @@ paths:
 
   /refresh-token:
     post:
-      summary: Method for refresh token 
+      summary: Method for refresh token
       tags:
-        - AuthController
+        - SecurityController
       description: refresh user's auth
       operationId: refresh
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Refresh'
+              $ref: '#/components/schemas/RefreshToken'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-               $ref: '#/components/schemas/JwtResponse'
+                $ref: '#/components/schemas/LoginResponse'
         '400':
           description: something wrong
           content:
@@ -96,8 +96,8 @@ paths:
     post:
       summary: Forgot password
       tags:
-        - AuthController
-      description: after this method user should check his email 
+        - SecurityController
+      description: after this method user should check his email
       operationId: processForgotPassword
       requestBody:
         content:
@@ -113,13 +113,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-      
+
   /users/reset-password:
     patch:
       summary: Reset password
       tags:
-        - AuthController
-      description: Method for resete password 
+        - SecurityController
+      description: Method for reset password
       operationId: processResetPassword
       requestBody:
         content:
@@ -138,19 +138,7 @@ paths:
 
 components:
   schemas:
-    CreateUser:
-      type: object
-      properties:
-        name:
-          type: string
-          example: theUser
-        email:
-          type: string
-          example: egor@email.com
-        password:
-          type: string
-          example: MyNew_pass
-    ReadUser:
+    User:
       type: object
       properties:
         id:
@@ -178,24 +166,36 @@ components:
           type: string
         password:
           type: string
-    JwtResponse:
+
+    LoginResponse:
       type: object
       properties:
-        id:
+        userId:
           type: integer
           format: int64
-        email:
-          type: string
-          example: egor@email.com
-        accessToken:
-          type: string
-        refreshToken:
-          type: string  
-    Refresh:
+        token:
+          $ref: '#/components/schemas/Token'
+
+    Token:
       type: object
       properties:
+        accessToken:
+          type: string
+        expirationIn:
+          type: integer
+          format: int64
         refreshToken:
-          type: string  
+          type: string
+
+    RefreshToken:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        refreshToken:
+          type: string
+
     ReadPage:
       type: object
       properties:
@@ -209,27 +209,27 @@ components:
         color:
           type: string
           example: red
-        template_page:
+        templatePage:
           type: string
           example: Horizontal image and text field below
-        tag_people:
+        tagPeople:
           type: string
           example: Andrew,Egor
-        tag_place:
+        tagPlace:
           type: string
           example: Germany,Berlin
         animation:
           type: string
           example: slide
         album:
-          $ref: '#/components/schemas/AlbumReadDto'
-    AlbumReadDto:
+          $ref: '#/components/schemas/ReadAlbum'
+    ReadAlbum:
       type: object
       properties:
         id:
           type: integer
           format: int64
-        created_at:
+        createdAt:
           type: string
           format: date-time
         page:
@@ -237,7 +237,7 @@ components:
     Pages:
       type: array
       items:
-         $ref: '#/components/schemas/ReadPage'
+        $ref: '#/components/schemas/ReadPage'
     Error:
       type: object
       properties:

@@ -7,11 +7,17 @@
         <groupId>com.catchthemoment</groupId>
         <version>0.0.1</version>
     </parent>
-    <groupId></groupId>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>memory-guard-core</artifactId>
     <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
 
 
 
