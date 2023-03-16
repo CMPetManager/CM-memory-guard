@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>memory-guard</artifactId>
+        <groupId>com.catchthemoment</groupId>
+        <version>0.0.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>memory-guard-rest-api</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <configuration>
+                    <generatorName>spring</generatorName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generateUsersApi</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/user-openapi.yaml</inputSpec>
+                            <apiPackage>com.catchthemoment.controller</apiPackage>
+                            <modelPackage>com.catchthemoment.model</modelPackage>
+                            <configOptions>
+                                <oas3>true</oas3>
+                                <useTags>true</useTags>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <interfaceOnly>false</interfaceOnly>
+                                <enableBuilderSupport>true</enableBuilderSupport>
+                                <dateLibrary>java8</dateLibrary>
+                                <serialzableModel>true</serialzableModel>
+                                <delegatePattern>true</delegatePattern>
+                                <simpleFluentPattern>true</simpleFluentPattern>
+                                <collectionFluentPattern>true</collectionFluentPattern>
+                                <openApiNullable>false</openApiNullable>
+                                <unhandledException>true</unhandledException>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generateAppApi</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/app-openapi.yaml</inputSpec>
+                            <apiPackage>com.catchthemoment.controller</apiPackage>
+                            <modelPackage>com.catchthemoment.model</modelPackage>
+                            <configOptions>
+                                <oas3>true</oas3>
+                                <useTags>true</useTags>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <interfaceOnly>false</interfaceOnly>
+                                <enableBuilderSupport>true</enableBuilderSupport>
+                                <dateLibrary>java8</dateLibrary>
+                                <serialzableModel>true</serialzableModel>
+                                <delegatePattern>true</delegatePattern>
+                                <simpleFluentPattern>true</simpleFluentPattern>
+                                <collectionFluentPattern>true</collectionFluentPattern>
+                                <openApiNullable>false</openApiNullable>
+                                <unhandledException>true</unhandledException>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

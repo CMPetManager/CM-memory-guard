@@ -1,0 +1,506 @@
+openapi: 3.0.3
+info:
+  description: This specification is intended to describe the functionality of the
+    photo album application (User's part)
+  title: Photo album OpenAPI specification
+  version: 1.0.11
+servers:
+  - description: Dev server
+    url: http://localhost:8080
+paths:
+  /albums:
+    post:
+      summary: Method for created album
+      tags:
+        - AlbumController
+      operationId: createAlbum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAlbum'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadAlbum'
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /albums/{coverId}:
+    get:
+      tags:
+        - AlbumController
+      summary: Find album by coverId
+      description: Find album by coverId
+      operationId: getAlbumByCoverId
+      parameters:
+        - name: coverId
+          in: path
+          description: coverId , which need to find an album
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadAlbum'
+        '404':
+          description: not found
+        '500':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - AlbumController
+      summary: Delete album by coverId
+      description: Method for delete album
+      operationId: deleteAlbum
+      parameters:
+        - name: coverId
+          in: path
+          description: ID of the cover that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /covers:
+    post:
+      summary: Method for created cover
+      tags:
+        - CoverController
+      operationId: createCover
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReadCover'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReadCover'
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /covers/{userId}:
+    get:
+      tags:
+        - CoverController
+      summary: Find covers by userId
+      operationId: getAllCoverByUserId
+      parameters:
+        - name: userId
+          in: path
+          description: userId , which need to find covers
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Covers'
+        '404':
+          description: not found
+        '500':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /covers/{coverId}:
+    put:
+      summary: Update cover
+      tags:
+        - CoverController
+      description: Method for update cover
+      operationId: updateCover
+      parameters:
+        - name: coverId
+          in: path
+          description: id that need to update cover
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent cover
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReadCover'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReadCover'
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - CoverController
+      summary: Delete cover by coverId
+      description: Method for delete cover
+      operationId: deleteCover
+      parameters:
+        - name: coverId
+          in: path
+          description: ID for delete cover
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /pages:
+    post:
+      summary: Method for created page
+      tags:
+        - PageController
+      operationId: createPage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReadPage'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReadPage'
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /pages/{albumId}:
+    get:
+      tags:
+        - PageController
+      summary: Find all pages by albumId
+      description: Find pages by albumId
+      operationId: getAllPagesByAlbumId
+      parameters:
+        - name: albumId
+          in: path
+          description: albumId , which need to find pages
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pages'
+        '404':
+          description: not found
+        '500':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /pages/{id}:
+    get:
+      tags:
+        - PageController
+      summary: Find page by ID
+      description: Find page by ID
+      operationId: getPage
+      parameters:
+        - name: id
+          in: path
+          description: id , which need to find page
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReadPage'
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update cover
+      tags:
+        - PageController
+      description: Method for update page
+      operationId: updatePage
+      parameters:
+        - name: id
+          in: path
+          description: id that need to update page
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent page in the album
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReadPage'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReadPage'
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - PageController
+      summary: Delete page by id
+      description: Method for delete page
+      operationId: deletePage
+      parameters:
+        - name: id
+          in: path
+          description: id for delete page
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /images:
+    post:
+      summary: Method for created image
+      tags:
+        - ImageController
+      operationId: createImage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReadImage'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateReadImage'
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /images/{id}:
+    delete:
+      tags:
+        - ImageController
+      summary: Delete image by ID
+      description: Method for delete image
+      operationId: deleteImage
+      parameters:
+        - name: id
+          in: path
+          description: ID for delete image
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    CreateReadPage:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 11
+        description:
+          type: string
+          example: some words about page
+        color:
+          type: string
+          example: red
+        templatePage:
+          type: string
+          example: Horizontal image and text field below
+        tagPeople:
+          type: string
+          example: Andrew,Egor
+        tagPlace:
+          type: string
+          example: Germany,Berlin
+        animation:
+          type: string
+          example: slide
+        album:
+          $ref: '#/components/schemas/ReadAlbum'
+
+    CreateAlbum:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        coverId:
+          type: integer
+          format: int64
+
+    ReadAlbum:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+          format: date-time
+        page:
+          $ref: '#/components/schemas/Pages'
+
+    CreateReadCover:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        description:
+          type: string
+          example: place description
+        albumId:
+          type: integer
+          format: int64
+
+    CreateReadImage:
+      type: object
+      required:
+        - link
+      properties:
+        id:
+          type: integer
+          format: int64
+        link:
+          type: string
+          example: photo link
+        pageId:
+          type: integer
+          format: int64
+        coverId:
+          type: integer
+          format: int64
+
+    Covers:
+      type: array
+      items:
+        $ref: '#/components/schemas/CreateReadCover'
+
+    Pages:
+      type: array
+      items:
+        $ref: '#/components/schemas/CreateReadPage'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+          
