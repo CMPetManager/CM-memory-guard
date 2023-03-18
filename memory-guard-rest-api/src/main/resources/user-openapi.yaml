@@ -153,6 +153,8 @@ components:
         password:
           type: string
           example: MyNew_pass
+        role:
+          $ref: '#/components/schemas/Role'
     ForgotPassword:
       type: object
       properties:
@@ -234,6 +236,11 @@ components:
           format: date-time
         page:
           $ref: '#/components/schemas/Pages'
+
+    Role:
+      type: string
+      enum:
+        - ROLE_USER
     Pages:
       type: array
       items:
