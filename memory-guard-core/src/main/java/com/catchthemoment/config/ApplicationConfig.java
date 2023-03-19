@@ -1,5 +1,6 @@
 package com.catchthemoment.config;
 
+import com.catchthemoment.security.JwtTokenFilter;
 import com.catchthemoment.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
@@ -14,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -57,7 +59,8 @@ public class ApplicationConfig {
                 .requestMatchers("/login", "/users", "/users/**", "/refresh-token").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .anonymous().disable();
+                .anonymous().disable()
+                .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
