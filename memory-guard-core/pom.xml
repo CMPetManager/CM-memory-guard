@@ -12,17 +12,22 @@
     <artifactId>memory-guard-core</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <jjwt.version>0.11.5</jjwt.version>
+        <module.version>0.0.1</module.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.catchthemoment</groupId>
             <artifactId>memory-guard-rest-api</artifactId>
-            <version>0.0.1</version>
+            <version>${module.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.catchthemoment</groupId>
             <artifactId>memory-guard-domain</artifactId>
-            <version>0.0.1</version>
+            <version>${module.version}</version>
         </dependency>
 
         <dependency>
@@ -37,8 +42,7 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
 
         <dependency>
@@ -46,6 +50,25 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
 </project>

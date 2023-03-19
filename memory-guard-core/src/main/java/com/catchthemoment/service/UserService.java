@@ -11,4 +11,7 @@ public class UserService {
     }
 
 
+    public User getById(Long userId) {
+        return null;
+    }
 }
