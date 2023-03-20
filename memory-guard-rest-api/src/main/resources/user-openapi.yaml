@@ -13,20 +13,12 @@ paths:
       summary: Method for user authorization
       tags:
         - SecurityController
-      operationId: loginUser
-      parameters:
-        - name: email
-          in: query
-          description: The email for login
-          required: true
-          schema:
-            type: string
-        - name: password
-          in: query
-          description: The password for login
-          required: true
-          schema:
-            type: string
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
       responses:
         '200':
           description: Successful operation
@@ -155,6 +147,16 @@ components:
           example: MyNew_pass
         role:
           $ref: '#/components/schemas/Role'
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          example: egor@email.com
+        password:
+          type: string
+          example: MyNew_pass
+
     ForgotPassword:
       type: object
       properties:

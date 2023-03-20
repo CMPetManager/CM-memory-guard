@@ -65,13 +65,12 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public LoginResponse refreshUserTokens(String refreshToken) {
+    public LoginResponse refreshUserTokens(String refreshToken,Long userId) {
         LoginResponse loginResponse = new LoginResponse();
 
         if (!validateToken(refreshToken)) {
             throw new ServiceProcessingException();
         }
-        Long userId = Long.valueOf(getId(refreshToken));
         User user = userService.getById(userId);
         Token token = createTokenForResponse(userId, user);
 
