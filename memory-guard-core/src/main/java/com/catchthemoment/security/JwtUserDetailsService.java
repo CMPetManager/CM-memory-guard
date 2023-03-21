@@ -1,5 +1,6 @@
 package com.catchthemoment.security;
 
+import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.User;
 import com.catchthemoment.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User foundUser = userService.getByUsername(email).orElseThrow();
+        User foundUser = userService.getByEmail(email);
         return JwtEntityFactory.create(foundUser);
     }
 }

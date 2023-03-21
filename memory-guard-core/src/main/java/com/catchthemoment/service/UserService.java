@@ -1,6 +1,8 @@
 package com.catchthemoment.service;
 
+import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.User;
+import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,12 +12,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
-    public Optional<User> getByUsername(String email) {
-        return null;
+    private final UserRepository userRepository;
+
+    public User getByEmail(String email) {
+        return userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new ServiceProcessingException("User "+ email + " not found"));
     }
 
     public User getById(Long userId) {
-        return null;
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ServiceProcessingException("User with such id not found"));
     }
 
 
