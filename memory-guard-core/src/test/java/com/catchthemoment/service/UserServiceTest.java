@@ -24,7 +24,7 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    void getById() {
+    void getByIdIfUserExists() {
         User expectedResult = getUser();
         doReturn(Optional.of(expectedResult)).when(userRepository).findById(USER_ID);
 
@@ -67,6 +67,7 @@ class UserServiceTest {
         user.setName("Ivan");
         user.setEmail("hello@gmail.com");
         user.setPassword("111");
+
         return user;
     }
 

@@ -1,4 +1,4 @@
-package com.catchthemoment.security;
+package com.catchthemoment.controller.security;
 
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.LoginResponse;
@@ -13,7 +13,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -66,7 +65,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public LoginResponse refreshUserTokens(String refreshToken,Long userId) {
+    public LoginResponse refreshUserTokens(String refreshToken, Long userId) {
         LoginResponse loginResponse = new LoginResponse();
 
         if (!validateToken(refreshToken)) {
@@ -86,6 +85,7 @@ public class JwtTokenProvider {
         token.setAccessToken(createAccessToken(userId, user.getEmail(), user.getRole()));
         token.setRefreshToken(createRefreshToken(userId, user.getEmail()));
         token.setExpirationIn(jwtProperties.getAccess());
+
         return token;
     }
 
@@ -95,6 +95,7 @@ public class JwtTokenProvider {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
+
         return !claims.getBody().getExpiration().before(new Date());
     }
 
@@ -122,6 +123,7 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         String email = getEmail(token);
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 }

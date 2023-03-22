@@ -1,7 +1,7 @@
 package com.catchthemoment.config;
 
-import com.catchthemoment.security.JwtTokenFilter;
-import com.catchthemoment.security.JwtTokenProvider;
+import com.catchthemoment.controller.security.JwtTokenFilter;
+import com.catchthemoment.controller.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;

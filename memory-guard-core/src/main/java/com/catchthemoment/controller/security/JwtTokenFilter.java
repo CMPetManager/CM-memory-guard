@@ -1,4 +1,4 @@
-package com.catchthemoment.security;
+package com.catchthemoment.controller.security;
 
 import com.catchthemoment.exception.ServiceProcessingException;
 import jakarta.servlet.FilterChain;
@@ -34,7 +34,8 @@ public class JwtTokenFilter extends GenericFilterBean {
                 if (authentication != null) {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
-            } catch (ServiceProcessingException ignored) {}
+            } catch (ServiceProcessingException ignored) {
+            }
         }
     }
 }

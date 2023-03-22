@@ -1,4 +1,4 @@
-package com.catchthemoment.security;
+package com.catchthemoment.controller.security;
 
 import com.catchthemoment.model.Role;
 import com.catchthemoment.model.User;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class JwtEntityFactory {
 
-    public static JwtEntity create(User user){
+    public static JwtEntity create(User user) {
         return new JwtEntity(
                 user.getId(),
                 user.getName(),

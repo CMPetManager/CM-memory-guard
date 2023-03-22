@@ -1,6 +1,5 @@
-package com.catchthemoment.security;
+package com.catchthemoment.controller.security;
 
-import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.User;
 import com.catchthemoment.service.UserService;
 import lombok.RequiredArgsConstructor;

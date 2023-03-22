@@ -1,4 +1,4 @@
-package com.catchthemoment.security;
+package com.catchthemoment.controller.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,6 @@ public class JwtEntity implements UserDetails {
     private final String email;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
-
 
     @Override
     public String getUsername() {
