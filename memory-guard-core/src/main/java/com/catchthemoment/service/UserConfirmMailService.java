@@ -1,33 +1,33 @@
 package com.catchthemoment.service;
 
-import com.catchthemoment.dto.ConfirmationEmailDTO;
-import com.catchthemoment.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserConfirmMailService implements UserService {
-    private final ServiceMail serviceMail;
-    @Override
-    public ResponseEntity<?> saveUser(UserDTO userDTO) {
+public class UserConfirmMailService {
+    private final JavaMailSender mailSender;
 
-        ConfirmationEmailDTO confirmationEmailDTO = new ConfirmationEmailDTO(userDTO.name());
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(userDTO.email());
-        mailMessage.setSubject("Complete Registration!");
-        mailMessage.setText("To confirm your account, please click here : "
-                + "http://localhost:8080/confirm-account?token=" + confirmationEmailDTO.confirmationToken());
-        serviceMail.sendMail(mailMessage);
-
-        return ResponseEntity.ok("Verify email by the link sent on your email address");
-
+    public String sendConfirmationEmail(String email) {
+        SimpleMailMessage mailMessage = createConfiramtionMail(email);
+        mailSender.send(mailMessage);
+//todo return confirmation token
+        return null;
     }
 
-    @Override
-    public ResponseEntity<?> confirmEmail(ConfirmationEmailDTO emailDTO) {
+    private SimpleMailMessage createConfiramtionMail(String email) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setSubject("Complete Registration!");
+        mailMessage.setText("To confirm your account, please click here : "
+                + "http://localhost:8080/confirm-account?token=" + createConfirmationToken());
+        return mailMessage;
+    }
+
+    private String createConfirmationToken() {
+//        todo
         return null;
     }
 }
