@@ -19,12 +19,12 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest loginRequest) {
         LoginResponse loginResponse = new LoginResponse();
-        Token token = new Token();
         User foundUser = userService.getByEmail(loginRequest.getEmail());
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
+        Token token = new Token();
         token.setAccessToken(jwtTokenProvider.createAccessToken(foundUser.getId(),
                 foundUser.getEmail(),
                 foundUser.getRole()));

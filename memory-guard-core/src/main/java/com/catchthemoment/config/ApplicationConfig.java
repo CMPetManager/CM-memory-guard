@@ -25,16 +25,19 @@ public class ApplicationConfig {
     private final JwtTokenProvider tokenProvider;
     private final ApplicationContext applicationContext;
 
+//    fixme extract to security config
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+//    fixme extract to security config
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
+//    fixme extract to security config
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity

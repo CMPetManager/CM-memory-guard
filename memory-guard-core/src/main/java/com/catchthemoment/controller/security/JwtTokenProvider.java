@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 
-@Service
+@Service //fixme -> @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
@@ -80,6 +80,7 @@ public class JwtTokenProvider {
         return loginResponse;
     }
 
+//    fixme make private
     public Token createTokenForResponse(Long userId, User user) {
         Token token = new Token();
         token.setAccessToken(createAccessToken(userId, user.getEmail(), user.getRole()));
@@ -99,6 +100,7 @@ public class JwtTokenProvider {
         return !claims.getBody().getExpiration().before(new Date());
     }
 
+    // fixme delete
     private String getId(String token) {
         return Jwts
                 .parserBuilder()

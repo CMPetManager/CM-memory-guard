@@ -2,20 +2,27 @@ package com.catchthemoment.controller;
 
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.Error;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(value = {ServiceProcessingException.class, AccessDeniedException.class})
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public Error handleAccessDenied() {
+//    fixme make return ResponseEntity<Error>
+//    fixme put particular exception as args and process it in proper - no hardcode
+    @ExceptionHandler
+    public Error handleAccessDenied(ServiceProcessingException spe) {
         Error error = new Error();
         error.setMessage("Access denied");
         return error;
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Error> handleAll(Exception ex) {
+        if(ex.getClass().isAssignableFrom(ServiceProcessingException.class)) {
+//            make it nice
+        }
+        return ResponseEntity.badRequest().build();
     }
 }
