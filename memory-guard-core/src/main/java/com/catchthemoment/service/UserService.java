@@ -6,10 +6,12 @@ import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.User;
 import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -17,15 +19,21 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
     public User getByEmail(String email) throws ServiceProcessingException {
-        return userRepository.findUserByEmail(email)
+        log.info("Request to get a user by email");
+        User currentUser = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.USER_NOT_FOUND.getCode(),
                         ApplicationErrorEnum.USER_NOT_FOUND.getMessage()));
+        log.info("User successfully found");
+        return currentUser;
     }
 
     public User getById(Long userId) throws ServiceProcessingException {
-        return userRepository.findById(userId)
+        log.info("Request to get a user by ID");
+        User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.USER_NOT_FOUND.getCode(),
                         ApplicationErrorEnum.USER_NOT_FOUND.getMessage()));
+        log.info("User successfully found");
+        return currentUser;
     }
 
     @Override

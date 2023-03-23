@@ -20,11 +20,17 @@ public class AuthController implements SecurityControllerApiDelegate {
 
 	@Override
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws ServiceProcessingException {
-		return ResponseEntity.ok(authService.login(loginRequest));
+		log.info("Received an authentication request by email: {}",loginRequest.getEmail());
+		ResponseEntity<LoginResponse> response = ResponseEntity.ok(authService.login(loginRequest));
+		log.info("Authentication successful");
+		return response;
 	}
 
 	@Override
 	public ResponseEntity<LoginResponse> refresh(@RequestBody RefreshToken refreshToken) throws ServiceProcessingException {
-		return ResponseEntity.ok(authService.refresh(refreshToken));
+		log.info("Received a request to refresh a token");
+		ResponseEntity<LoginResponse> response = ResponseEntity.ok(authService.refresh(refreshToken));
+		log.info("Tokens have been successfully updated");
+		return response;
 	}
 }

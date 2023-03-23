@@ -5,10 +5,12 @@ import com.catchthemoment.model.*;
 import com.catchthemoment.auth.JwtTokenManager;
 import com.catchthemoment.config.JwtProperties;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -19,15 +21,19 @@ public class AuthService {
     private final JwtProperties jwtProperties;
 
     public LoginResponse login(LoginRequest loginRequest) throws ServiceProcessingException {
-        LoginResponse loginResponse = new LoginResponse();
+
         User currentUser = userService.getByEmail(loginRequest.getEmail());
 
+        log.info("The beginning of authentication");
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        log.info("Authentication successfully");
 
+        log.info("Create object for response");
+        LoginResponse loginResponse = new LoginResponse();
         loginResponse.setUserId(currentUser.getId());
         loginResponse.setToken(getToken(currentUser));
-
+        log.info("LoginResponse successfully created");
         return loginResponse;
     }
 
