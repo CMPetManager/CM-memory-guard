@@ -1,8 +1,9 @@
 package com.catchthemoment.service;
 
+import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.*;
-import com.catchthemoment.controller.security.JwtTokenProvider;
-import com.catchthemoment.service.props.JwtProperties;
+import com.catchthemoment.auth.JwtTokenManager;
+import com.catchthemoment.config.JwtProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,7 +23,7 @@ class AuthServiceTest {
     @Mock
     private UserService userService;
     @Mock
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtTokenManager jwtTokenManager;
     @Mock
     private AuthenticationManager authenticationManager;
     @Mock
@@ -31,14 +32,14 @@ class AuthServiceTest {
     private AuthService authService;
 
     @Test
-    void login() {
+    void login() throws ServiceProcessingException {
         LoginResponse expectedResult = getLoginResponse();
         LoginRequest loginRequest = getLoginRequest();
         User user = getUser();
         doReturn(user).when(userService).getByEmail(loginRequest.getEmail());
-        doReturn(expectedResult.getToken().getAccessToken()).when(jwtTokenProvider)
+        doReturn(expectedResult.getToken().getAccessToken()).when(jwtTokenManager)
                 .createAccessToken(user.getId(), user.getEmail(), user.getRole());
-        doReturn(expectedResult.getToken().getRefreshToken()).when(jwtTokenProvider)
+        doReturn(expectedResult.getToken().getRefreshToken()).when(jwtTokenManager)
                 .createRefreshToken(user.getId(), user.getEmail());
         doReturn(expectedResult.getToken().getExpirationIn()).when(jwtProperties).getAccess();
 
@@ -49,10 +50,10 @@ class AuthServiceTest {
     }
 
     @Test
-    void refresh() {
+    void refresh() throws ServiceProcessingException {
         LoginResponse expectedResult = getLoginResponse();
         RefreshToken refreshToken = getRefreshToken();
-        doReturn(expectedResult).when(jwtTokenProvider)
+        doReturn(expectedResult).when(jwtTokenManager)
                 .refreshUserTokens(refreshToken.getRefreshToken(), refreshToken.getUserId());
 
         LoginResponse actualResult = authService.refresh(refreshToken);
@@ -62,9 +63,9 @@ class AuthServiceTest {
     }
 
     @Test
-    void refreshFailed() {
+    void refreshFailed() throws ServiceProcessingException {
         RefreshToken refreshToken = getRefreshToken();
-        doReturn(null).when(jwtTokenProvider).refreshUserTokens(any(), any());
+        doReturn(null).when(jwtTokenManager).refreshUserTokens(any(), any());
 
         LoginResponse actualResult = authService.refresh(refreshToken);
 

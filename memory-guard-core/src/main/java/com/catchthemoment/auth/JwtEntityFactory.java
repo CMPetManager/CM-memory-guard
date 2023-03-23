@@ -1,4 +1,4 @@
-package com.catchthemoment.controller.security;
+package com.catchthemoment.auth;
 
 import com.catchthemoment.model.Role;
 import com.catchthemoment.model.User;

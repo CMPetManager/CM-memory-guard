@@ -1,12 +1,13 @@
-package com.catchthemoment.controller.security;
+package com.catchthemoment.auth;
 
+import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.LoginResponse;
 import com.catchthemoment.model.Role;
 import com.catchthemoment.model.Token;
 import com.catchthemoment.model.User;
 import com.catchthemoment.service.UserService;
-import com.catchthemoment.service.props.JwtProperties;
+import com.catchthemoment.config.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -16,18 +17,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 
-@Service //fixme -> @Component
+@Component
 @RequiredArgsConstructor
-public class JwtTokenProvider {
+public class JwtTokenManager {
 
     private final JwtProperties jwtProperties;
-    private final UserDetailsService userDetailsService;
     private final UserService userService;
     private Key key;
 
@@ -65,11 +64,12 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public LoginResponse refreshUserTokens(String refreshToken, Long userId) {
+    public LoginResponse refreshUserTokens(String refreshToken, Long userId) throws ServiceProcessingException {
         LoginResponse loginResponse = new LoginResponse();
 
         if (!validateToken(refreshToken)) {
-            throw new ServiceProcessingException();
+            throw new ServiceProcessingException(ApplicationErrorEnum.ACCESS_DENIED.getCode(),
+                    ApplicationErrorEnum.ACCESS_DENIED.getMessage());
         }
         User user = userService.getById(userId);
         Token token = createTokenForResponse(userId, user);
@@ -78,16 +78,6 @@ public class JwtTokenProvider {
         loginResponse.setToken(token);
 
         return loginResponse;
-    }
-
-//    fixme make private
-    public Token createTokenForResponse(Long userId, User user) {
-        Token token = new Token();
-        token.setAccessToken(createAccessToken(userId, user.getEmail(), user.getRole()));
-        token.setRefreshToken(createRefreshToken(userId, user.getEmail()));
-        token.setExpirationIn(jwtProperties.getAccess());
-
-        return token;
     }
 
     public boolean validateToken(String token) {
@@ -100,16 +90,20 @@ public class JwtTokenProvider {
         return !claims.getBody().getExpiration().before(new Date());
     }
 
-    // fixme delete
-    private String getId(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("id")
-                .toString();
+    public Authentication getAuthentication(String token) {
+        String email = getEmail(token);
+        UserDetails userDetails = userService.loadUserByUsername(email);
+
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    private Token createTokenForResponse(Long userId, User user) {
+        Token token = new Token();
+        token.setAccessToken(createAccessToken(userId, user.getEmail(), user.getRole()));
+        token.setRefreshToken(createRefreshToken(userId, user.getEmail()));
+        token.setExpirationIn(jwtProperties.getAccess());
+
+        return token;
     }
 
     private String getEmail(String token) {
@@ -120,13 +114,6 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
-    }
-
-    public Authentication getAuthentication(String token) {
-        String email = getEmail(token);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 }
 

@@ -1,4 +1,4 @@
-package com.catchthemoment.controller.security;
+package com.catchthemoment.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

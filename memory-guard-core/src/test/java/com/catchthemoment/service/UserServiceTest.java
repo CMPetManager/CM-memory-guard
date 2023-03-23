@@ -24,7 +24,7 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    void getByIdIfUserExists() {
+    void getByIdIfUserExists() throws ServiceProcessingException {
         User expectedResult = getUser();
         doReturn(Optional.of(expectedResult)).when(userRepository).findById(USER_ID);
 
@@ -43,7 +43,7 @@ class UserServiceTest {
     }
 
     @Test
-    void getByEmailIfUserExists() {
+    void getByEmailIfUserExists() throws ServiceProcessingException {
         User expectedResult = getUser();
         doReturn(Optional.of(expectedResult)).when(userRepository).findUserByEmail(expectedResult.getEmail());
 

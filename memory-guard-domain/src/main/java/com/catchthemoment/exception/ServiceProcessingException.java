@@ -1,17 +1,18 @@
 package com.catchthemoment.exception;
 
-public class ServiceProcessingException extends RuntimeException {
+import lombok.Getter;
+
+@Getter
+public class ServiceProcessingException extends Exception {
 
     private int code;
     private String message;
 
-    public ServiceProcessingException() {
-        super();
+
+    public ServiceProcessingException(int code, String message) {
+        this.code = code;
+        this.message = message;
     }
 
-    public ServiceProcessingException(String message) {
-        super(message);
-    }
 
-    // todo create constructor
 }

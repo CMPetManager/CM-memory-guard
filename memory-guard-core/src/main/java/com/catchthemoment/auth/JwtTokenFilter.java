@@ -1,6 +1,5 @@
-package com.catchthemoment.controller.security;
+package com.catchthemoment.auth;
 
-import com.catchthemoment.exception.ServiceProcessingException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -16,7 +15,7 @@ import java.io.IOException;
 @AllArgsConstructor
 public class JwtTokenFilter extends GenericFilterBean {
 
-    private final JwtTokenProvider tokenProvider;
+    private final JwtTokenManager jwtTokenManager;
 
     @Override
     public void doFilter(ServletRequest servletRequest,
@@ -25,18 +24,16 @@ public class JwtTokenFilter extends GenericFilterBean {
 
         String bearerToken = ((HttpServletRequest) servletRequest).getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-//            bearerToken = bearerToken.replace("Bearer ", "");
-            bearerToken = bearerToken.substring(7);
+            bearerToken = bearerToken.replace("Bearer ", "");
         }
 
-        if (bearerToken != null && tokenProvider.validateToken(bearerToken)) {
-            try {
-                Authentication authentication = tokenProvider.getAuthentication(bearerToken);
-                if (authentication != null) {
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-            } catch (ServiceProcessingException ignored) {
+        if (bearerToken != null && jwtTokenManager.validateToken(bearerToken)) {
+
+            Authentication authentication = jwtTokenManager.getAuthentication(bearerToken);
+            if (authentication != null) {
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
     }
 }
+

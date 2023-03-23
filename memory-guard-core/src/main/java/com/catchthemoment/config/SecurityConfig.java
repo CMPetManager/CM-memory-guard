@@ -1,7 +1,7 @@
 package com.catchthemoment.config;
 
-import com.catchthemoment.controller.security.JwtTokenFilter;
-import com.catchthemoment.controller.security.JwtTokenProvider;
+import com.catchthemoment.auth.JwtTokenFilter;
+import com.catchthemoment.auth.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -20,24 +20,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class ApplicationConfig {
+public class SecurityConfig {
 
-    private final JwtTokenProvider tokenProvider;
+    private final JwtTokenManager jwtTokenManager;
     private final ApplicationContext applicationContext;
 
-//    fixme extract to security config
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-//    fixme extract to security config
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
-//    fixme extract to security config
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -55,7 +52,7 @@ public class ApplicationConfig {
                 }))
                 .accessDeniedHandler(((request, response, accessDeniedException) -> {
                     response.setStatus(HttpStatus.FORBIDDEN.value());
-                    response.getWriter().write("Unauthorized.");
+                    response.getWriter().write("Forbidden.");
                 }))
                 .and()
                 .authorizeHttpRequests()
@@ -63,7 +60,7 @@ public class ApplicationConfig {
                 .anyRequest().authenticated()
                 .and()
                 .anonymous().disable()
-                .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtTokenFilter(jwtTokenManager), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
