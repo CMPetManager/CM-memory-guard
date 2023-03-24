@@ -1,5 +1,6 @@
 package com.catchthemoment.service;
 
+<<<<<<< memory-guard-core/src/main/java/com/catchthemoment/service/UserService.java
 import com.catchthemoment.auth.JwtEntityFactory;
 import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
@@ -10,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import com.catchthemoment.dto.ConfirmationEmailDTO;
+import com.catchthemoment.dto.UserDTO;
+import org.springframework.http.ResponseEntity;
 
 @Slf4j
 @Service
@@ -36,6 +40,9 @@ public class UserService implements UserDetailsService {
         return currentUser;
     }
 
+    ResponseEntity<?> saveUser(UserDTO userDTO);
+    ResponseEntity<?>confirmEmail(ConfirmationEmailDTO emailDTO);
+
     @Override
     public UserDetails loadUserByUsername(String email) {
         User currentUser;
@@ -46,6 +53,5 @@ public class UserService implements UserDetailsService {
         }
         return JwtEntityFactory.create(currentUser);
     }
-
 
 }
