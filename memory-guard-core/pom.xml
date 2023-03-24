@@ -15,6 +15,9 @@
     <properties>
         <jjwt.version>0.11.5</jjwt.version>
         <module.version>0.0.1</module.version>
+        <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <hibernate-validator.version>8.0.0.Final</hibernate-validator.version>
+        <jakarta-validation.version>3.0.2</jakarta-validation.version>
     </properties>
 
     <dependencies>
@@ -48,12 +51,32 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta-validation.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
