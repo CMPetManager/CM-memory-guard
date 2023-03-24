@@ -436,9 +436,6 @@ components:
     CreateAlbum:
       type: object
       properties:
-        createdAt:
-          type: string
-          format: date-time
         coverId:
           type: integer
           format: int64
@@ -449,9 +446,6 @@ components:
         id:
           type: integer
           format: int64
-        createdAt:
-          type: string
-          format: date-time
         page:
           $ref: '#/components/schemas/Pages'
 
