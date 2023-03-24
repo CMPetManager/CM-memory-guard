@@ -1,6 +1,5 @@
 package com.catchthemoment.service;
 
-<<<<<<< memory-guard-core/src/main/java/com/catchthemoment/service/UserService.java
 import com.catchthemoment.auth.JwtEntityFactory;
 import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
@@ -39,9 +38,6 @@ public class UserService implements UserDetailsService {
         log.info("User successfully found");
         return currentUser;
     }
-
-    ResponseEntity<?> saveUser(UserDTO userDTO);
-    ResponseEntity<?>confirmEmail(ConfirmationEmailDTO emailDTO);
 
     @Override
     public UserDetails loadUserByUsername(String email) {
