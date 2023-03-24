@@ -13,20 +13,12 @@ paths:
       summary: Method for user authorization
       tags:
         - SecurityController
-      operationId: loginUser
-      parameters:
-        - name: email
-          in: query
-          description: The email for login
-          required: true
-          schema:
-            type: string
-        - name: password
-          in: query
-          description: The password for login
-          required: true
-          schema:
-            type: string
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
       responses:
         '200':
           description: Successful operation
@@ -39,7 +31,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /users:
     post:
@@ -51,20 +43,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserAPI'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserAPI'
         '400':
           description: something wrong
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /refresh-token:
     post:
@@ -90,7 +82,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /users/forgot-password:
     post:
@@ -112,7 +104,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /users/reset-password:
     patch:
@@ -134,11 +126,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
-    User:
+    UserAPI:
       type: object
       properties:
         id:
@@ -153,6 +145,20 @@ components:
         password:
           type: string
           example: MyNew_pass
+        confirmationResetToken:
+          type: String
+          example: hsjjujffuvn2944mjf
+
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          example: egor@email.com
+        password:
+          type: string
+          example: MyNew_pass
+
     ForgotPassword:
       type: object
       properties:
@@ -229,16 +235,14 @@ components:
         id:
           type: integer
           format: int64
-        createdAt:
-          type: string
-          format: date-time
         page:
           $ref: '#/components/schemas/Pages'
+
     Pages:
       type: array
       items:
         $ref: '#/components/schemas/ReadPage'
-    Error:
+    ErrorResponse:
       type: object
       properties:
         code:
