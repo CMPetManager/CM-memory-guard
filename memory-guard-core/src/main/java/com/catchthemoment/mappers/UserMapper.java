@@ -1,12 +1,13 @@
 package com.catchthemoment.mappers;
 
 import com.catchthemoment.entity.User;
+import com.catchthemoment.model.UserAPI;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    User toEntity(com.catchthemoment.model.User user);
+    User toEntity(User user);
 
-    com.catchthemoment.model.User toDto(User user);
+    UserAPI toDto(User user);
 }

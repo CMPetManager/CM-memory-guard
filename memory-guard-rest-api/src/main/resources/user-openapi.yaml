@@ -43,14 +43,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserAPI'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserAPI'
         '400':
           description: something wrong
           content:
@@ -130,7 +130,7 @@ paths:
 
 components:
   schemas:
-    User:
+    UserAPI:
       type: object
       properties:
         id:
