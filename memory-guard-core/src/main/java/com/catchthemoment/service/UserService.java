@@ -3,7 +3,7 @@ package com.catchthemoment.service;
 import com.catchthemoment.auth.JwtEntityFactory;
 import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.model.User;
+import com.catchthemoment.entity.User;
 import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
 
     public User getById(Long userId) throws ServiceProcessingException {
         log.info("Request to get a user by ID");
-        User currentUser = userRepository.findById(userId)
+        User currentUser = userRepository.findUserById(userId)
                 .orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.USER_NOT_FOUND.getCode(),
                         ApplicationErrorEnum.USER_NOT_FOUND.getMessage()));
         log.info("User successfully found");

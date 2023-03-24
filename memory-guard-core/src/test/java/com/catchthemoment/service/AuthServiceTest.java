@@ -1,9 +1,11 @@
 package com.catchthemoment.service;
 
+import com.catchthemoment.entity.Role;
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.model.*;
+import com.catchthemoment.entity.User;
 import com.catchthemoment.auth.JwtTokenManager;
 import com.catchthemoment.config.JwtProperties;
+import com.catchthemoment.model.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -110,7 +112,7 @@ class AuthServiceTest {
         user.setName("Ivan");
         user.setEmail("hello@gmail.com");
         user.setPassword("111");
-        user.setRole(Role.ROLE_USER);
+        user.setRole(Role.ROlE_USER);
 
         return user;
     }

@@ -1,9 +1,14 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.model.*;
 import com.catchthemoment.auth.JwtTokenManager;
 import com.catchthemoment.config.JwtProperties;
+import com.catchthemoment.model.LoginRequest;
+import com.catchthemoment.model.LoginResponse;
+
+import com.catchthemoment.entity.User;
+import com.catchthemoment.model.RefreshToken;
+import com.catchthemoment.model.Token;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;

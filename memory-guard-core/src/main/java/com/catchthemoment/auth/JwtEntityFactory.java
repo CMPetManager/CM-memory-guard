@@ -1,7 +1,7 @@
 package com.catchthemoment.auth;
 
-import com.catchthemoment.model.Role;
-import com.catchthemoment.model.User;
+import com.catchthemoment.entity.Role;
+import com.catchthemoment.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

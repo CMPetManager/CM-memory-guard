@@ -145,8 +145,10 @@ components:
         password:
           type: string
           example: MyNew_pass
-        role:
-          $ref: '#/components/schemas/Role'
+        confirmationResetToken:
+          type: String
+          example: hsjjujffuvn2944mjf
+
     LoginRequest:
       type: object
       properties:
@@ -233,16 +235,9 @@ components:
         id:
           type: integer
           format: int64
-        createdAt:
-          type: string
-          format: date-time
         page:
           $ref: '#/components/schemas/Pages'
 
-    Role:
-      type: string
-      enum:
-        - ROLE_USER
     Pages:
       type: array
       items:

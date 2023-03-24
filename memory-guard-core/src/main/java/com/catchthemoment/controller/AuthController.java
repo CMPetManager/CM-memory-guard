@@ -1,6 +1,7 @@
 package com.catchthemoment.controller;
 
 import com.catchthemoment.exception.ServiceProcessingException;
+import com.catchthemoment.mappers.UserMapper;
 import com.catchthemoment.model.LoginRequest;
 import com.catchthemoment.model.LoginResponse;
 import com.catchthemoment.model.RefreshToken;

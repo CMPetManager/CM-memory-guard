@@ -1,7 +1,7 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.model.User;
+import com.catchthemoment.entity.User;
 import com.catchthemoment.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,14 +26,14 @@ class UserServiceTest {
     @Test
     void getByIdIfUserExists() throws ServiceProcessingException {
         User expectedResult = getUser();
-        doReturn(Optional.of(expectedResult)).when(userRepository).findById(USER_ID);
+        doReturn(Optional.of(expectedResult)).when(userRepository).findUserById(USER_ID);
 
         User actualResult = userService.getById(USER_ID);
 
         assertNotNull(actualResult);
         assertEquals(expectedResult, actualResult);
 
-        verify(userRepository).findById(USER_ID);
+        verify(userRepository).findUserById(USER_ID);
         verifyNoMoreInteractions(userRepository);
     }
 
