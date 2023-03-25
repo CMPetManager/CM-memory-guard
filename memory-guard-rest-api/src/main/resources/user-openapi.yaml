@@ -38,7 +38,7 @@ paths:
       summary: Method for registration
       tags:
         - SecurityController
-      operationId: registrationUser
+      operationId: registration
       requestBody:
         content:
           application/json:

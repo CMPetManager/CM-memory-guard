@@ -28,6 +28,7 @@ public class JwtTokenManager {
 
     private final JwtProperties jwtProperties;
     private final UserService userService;
+
     private Key key;
 
     @PostConstruct
