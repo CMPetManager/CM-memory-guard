@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -20,8 +21,30 @@ class UserServiceTest {
     private static final Long USER_ID = 1L;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private UserService userService;
+
+    @Test
+    void registration() throws ServiceProcessingException {
+        User expectedUser = getUser();
+        doReturn(expectedUser).when(userRepository).save(expectedUser);
+        doReturn(Optional.empty()).when(userRepository).findUserByEmail(expectedUser.getEmail());
+        doReturn(expectedUser.getPassword()).when(passwordEncoder).encode(expectedUser.getPassword());
+
+        User registeredUser = userService.create(expectedUser);
+
+        assertEquals(expectedUser, registeredUser);
+    }
+
+    @Test
+    void registrationExceptionIfUSerAlreadyExists(){
+        User user = getUser();
+        doReturn(Optional.of(user)).when(userRepository).findUserByEmail(user.getEmail());
+        assertThrows(ServiceProcessingException.class, () -> userService.create(user));
+    }
 
     @Test
     void getByIdIfUserExists() throws ServiceProcessingException {
