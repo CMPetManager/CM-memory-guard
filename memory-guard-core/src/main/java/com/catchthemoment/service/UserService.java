@@ -1,18 +1,15 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.auth.JwtEntityFactory;
+import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.entity.User;
 import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import com.catchthemoment.dto.ConfirmationEmailDTO;
-import com.catchthemoment.dto.UserDTO;
-import org.springframework.http.ResponseEntity;
 
 @Slf4j
 @Service
@@ -20,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
 
     public User getByEmail(String email) throws ServiceProcessingException {
         log.info("Request to get a user by email");
@@ -38,6 +36,7 @@ public class UserService implements UserDetailsService {
         log.info("User successfully found");
         return currentUser;
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String email) {

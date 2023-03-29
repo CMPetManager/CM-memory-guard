@@ -58,6 +58,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+
   /refresh-token:
     post:
       summary: Method for refresh token

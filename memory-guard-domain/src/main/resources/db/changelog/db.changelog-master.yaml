@@ -1,3 +1,0 @@
-    databaseChangelog:
-      - include:
-          file: db/changelog/initial/db.changelog-1.0.sql

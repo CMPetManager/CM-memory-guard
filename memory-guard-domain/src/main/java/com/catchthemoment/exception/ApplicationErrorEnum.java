@@ -8,6 +8,7 @@ public enum ApplicationErrorEnum {
 	USER_NOT_FOUND(2000,"User not found"),
 	ACCESS_DENIED(2001,"Access denied");
 
+
 	private final int code;
 	private final String message;
 
