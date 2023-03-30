@@ -41,17 +41,6 @@ public class UserService implements UserDetailsService {
         return currentUser;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String email) {
-        User currentUser;
-        try {
-            currentUser = getByEmail(email);
-        } catch (ServiceProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return JwtEntityFactory.create(currentUser);
-    }
-
     @Transactional
     public User create(User user) throws ServiceProcessingException {
         log.info("Checking for mail uniqueness");
@@ -65,5 +54,16 @@ public class UserService implements UserDetailsService {
         User createdUser = userRepository.save(user);
         log.info("The user has been successfully added to the database");
         return createdUser;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) {
+        User currentUser;
+        try {
+            currentUser = getByEmail(email);
+        } catch (ServiceProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return JwtEntityFactory.create(currentUser);
     }
 }

@@ -1,6 +1,7 @@
 package com.catchthemoment.controller;
 
 import com.catchthemoment.entity.User;
+import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.UserMapper;
 import com.catchthemoment.model.LoginRequest;
@@ -9,6 +10,8 @@ import com.catchthemoment.model.RefreshToken;
 import com.catchthemoment.model.UserAPI;
 import com.catchthemoment.service.AuthService;
 import com.catchthemoment.service.UserService;
+import com.catchthemoment.validation.UserApiValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,7 @@ public class AuthController implements SecurityControllerApiDelegate {
 	private final AuthService authService;
 	private final UserService userService;
 	private final UserMapper userMapper;
+	private final UserApiValidator validator;
 
 	@Override
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws ServiceProcessingException {
@@ -42,8 +46,12 @@ public class AuthController implements SecurityControllerApiDelegate {
 	}
 
 	@Override
-	public ResponseEntity<UserAPI> registration(@RequestBody UserAPI userAPI) throws Exception {
+	public ResponseEntity<UserAPI> registration(@RequestBody @Valid UserAPI userAPI) throws Exception {
 		log.info("Received a registration request by email: {}", userAPI.getEmail());
+		if(!validator.isValid(userAPI))
+			throw new ServiceProcessingException(ApplicationErrorEnum.INCORRECT_INPUT.getCode(),
+					ApplicationErrorEnum.INCORRECT_INPUT.getMessage());
+
 		User user = userMapper.toEntity(userAPI);
 		UserAPI createdUser = userMapper.toDto(userService.create(user));
 		ResponseEntity<UserAPI> response = new ResponseEntity<>(createdUser, HttpStatus.CREATED);

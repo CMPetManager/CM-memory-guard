@@ -144,10 +144,7 @@ components:
           example: egor@email.com
         password:
           type: string
-          example: MyNew_pass
-        confirmationResetToken:
-          type: String
-          example: hsjjujffuvn2944mjf
+          example: 2uffu4fuo
 
     LoginRequest:
       type: object
@@ -179,6 +176,8 @@ components:
         userId:
           type: integer
           format: int64
+        name:
+          type: string
         token:
           $ref: '#/components/schemas/Token'
 
