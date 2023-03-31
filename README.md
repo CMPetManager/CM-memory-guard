@@ -11,3 +11,5 @@
 - for bug fix create branch - bugfix/{task-number}
 - for bug fix on prod create branch from main - hotfix/{task-number}
 - create short but self-defining commit messages, but there is always place for fun)
+
+#### test line to check pushes to dev
