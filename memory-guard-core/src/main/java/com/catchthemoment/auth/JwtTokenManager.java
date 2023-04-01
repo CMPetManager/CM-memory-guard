@@ -28,6 +28,7 @@ public class JwtTokenManager {
 
     private final JwtProperties jwtProperties;
     private final UserService userService;
+
     private Key key;
 
     @PostConstruct
@@ -75,6 +76,7 @@ public class JwtTokenManager {
         Token token = createTokenForResponse(userId, user);
 
         loginResponse.setUserId(userId);
+        loginResponse.setName(user.getName());
         loginResponse.setToken(token);
 
         return loginResponse;

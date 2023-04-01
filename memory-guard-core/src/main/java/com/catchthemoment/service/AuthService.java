@@ -37,6 +37,7 @@ public class AuthService {
         log.info("Create object for response");
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setUserId(currentUser.getId());
+        loginResponse.setName(currentUser.getName());
         loginResponse.setToken(getToken(currentUser));
         log.info("LoginResponse successfully created");
         return loginResponse;

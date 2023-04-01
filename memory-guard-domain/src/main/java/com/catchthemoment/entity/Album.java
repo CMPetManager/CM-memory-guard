@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "albums")
+@Table(name = "album")
 public class Album {
 
     @Id
