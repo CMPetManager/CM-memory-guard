@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 
@@ -19,6 +22,7 @@ public class Page {
     private Long id;
 
     @Column(name = "description")
+    @JdbcTypeCode(SqlTypes.LONGVARCHAR)
     private String description;
 
     @Column(name = "color")
@@ -34,7 +38,7 @@ public class Page {
     private String tagPlace;
 
     @Column(name = "animation")
-    private String animation;
+    private byte [] animation;
 
     @ManyToOne
     @JoinColumn(name = "album_id",referencedColumnName = "id")

@@ -10,5 +10,5 @@ import javax.validation.constraints.NotNull;
 public record UserDTO(@NotNull @JsonProperty("name") String name,
                       @NotNull @Password @JsonProperty("password") String password,
                       @Email(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+/.[a-zA-Z0-9-.]+$", message = "Incorrect email") @NotNull @JsonProperty("email")
-                      String email, String confirmation_reset_token) {
+                      String email, String confirmation_reset_token, String reset_password_token) {
 }

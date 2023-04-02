@@ -12,7 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "users" , indexes = @Index(name = "usr_mail_index",columnList = "email,name"))
+@NamedEntityGraph(name = "usr-entity-graph", attributeNodes = {
+        @NamedAttributeNode("id"),
+        @NamedAttributeNode("name"),
+        @NamedAttributeNode("password") //entity graph for avoiding n+1 problem multiple select queries
+})
 public class User {
 
     @Id
@@ -33,9 +38,13 @@ public class User {
     @Column(name = "confirmation_reset_token", length = 20)
     private String confirmationResetToken;
 
+    @Column(name = "reset_password_token", length = 20)
+    private String resetPasswordToken;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(mappedBy = "user",orphanRemoval = true)
     private List<Album> albums;
+
 }
