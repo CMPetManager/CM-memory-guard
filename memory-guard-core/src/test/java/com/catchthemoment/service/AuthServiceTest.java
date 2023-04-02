@@ -77,6 +77,7 @@ class AuthServiceTest {
     private LoginResponse getLoginResponse() {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setUserId(USER_ID);
+        loginResponse.setName("Ivan");
         loginResponse.setToken(getToken());
         return loginResponse;
     }

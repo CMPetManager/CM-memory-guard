@@ -5,7 +5,6 @@
 # Editor-based HTTP Client requests
 /httpRequests/
 # Datasource local storage ignored files
-/application.properties
 /dataSources/
 /dataSources.local.xml
 */target/
@@ -15,7 +14,6 @@
 *.iml
 */.factorypath
 /.settings/
-/memory-guard-core/src/main/resources/application.properties
 /catch-the-moment.log
 /memory-guard-core/src/main/resources/
 /memory-guard-core/src/test/resources/
