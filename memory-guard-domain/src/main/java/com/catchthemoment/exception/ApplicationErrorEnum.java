@@ -10,6 +10,7 @@ public enum ApplicationErrorEnum {
 	ILLEGAL_STATE(2003,"Already exists"),
 	INCORRECT_INPUT(4001,"The entered data did not pass validation");
 
+
 	private final int code;
 	private final String message;
 

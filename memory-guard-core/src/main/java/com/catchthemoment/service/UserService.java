@@ -1,10 +1,10 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.auth.JwtEntityFactory;
+import com.catchthemoment.entity.User;
 import com.catchthemoment.entity.Role;
 import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.entity.User;
 import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +22,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     public User getByEmail(String email) throws ServiceProcessingException {
         log.info("Request to get a user by email");
