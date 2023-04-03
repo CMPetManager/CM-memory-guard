@@ -3,6 +3,7 @@ package com.catchthemoment.service;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.repository.UserRepository;
+import net.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,18 +24,21 @@ class UserServiceTest {
     private UserRepository userRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private UserConfirmMailService confirmMailService;
 
     @InjectMocks
     private UserService userService;
 
     @Test
-    void registration() throws ServiceProcessingException {
+    void registration() throws Exception {
         User expectedUser = getUser();
         doReturn(expectedUser).when(userRepository).save(expectedUser);
         doReturn(Optional.empty()).when(userRepository).findUserByEmail(expectedUser.getEmail());
         doReturn(expectedUser.getPassword()).when(passwordEncoder).encode(expectedUser.getPassword());
 
-        User registeredUser = userService.create(expectedUser);
+        User registeredUser = userService.create(expectedUser,
+                expectedUser.getConfirmationResetToken());
 
         assertEquals(expectedUser, registeredUser);
     }
@@ -43,7 +47,7 @@ class UserServiceTest {
     void registrationExceptionIfUSerAlreadyExists(){
         User user = getUser();
         doReturn(Optional.of(user)).when(userRepository).findUserByEmail(user.getEmail());
-        assertThrows(ServiceProcessingException.class, () -> userService.create(user));
+        assertThrows(ServiceProcessingException.class, () -> userService.create(user, user.getConfirmationResetToken()));
     }
 
     @Test
@@ -90,6 +94,8 @@ class UserServiceTest {
         user.setName("Ivan");
         user.setEmail("hello@gmail.com");
         user.setPassword("111");
+        String randomCode = RandomString.make(20);
+        user.setConfirmationResetToken(randomCode);
 
         return user;
     }

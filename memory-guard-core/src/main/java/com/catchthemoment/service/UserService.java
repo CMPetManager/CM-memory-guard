@@ -1,18 +1,23 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.auth.JwtEntityFactory;
+import com.catchthemoment.dto.UserDTO;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.entity.Role;
 import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.UserRepository;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.UnsupportedEncodingException;
 
 @Slf4j
 @Service
@@ -22,6 +27,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserConfirmMailService confirmMailService;
 
 
     public User getByEmail(String email) throws ServiceProcessingException {
@@ -43,7 +49,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User create(User user) throws ServiceProcessingException {
+    public User create(User user, String siteURL) throws ServiceProcessingException,
+            UnsupportedEncodingException, MessagingException {
         log.info("Checking for mail uniqueness");
         if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
             throw new ServiceProcessingException(ApplicationErrorEnum.ILLEGAL_STATE.getCode(),
@@ -52,7 +59,10 @@ public class UserService implements UserDetailsService {
         log.info("The check was successful");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.ROlE_USER);
+        String randomCode = RandomString.make(20);
+        user.setConfirmationResetToken(randomCode);
         User createdUser = userRepository.save(user);
+        confirmMailService.sendVerificationEmail(user, siteURL);
         log.info("The user has been successfully added to the database");
         return createdUser;
     }

@@ -10,10 +10,6 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
-    User toEntity(UserAPI userAPI);
-
-    UserAPI toDto(User user);
-
     @Mapping(target = "name", source = "user.name")
     @Mapping(target = "password", source = "user.password")
     @Mapping(target = "email", source = "user.email")

@@ -23,7 +23,6 @@ import java.io.UnsupportedEncodingException;
 
 public class UserConfirmMailService {
     private final JavaMailSender mailSender;
-    private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
@@ -33,19 +32,6 @@ public class UserConfirmMailService {
     private String sender;
 
 
-    public void register(UserDTO userDTO, String siteURL)
-            throws UnsupportedEncodingException, MessagingException {
-        String encodedPassword = encoder.encode(userDTO.password());
-        User user = userMapper.fromUserDTO(userDTO);
-        user.setPassword(encodedPassword);
-
-        String randomCode = RandomString.make(20);
-        user.setConfirmationResetToken(randomCode);
-        userRepository.save(user);
-        sendVerificationEmail(user, siteURL);
-
-    }
-
     public boolean verifyAccount(@NotNull String token) throws VerifyAccountException {
         User user = userRepository.findUSerByConfirmationResetToken(token).
                 orElseThrow(() -> new VerifyAccountException(505, "Invalid token"));
@@ -54,7 +40,7 @@ public class UserConfirmMailService {
         return true;
     }
 
-    private void sendVerificationEmail(User user, String siteURL)
+    void sendVerificationEmail(User user, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
         String fromAddress = mailAddress;
