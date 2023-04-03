@@ -1,20 +1,12 @@
 package com.catchthemoment.controller;
 
-import com.catchthemoment.entity.User;
-import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.mappers.UserMapper;
 import com.catchthemoment.model.LoginRequest;
 import com.catchthemoment.model.LoginResponse;
 import com.catchthemoment.model.RefreshToken;
-import com.catchthemoment.model.UserAPI;
 import com.catchthemoment.service.AuthService;
-import com.catchthemoment.service.UserService;
-import com.catchthemoment.validation.UserApiValidator;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AuthController implements SecurityControllerApiDelegate {
 
 	private final AuthService authService;
-	private final UserService userService;
-	private final UserMapper userMapper;
-	private final UserApiValidator validator;
+
 
 	@Override
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws ServiceProcessingException {
@@ -45,7 +35,7 @@ public class AuthController implements SecurityControllerApiDelegate {
 		return response;
 	}
 
-	@Override
+/*	@Override
 	public ResponseEntity<UserAPI> registration(@RequestBody @Valid UserAPI userAPI) throws Exception {
 		log.info("Received a registration request by email: {}", userAPI.getEmail());
 		if(!validator.isValid(userAPI))
@@ -57,5 +47,5 @@ public class AuthController implements SecurityControllerApiDelegate {
 		ResponseEntity<UserAPI> response = new ResponseEntity<>(createdUser, HttpStatus.CREATED);
 		log.info("The user has been successfully registered");
 		return response;
-	}
+	}*/
 }

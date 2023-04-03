@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users" , indexes = @Index(name = "usr_mail_index",columnList = "email,name"))
+@Table(name = "users", indexes = @Index(name = "usr_mail_index", columnList = "email,name"))
 @NamedEntityGraph(name = "usr-entity-graph", attributeNodes = {
         @NamedAttributeNode("id"),
         @NamedAttributeNode("name"),
@@ -45,7 +45,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user",orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Album> albums;
 
 }
