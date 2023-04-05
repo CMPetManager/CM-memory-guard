@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ApplicationErrorEnum {
-	DEFAULT_EXCEPTION(1001, "server fault"),
-	USER_NOT_FOUND(2001,"Not found"),
+	DEFAULT_EXCEPTION(1001, "Problems on the server.Try it another time"),
+	USER_NOT_FOUND(2001,"User not found"),
 	ACCESS_DENIED(2002,"Access denied"),
 	ILLEGAL_STATE(2003,"Already exists"),
 	INCORRECT_INPUT(4001,"The entered data did not pass validation");

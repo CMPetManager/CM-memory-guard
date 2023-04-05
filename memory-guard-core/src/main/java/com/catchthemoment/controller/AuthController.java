@@ -34,18 +34,4 @@ public class AuthController implements SecurityControllerApiDelegate {
 		log.info("Tokens have been successfully updated");
 		return response;
 	}
-
-/*	@Override
-	public ResponseEntity<UserAPI> registration(@RequestBody @Valid UserAPI userAPI) throws Exception {
-		log.info("Received a registration request by email: {}", userAPI.getEmail());
-		if(!validator.isValid(userAPI))
-			throw new ServiceProcessingException(ApplicationErrorEnum.INCORRECT_INPUT.getCode(),
-					ApplicationErrorEnum.INCORRECT_INPUT.getMessage());
-
-		User user = userMapper.toEntity(userAPI);
-		UserAPI createdUser = userMapper.toDto(userService.create(user));
-		ResponseEntity<UserAPI> response = new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-		log.info("The user has been successfully registered");
-		return response;
-	}*/
 }

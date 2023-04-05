@@ -43,14 +43,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserAPI'
+              $ref: '#/components/schemas/CreateReadUser'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserAPI'
+                $ref: '#/components/schemas/CreateReadUser'
         '400':
           description: something wrong
           content:
@@ -131,7 +131,7 @@ paths:
 
 components:
   schemas:
-    UserAPI:
+    CreateReadUser:
       type: object
       properties:
         id:

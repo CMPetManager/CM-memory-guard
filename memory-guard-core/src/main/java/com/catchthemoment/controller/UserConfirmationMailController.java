@@ -4,8 +4,8 @@ import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.exception.VerifyAccountException;
-import com.catchthemoment.mappers.UserAPIMapper;
-import com.catchthemoment.model.UserAPI;
+import com.catchthemoment.mappers.CreateReadUserMapper;
+import com.catchthemoment.model.CreateReadUser;
 import com.catchthemoment.service.UserConfirmMailService;
 import com.catchthemoment.service.UserService;
 import com.catchthemoment.util.SiteUrlUtil;
@@ -27,20 +27,20 @@ public class UserConfirmationMailController {
 
     private final UserConfirmMailService userConfirmMailService;
     private final UserService userService;
-    private final UserAPIMapper userMapper;
+    private final CreateReadUserMapper userMapper;
     private final UserApiValidator validator;
 
     @RequestMapping(value = "/confirm-account", method = {RequestMethod.GET, RequestMethod.POST},
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserAPI> confirmUserAccount(@RequestBody @NotNull UserAPI userAPI, HttpServletRequest request)
+    public ResponseEntity<CreateReadUser> confirmUserAccount(@RequestBody @NotNull CreateReadUser createReadUser, HttpServletRequest request)
             throws Exception {
-        log.info("Received a registration request by email: {}", userAPI.getEmail());
-        if(!validator.isValid(userAPI))
+        log.info("Received a registration request by email: {}", createReadUser.getEmail());
+        if(!validator.isValid(createReadUser))
             throw new ServiceProcessingException(ApplicationErrorEnum.INCORRECT_INPUT.getCode(),
                     ApplicationErrorEnum.INCORRECT_INPUT.getMessage());
-        User user = userMapper.toEntity(userAPI);
-        UserAPI createdUser = userMapper.toDto(userService.create(user, SiteUrlUtil.getSiteURL(request)));
-        ResponseEntity<UserAPI> response = new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        User user = userMapper.toEntity(createReadUser);
+        CreateReadUser createdUser = userMapper.toDto(userService.create(user, SiteUrlUtil.getSiteURL(request)));
+        ResponseEntity<CreateReadUser> response = new ResponseEntity<>(createdUser, HttpStatus.CREATED);
         log.info("The user has been successfully registered");
         return response;
     }

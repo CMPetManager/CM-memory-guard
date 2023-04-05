@@ -1,13 +1,12 @@
 package com.catchthemoment.service;
 
-import com.catchthemoment.dto.UserDTO;
 import com.catchthemoment.entity.User;
+import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.UserMapper;
 import com.catchthemoment.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ public class UserResetPasswordService {
 
     private final UserRepository repository;
 
-
     @Autowired
     private UserMapper userMapper;
 
@@ -38,7 +36,8 @@ public class UserResetPasswordService {
 
     public void updateResetPasswordToken(@NotNull String email, String token) throws ServiceProcessingException {
         var user = repository.findUserByEmail(email).orElseThrow(
-                () -> new ServiceProcessingException(1006, "Invalid email of user"));
+                () -> new ServiceProcessingException(ApplicationErrorEnum.USER_NOT_FOUND.getCode(),
+                        ApplicationErrorEnum.USER_NOT_FOUND.getMessage()));
         if (user != null) {
             user.setResetPasswordToken(token);
             repository.save(user);

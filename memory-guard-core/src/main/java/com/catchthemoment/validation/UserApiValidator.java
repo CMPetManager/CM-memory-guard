@@ -1,7 +1,7 @@
 package com.catchthemoment.validation;
 
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.model.UserAPI;
+import com.catchthemoment.model.CreateReadUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -11,48 +11,48 @@ public class UserApiValidator {
     private static final String REGEX_EMAIL = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+)";
     private static final String REGEX_NAME = "[a-zA-Z0-9_.-]";
 
-    public boolean isValid(UserAPI userAPI) throws ServiceProcessingException {
-        return checkName(userAPI) &&
-                checkEmail(userAPI) &&
-                checkPassword(userAPI);
+    public boolean isValid(CreateReadUser createReadUser) throws ServiceProcessingException {
+        return checkName(createReadUser) &&
+                checkEmail(createReadUser) &&
+                checkPassword(createReadUser);
     }
 
-    private boolean checkPassword(UserAPI userAPI) {
+    private boolean checkPassword(CreateReadUser createReadUser) {
         log.info("");
-        if (userAPI.getPassword() == null || userAPI.getPassword().isEmpty()) {
+        if (createReadUser.getPassword() == null || createReadUser.getPassword().isEmpty()) {
             log.error("Password is null");
             return false;
-        } else if (userAPI.getPassword().length() < 6 || userAPI.getPassword().length() > 64) {
+        } else if (createReadUser.getPassword().length() < 6 || createReadUser.getPassword().length() > 64) {
             log.error("Password length is not correct");
             return false;
-        } else if (userAPI.getPassword().equals(userAPI.getEmail()) &&
-                userAPI.getPassword().equals(userAPI.getName())) {
+        } else if (createReadUser.getPassword().equals(createReadUser.getEmail()) &&
+                createReadUser.getPassword().equals(createReadUser.getName())) {
             log.error("Password length shouldn't be equal name or email");
             return false;
         } else return true;
     }
 
-    private boolean checkEmail(UserAPI userAPI) throws ServiceProcessingException {
-        if (userAPI.getEmail() == null || userAPI.getEmail().isEmpty()) {
+    private boolean checkEmail(CreateReadUser createReadUser) throws ServiceProcessingException {
+        if (createReadUser.getEmail() == null || createReadUser.getEmail().isEmpty()) {
             log.error("Email is null");
             return false;
-        } else if (userAPI.getEmail().length() < 5 || userAPI.getEmail().length() > 255) {
+        } else if (createReadUser.getEmail().length() < 5 || createReadUser.getEmail().length() > 255) {
             log.error("Email length is not correct");
             return false;
-        } else if (!userAPI.getEmail().matches(REGEX_EMAIL)) {
+        } else if (!createReadUser.getEmail().matches(REGEX_EMAIL)) {
             log.error("Incorrect input email");
             return false;
         } else return true;
     }
 
-    private boolean checkName(UserAPI userAPI) {
-        if (userAPI.getName() == null || userAPI.getName().isEmpty()) {
+    private boolean checkName(CreateReadUser createReadUser) {
+        if (createReadUser.getName() == null || createReadUser.getName().isEmpty()) {
             log.error("Name shouldn't be null");
             return false;
-        } else if (userAPI.getName().length() < 1 || userAPI.getName().length() > 64) {
+        } else if (createReadUser.getName().length() < 1 || createReadUser.getName().length() > 64) {
             log.error("Name length is not correct");
             return false;
-        } else if (userAPI.getName().matches(REGEX_NAME)) {
+        } else if (createReadUser.getName().matches(REGEX_NAME)) {
             log.error("Incorrect input name");
             return false;
         } else return true;

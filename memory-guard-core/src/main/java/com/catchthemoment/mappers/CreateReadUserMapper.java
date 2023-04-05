@@ -1,14 +1,14 @@
 package com.catchthemoment.mappers;
 
 import com.catchthemoment.entity.User;
-import com.catchthemoment.model.UserAPI;
+import com.catchthemoment.model.CreateReadUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface UserAPIMapper {
+public interface CreateReadUserMapper {
 
-    User toEntity(UserAPI userAPI);
+    User toEntity(CreateReadUser createReadUser);
 
-    UserAPI toDto(User user);
+    CreateReadUser toDto(User user);
 }
