@@ -1,4 +1,4 @@
-package com.catchthemoment.dto;
+package com.catchthemoment.model;
 
 import com.catchthemoment.validation.Password;
 import com.fasterxml.jackson.annotation.JsonProperty;

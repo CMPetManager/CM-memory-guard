@@ -1,18 +1,16 @@
 package com.catchthemoment.service;
 
-import com.catchthemoment.dto.UserDTO;
 import com.catchthemoment.entity.User;
-import com.catchthemoment.exception.VerifyAccountException;
+import com.catchthemoment.exception.ApplicationErrorEnum;
+import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.UserMapper;
 import com.catchthemoment.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
@@ -32,9 +30,10 @@ public class UserConfirmMailService {
     private String sender;
 
 
-    public boolean verifyAccount(@NotNull String token) throws VerifyAccountException {
+    public boolean verifyAccount(@NotNull String token) throws ServiceProcessingException {
         User user = userRepository.findUSerByConfirmationResetToken(token).
-                orElseThrow(() -> new VerifyAccountException(505, "Invalid token"));
+                orElseThrow(() -> new ServiceProcessingException(4003,
+                        ApplicationErrorEnum.VALID_ACCOUNT_ERROR.getMessage()));
         user.setConfirmationResetToken(null);
         userRepository.save(user);
         return true;

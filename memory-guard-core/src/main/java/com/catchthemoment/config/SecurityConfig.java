@@ -49,7 +49,7 @@ public class SecurityConfig {
                 }))
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/login", "/users", "/users/**", "/refresh-token").permitAll()
+                .requestMatchers("/login", "/users**", "/users/**", "/refresh-token","/forgot-password").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .anonymous().disable()

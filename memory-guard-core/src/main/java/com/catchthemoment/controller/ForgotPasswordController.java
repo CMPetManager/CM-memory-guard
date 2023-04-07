@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class ForgotPasswordController {
 
     private final UserResetPasswordService resetPasswordService;
 
-    @GetMapping("/forgot_password")
+    @GetMapping("/forgot-password")
     public String forgotPasswordForm() {
         return "Should be reset password html form";
     }

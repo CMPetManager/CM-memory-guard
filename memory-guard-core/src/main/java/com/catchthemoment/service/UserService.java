@@ -1,7 +1,6 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.auth.JwtEntityFactory;
-import com.catchthemoment.dto.UserDTO;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.entity.Role;
 import com.catchthemoment.exception.ApplicationErrorEnum;
