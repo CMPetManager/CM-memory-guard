@@ -1,8 +1,7 @@
 package com.catchthemoment.mappers;
 
-import com.catchthemoment.dto.UserDTO;
+import com.catchthemoment.model.UserDTO;
 import com.catchthemoment.entity.User;
-import com.catchthemoment.model.UserAPI;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

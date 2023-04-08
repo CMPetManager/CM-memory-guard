@@ -28,10 +28,4 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<>(errorResponse, INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<VerifyAccountError> handle(VerifyAccountException ex) {
-        log.error("ConfirmationMailService failed:{}", ex.toString());
-        VerifyAccountError accountError = new VerifyAccountError(ex.getCode(), ex.getMessage());
-        return new ResponseEntity<>(accountError, UNPROCESSABLE_ENTITY);
-    }
 }

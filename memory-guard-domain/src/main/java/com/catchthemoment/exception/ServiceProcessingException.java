@@ -9,7 +9,7 @@ public class ServiceProcessingException extends Exception {
     private String message;
 
 
-    public ServiceProcessingException(int code, String message) {
+    public ServiceProcessingException(int code, String  message) {
         this.code = code;
         this.message = message;
     }
