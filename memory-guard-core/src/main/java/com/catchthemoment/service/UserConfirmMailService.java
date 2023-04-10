@@ -18,7 +18,6 @@ import java.io.UnsupportedEncodingException;
 
 @Service
 @RequiredArgsConstructor
-
 public class UserConfirmMailService {
     private final JavaMailSender mailSender;
     private final UserRepository userRepository;
@@ -32,7 +31,7 @@ public class UserConfirmMailService {
 
     public boolean verifyAccount(@NotNull String token) throws ServiceProcessingException {
         User user = userRepository.findUSerByConfirmationResetToken(token).
-                orElseThrow(() -> new ServiceProcessingException(4003,
+                orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.VALID_ACCOUNT_ERROR.getCode(),
                         ApplicationErrorEnum.VALID_ACCOUNT_ERROR.getMessage()));
         user.setConfirmationResetToken(null);
         userRepository.save(user);

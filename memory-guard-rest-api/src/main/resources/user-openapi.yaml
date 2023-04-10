@@ -59,7 +59,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
 
-  /refresh-token:
+  /users/refresh-token:
     post:
       summary: Method for refresh token
       tags:
@@ -89,9 +89,9 @@ paths:
     post:
       summary: Forgot password
       tags:
-        - SecurityController
+        - ForgotPasswordController
       description: after this method user should check his email
-      operationId: processForgotPassword
+      operationId: forgotPassword
       requestBody:
         content:
           application/json:
@@ -99,21 +99,42 @@ paths:
               $ref: '#/components/schemas/ForgotPassword'
       responses:
         default:
-          description: successful operation
+          description: successful operation of creation new password
         '400':
-          description: something wrong
+          description: something wrong with password
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /users/reset-password:
-    patch:
-      summary: Reset password
+  /users/reset:
+    get:
+      summary: Get user token
       tags:
-        - SecurityController
-      description: Method for reset password
-      operationId: processResetPassword
+        - ForgotPasswordController
+      description: Method for getting user token
+      operationId: resetPasswordForm
+      responses:
+       '200':
+        description: successful operation
+        content:
+          application/json:
+            schema:
+              type: string
+       '400':
+          description: Invalid token value
+
+
+
+
+
+  /users/reset-password:
+    post:
+      summary: Reset user's password
+      tags:
+        - ForgotPasswordController
+      description: Method for reset user's password
+      operationId: resetPassword
       requestBody:
         content:
           application/json:
