@@ -52,7 +52,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
     private List<Album> albums;
 
     @Override

@@ -14,9 +14,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserResetPasswordService {
 
     private final UserRepository repository;
@@ -40,7 +42,7 @@ public class UserResetPasswordService {
     }
 
     public User getUserFromResetToken(String token) {
-        return repository.findUserByResetPasswordToken(token).get();
+        return repository.findUserByResetPasswordToken(token).orElse(new User());
 
     }
 
@@ -48,7 +50,6 @@ public class UserResetPasswordService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(newPassword);
         reqUser.setPassword(encodedPassword);
-
         reqUser.setResetPasswordToken(null);
         repository.save(reqUser);
     }

@@ -15,6 +15,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
@@ -39,9 +40,9 @@ public class UserConfirmationMailController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<?> verifyAccount(@Param("code") String code) throws ServiceProcessingException {
+    public ResponseEntity<Object> verifyAccount(@Param("code") String code, Model model) throws ServiceProcessingException {
         userConfirmMailService.verifyAccount(code);
-        return ResponseEntity.ok("Account verified!");
+        return ResponseEntity.ok().body("Account has been verified!");
     }
 
 

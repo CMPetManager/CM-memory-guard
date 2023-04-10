@@ -21,13 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 @TestPropertySource("/application-test.properties")
-@ActiveProfiles("test")
-//TODO Fix test class
+@ActiveProfiles("shele-test")
 public class UserPersitentTests {
 
     @Autowired
     private UserRepository repository;
-    private User saverUserEntity;
     private User savedEntity;
 
     @BeforeEach
@@ -52,4 +50,6 @@ public class UserPersitentTests {
 
         assertEquals(2, repository.count());
     }
+
+
 }
