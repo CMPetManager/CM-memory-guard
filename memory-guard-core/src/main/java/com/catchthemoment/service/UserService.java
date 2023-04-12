@@ -1,9 +1,8 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.auth.JwtEntityFactory;
-import com.catchthemoment.entity.User;
 import com.catchthemoment.entity.Role;
-import com.catchthemoment.exception.ApplicationErrorEnum;
+import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.UserRepository;
 import jakarta.mail.MessagingException;
@@ -12,11 +11,15 @@ import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+
+import static com.catchthemoment.exception.ApplicationErrorEnum.ILLEGAL_STATE;
+import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -28,12 +31,10 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UserConfirmMailService confirmMailService;
 
-
     public User getByEmail(String email) throws ServiceProcessingException {
         log.info("Request to get a user by email");
         User currentUser = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.USER_NOT_FOUND.getCode(),
-                        ApplicationErrorEnum.USER_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage()));
         log.info("User successfully found");
         return currentUser;
     }
@@ -41,8 +42,7 @@ public class UserService implements UserDetailsService {
     public User getById(Long userId) throws ServiceProcessingException {
         log.info("Request to get a user by ID");
         User currentUser = userRepository.findUserById(userId)
-                .orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.USER_NOT_FOUND.getCode(),
-                        ApplicationErrorEnum.USER_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage()));
         log.info("User successfully found");
         return currentUser;
     }
@@ -52,8 +52,7 @@ public class UserService implements UserDetailsService {
             UnsupportedEncodingException, MessagingException {
         log.info("Checking for mail uniqueness");
         if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
-            throw new ServiceProcessingException(ApplicationErrorEnum.ILLEGAL_STATE.getCode(),
-                    ApplicationErrorEnum.ILLEGAL_STATE.getMessage());
+            throw new ServiceProcessingException(ILLEGAL_STATE.getCode(),ILLEGAL_STATE.getMessage());
         }
         log.info("The check was successful");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -71,8 +70,8 @@ public class UserService implements UserDetailsService {
         User currentUser;
         try {
             currentUser = getByEmail(email);
-        } catch (ServiceProcessingException e) {
-            throw new RuntimeException(e);
+        } catch (ServiceProcessingException cause) {
+            throw new UsernameNotFoundException(cause.getMessage());
         }
         return JwtEntityFactory.create(currentUser);
     }

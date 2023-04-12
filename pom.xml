@@ -21,17 +21,22 @@
         <relativePath/>
     </parent>
 
+    <properties>
+        <openapi.version>6.4.0</openapi.version>
+        <swagger.version>2.2.8</swagger.version>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator</artifactId>
-                <version>6.4.0</version>
+                <version>${openapi.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.swagger.core.v3</groupId>
                 <artifactId>swagger-annotations</artifactId>
-                <version>2.2.8</version>
+                <version>${swagger.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -42,7 +47,7 @@
                 <plugin>
                     <groupId>org.openapitools</groupId>
                     <artifactId>openapi-generator-maven-plugin</artifactId>
-                    <version>6.4.0</version>
+                    <version>${openapi.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.springframework.boot</groupId>

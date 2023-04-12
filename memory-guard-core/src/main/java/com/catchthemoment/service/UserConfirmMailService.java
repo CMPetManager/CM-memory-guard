@@ -28,7 +28,6 @@ public class UserConfirmMailService {
     @Value("${spring.application.name}")
     private String sender;
 
-
     public boolean verifyAccount(@NotNull String token) throws ServiceProcessingException {
         User user = userRepository.findUSerByConfirmationResetToken(token).
                 orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.VALID_ACCOUNT_ERROR.getCode(),
