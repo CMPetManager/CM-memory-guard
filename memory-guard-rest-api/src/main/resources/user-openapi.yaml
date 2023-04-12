@@ -12,7 +12,7 @@ paths:
     post:
       summary: Method for user authorization
       tags:
-        - SecurityController
+        - AuthController
       operationId: login
       requestBody:
         content:
@@ -31,39 +31,38 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
   /users:
     post:
       summary: Method for registration
       tags:
-        - SecurityController
+        - AuthController
       operationId: registration
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserAPI'
+              $ref: '#/components/schemas/CreateReadUser'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserAPI'
+                $ref: '#/components/schemas/CreateReadUser'
         '400':
           description: something wrong
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
+                $ref: '#/components/schemas/ApplicationError'
 
   /users/refresh-token:
     post:
       summary: Method for refresh token
       tags:
-        - SecurityController
+        - AuthController
       description: refresh user's auth
       operationId: refresh
       requestBody:
@@ -83,7 +82,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
   /users/forgot-password:
     post:
@@ -105,7 +104,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
   /users/reset:
     get:
@@ -124,17 +123,14 @@ paths:
        '400':
           description: Invalid token value
 
-
-
-
-
   /users/reset-password:
     post:
       summary: Reset user's password
       tags:
-        - ForgotPasswordController
+        - AuthController
       description: Method for reset user's password
       operationId: resetPassword
+        - ForgotPasswordController
       requestBody:
         content:
           application/json:
@@ -148,11 +144,38 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
+  /users/{userId}:
+    delete:
+      tags:
+        - AuthController
+      summary: Delete user userId
+      description: Method for delete user
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID for delete user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: { }
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
 components:
   schemas:
-    UserAPI:
+    CreateReadUser:
       type: object
       properties:
         id:
@@ -184,6 +207,7 @@ components:
         email:
           type: string
           example: egor@email.com
+
     UpdatePassword:
       type: object
       properties:
@@ -223,7 +247,7 @@ components:
         refreshToken:
           type: string
 
-    ReadPage:
+    Page:
       type: object
       properties:
         id:
@@ -249,25 +273,23 @@ components:
           type: string
           example: slide
         album:
-          $ref: '#/components/schemas/ReadAlbum'
-    ReadAlbum:
+          $ref: '#/components/schemas/Album'
+
+    Album:
       type: object
       properties:
         id:
           type: integer
           format: int64
-        page:
-          $ref: '#/components/schemas/Pages'
+        pages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Page'
 
-    Pages:
-      type: array
-      items:
-        $ref: '#/components/schemas/ReadPage'
-    ErrorResponse:
+    ApplicationError:
       type: object
       properties:
         code:
           type: integer
         message:
-          type: string      
-          
+          type: string

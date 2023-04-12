@@ -16,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.catchthemoment.exception.ApplicationErrorEnum.MAIL_INCORRECT;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -34,11 +36,9 @@ public class UserResetPasswordService {
 
     public void updateResetPasswordToken(@NotNull String email, String token) throws ServiceProcessingException {
         var user = repository.findUserByEmail(email).orElseThrow(
-                () -> new ServiceProcessingException(4002,ApplicationErrorEnum.MAIL_INCORRECT.getMessage()));
-        if (user != null) {
+                () -> new ServiceProcessingException(MAIL_INCORRECT.getCode(), MAIL_INCORRECT.getMessage()));
             user.setResetPasswordToken(token);
             repository.save(user);
-        }
     }
 
     public User getUserFromResetToken(String token) {
@@ -46,7 +46,7 @@ public class UserResetPasswordService {
 
     }
 
-    public void updatePassword(@jakarta.validation.constraints.NotNull User reqUser, String newPassword) {
+    public void updatePassword(@NotNull User reqUser, String newPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(newPassword);
         reqUser.setPassword(encodedPassword);

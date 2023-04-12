@@ -108,6 +108,19 @@ public class JwtTokenManager {
         return token;
     }
 
+    public Token getToken(User user) {
+        Token token = new Token();
+        token.setAccessToken(createAccessToken(
+                user.getId(),
+                user.getEmail(),
+                user.getRole()));
+        token.setRefreshToken(createRefreshToken(
+                user.getId(),
+                user.getEmail()));
+        token.setExpirationIn(jwtProperties.getAccess());
+        return token;
+    }
+
     private String getEmail(String token) {
         return Jwts
                 .parserBuilder()

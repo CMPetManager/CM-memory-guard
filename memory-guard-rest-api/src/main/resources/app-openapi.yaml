@@ -25,13 +25,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReadAlbum'
+                $ref: '#/components/schemas/Album'
         '400':
           description: something wrong
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
   /albums/{coverId}:
     get:
@@ -54,7 +54,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReadAlbum'
+                $ref: '#/components/schemas/Album'
         '404':
           description: not found
         '500':
@@ -62,7 +62,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
     delete:
       tags:
         - AlbumController
@@ -88,7 +88,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
   /covers:
     post:
@@ -100,20 +100,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateReadCover'
+              $ref: '#/components/schemas/Cover'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateReadCover'
+                $ref: '#/components/schemas/Cover'
         '400':
           description: something wrong
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
   /covers/{userId}:
     get:
@@ -143,7 +143,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
   /covers/{coverId}:
     put:
@@ -164,7 +164,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateReadCover'
+              $ref: '#/components/schemas/Cover'
         required: true
       responses:
         '200':
@@ -172,13 +172,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateReadCover'
+                $ref: '#/components/schemas/Cover'
         '400':
           description: something wrong
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
     delete:
       tags:
         - CoverController
@@ -204,7 +204,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
   /pages:
     post:
@@ -216,20 +216,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateReadPage'
+              $ref: '#/components/schemas/Page'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateReadPage'
+                $ref: '#/components/schemas/Page'
         '400':
           description: something wrong
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
   /pages/{albumId}:
     get:
@@ -260,7 +260,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
   /pages/{id}:
     get:
@@ -283,13 +283,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateReadPage'
+                $ref: '#/components/schemas/Page'
         '400':
           description: something wrong
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
     put:
       summary: Update cover
       tags:
@@ -308,20 +308,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateReadPage'
+              $ref: '#/components/schemas/Page'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateReadPage'
+                $ref: '#/components/schemas/Page'
         '400':
           description: something wrong
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
     delete:
       tags:
@@ -348,7 +348,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
   /images:
     post:
@@ -360,20 +360,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateReadImage'
+              $ref: '#/components/schemas/Image'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateReadImage'
+                $ref: '#/components/schemas/Image'
         '400':
           description: something wrong
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
   /images/{id}:
     delete:
@@ -401,11 +401,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApplicationError'
 
 components:
   schemas:
-    CreateReadPage:
+    Page:
       type: object
       properties:
         id:
@@ -431,7 +431,7 @@ components:
           type: string
           example: slide
         album:
-          $ref: '#/components/schemas/ReadAlbum'
+          $ref: '#/components/schemas/Album'
 
     CreateAlbum:
       type: object
@@ -440,16 +440,20 @@ components:
           type: integer
           format: int64
 
-    ReadAlbum:
+    Album:
       type: object
       properties:
         id:
           type: integer
           format: int64
-        page:
-          $ref: '#/components/schemas/Pages'
+        cover:
+          $ref: '#/components/schemas/Page'
+        pages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Page'
 
-    CreateReadCover:
+    Cover:
       type: object
       properties:
         id:
@@ -462,7 +466,7 @@ components:
           type: integer
           format: int64
 
-    CreateReadImage:
+    Image:
       type: object
       required:
         - link
@@ -480,21 +484,20 @@ components:
           type: integer
           format: int64
 
-    Covers:
-      type: array
-      items:
-        $ref: '#/components/schemas/CreateReadCover'
-
     Pages:
       type: array
       items:
-        $ref: '#/components/schemas/CreateReadPage'
+        $ref: '#/components/schemas/Page'
 
-    ErrorResponse:
+    Covers:
+      type: array
+      items:
+        $ref: '#/components/schemas/Cover'
+
+    ApplicationError:
       type: object
       properties:
         code:
           type: integer
         message:
           type: string
-          

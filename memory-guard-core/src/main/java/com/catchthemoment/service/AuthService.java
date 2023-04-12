@@ -2,13 +2,11 @@ package com.catchthemoment.service;
 
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.auth.JwtTokenManager;
-import com.catchthemoment.config.JwtProperties;
 import com.catchthemoment.model.LoginRequest;
 import com.catchthemoment.model.LoginResponse;
 
 import com.catchthemoment.entity.User;
 import com.catchthemoment.model.RefreshToken;
-import com.catchthemoment.model.Token;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +21,6 @@ public class AuthService {
     private final UserService userService;
     private final JwtTokenManager jwtTokenManager;
     private final AuthenticationManager authenticationManager;
-    private final JwtProperties jwtProperties;
 
     public LoginResponse login(LoginRequest loginRequest) throws ServiceProcessingException {
 
@@ -35,26 +32,21 @@ public class AuthService {
         log.info("Authentication successfully");
 
         log.info("Create object for response");
-        LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setUserId(currentUser.getId());
-        loginResponse.setName(currentUser.getName());
-        loginResponse.setToken(getToken(currentUser));
+        LoginResponse loginResponse = getLoginResponse(currentUser);
         log.info("LoginResponse successfully created");
         return loginResponse;
     }
+
 
     public LoginResponse refresh(RefreshToken refreshToken) throws ServiceProcessingException {
         return jwtTokenManager.refreshUserTokens(refreshToken.getRefreshToken(), refreshToken.getUserId());
     }
 
-    private Token getToken(User user) {
-        Token token = new Token();
-        token.setAccessToken(jwtTokenManager.createAccessToken(user.getId(),
-                user.getEmail(),
-                user.getRole()));
-        token.setRefreshToken(jwtTokenManager.createRefreshToken(user.getId(),
-                user.getEmail()));
-        token.setExpirationIn(jwtProperties.getAccess());
-        return token;
+    private LoginResponse getLoginResponse(User currentUser) {
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setUserId(currentUser.getId());
+        loginResponse.setName(currentUser.getName());
+        loginResponse.setToken(jwtTokenManager.getToken(currentUser));
+        return loginResponse;
     }
 }

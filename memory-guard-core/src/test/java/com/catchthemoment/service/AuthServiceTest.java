@@ -39,11 +39,7 @@ class AuthServiceTest {
         LoginRequest loginRequest = getLoginRequest();
         User user = getUser();
         doReturn(user).when(userService).getByEmail(loginRequest.getEmail());
-        doReturn(expectedResult.getToken().getAccessToken()).when(jwtTokenManager)
-                .createAccessToken(user.getId(), user.getEmail(), user.getRole());
-        doReturn(expectedResult.getToken().getRefreshToken()).when(jwtTokenManager)
-                .createRefreshToken(user.getId(), user.getEmail());
-        doReturn(expectedResult.getToken().getExpirationIn()).when(jwtProperties).getAccess();
+        doReturn(getToken()).when(jwtTokenManager).getToken(user);
 
         LoginResponse actualResult = authService.login(loginRequest);
 

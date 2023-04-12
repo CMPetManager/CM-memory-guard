@@ -1,18 +1,12 @@
 package com.catchthemoment.exception;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class ServiceProcessingException extends Exception {
 
-    private int code;
-    private String message;
-
-
-    public ServiceProcessingException(int code, String  message) {
-        this.code = code;
-        this.message = message;
-    }
-
-
+    private final int code;
+    private final String message;
 }

@@ -18,6 +18,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findUSerByConfirmationResetToken(String code);
 
-
     Optional<User> findUserByResetPasswordToken(String token);
 }
