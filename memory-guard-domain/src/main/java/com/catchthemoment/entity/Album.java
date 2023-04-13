@@ -1,12 +1,12 @@
 package com.catchthemoment.entity;
 
+import com.catchthemoment.entity.embedded.Cover;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -22,15 +22,17 @@ public class Album {
     @NotNull
     private Long id;
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride( name = "description", column = @Column(name = "cover_description")),
+    })
+    private Cover cover;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User user;
 
-    @OneToOne(mappedBy = "album")
-    private Cover cover;
-
     @OneToMany(mappedBy = "album")
     private List<Page> pages;
-
 
 }

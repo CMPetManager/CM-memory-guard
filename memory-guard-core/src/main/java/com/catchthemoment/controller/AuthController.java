@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Slf4j
 @Service
@@ -20,7 +19,7 @@ public class AuthController implements AuthControllerApiDelegate {
 
 
 	@Override
-	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws ServiceProcessingException {
+	public ResponseEntity<LoginResponse> login(LoginRequest loginRequest) throws ServiceProcessingException {
 		log.info("Received an authentication request by email: {}",loginRequest.getEmail());
 		ResponseEntity<LoginResponse> response = ResponseEntity.ok(authService.login(loginRequest));
 		log.info("Authentication successful");
@@ -28,7 +27,7 @@ public class AuthController implements AuthControllerApiDelegate {
 	}
 
 	@Override
-	public ResponseEntity<LoginResponse> refresh(@RequestBody RefreshToken refreshToken) throws ServiceProcessingException {
+	public ResponseEntity<LoginResponse> refresh(RefreshToken refreshToken) throws ServiceProcessingException {
 		log.info("Received a request to refresh a token");
 		ResponseEntity<LoginResponse> response = ResponseEntity.ok(authService.refresh(refreshToken));
 		log.info("Tokens have been successfully updated");
