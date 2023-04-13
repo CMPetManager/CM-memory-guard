@@ -18,7 +18,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateAlbum'
+              $ref: '#/components/schemas/Album'
       responses:
         '200':
           description: successful operation
@@ -433,13 +433,6 @@ components:
         album:
           $ref: '#/components/schemas/Album'
 
-    CreateAlbum:
-      type: object
-      properties:
-        coverId:
-          type: integer
-          format: int64
-
     Album:
       type: object
       properties:
@@ -447,7 +440,7 @@ components:
           type: integer
           format: int64
         cover:
-          $ref: '#/components/schemas/Page'
+          $ref: '#/components/schemas/Cover'
         pages:
           type: array
           items:
@@ -456,15 +449,11 @@ components:
     Cover:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
         description:
           type: string
           example: place description
-        albumId:
-          type: integer
-          format: int64
+        coverImage:
+          $ref: '#/components/schemas/Image'
 
     Image:
       type: object

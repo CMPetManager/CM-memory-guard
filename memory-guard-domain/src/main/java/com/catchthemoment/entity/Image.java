@@ -21,8 +21,8 @@ public class Image {
     private String link;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cover_id", referencedColumnName = "id")
-    private Cover cover;
+    @JoinColumn(name = "album_id", referencedColumnName = "id")
+    private Album cover;
 
     @ManyToOne
     @JoinColumn(name = "page_id",referencedColumnName = "id")
