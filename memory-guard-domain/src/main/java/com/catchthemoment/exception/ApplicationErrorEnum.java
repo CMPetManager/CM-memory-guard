@@ -8,9 +8,10 @@ import lombok.RequiredArgsConstructor;
 public enum ApplicationErrorEnum {
 	DEFAULT_EXCEPTION(1001, "Problems on the server.Try it another time"),
 
-	USER_NOT_FOUND(2001,"Not found"),
-	ACCESS_DENIED(2002,"Access denied"),
-	ILLEGAL_STATE(2003,"Already exists"),
+	USER_NOT_FOUND(2001,"User not found"),
+	IMAGE_NOT_FOUND(2002,"Image not found"),
+	ACCESS_DENIED(2003,"Access denied"),
+	ILLEGAL_STATE(2004,"Already exists"),
 
 	INCORRECT_INPUT(4001,"The entered data did not pass validation"),
 	MAIL_INCORRECT(4002,"The mail incorrect"),

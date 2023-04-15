@@ -252,7 +252,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pages'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Page'
         '404':
           description: not found
         '500':
@@ -350,17 +352,52 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
+  /images/{name}:
+    get:
+      tags:
+        - ImageController
+      summary: Find image by name
+      description: Find image by name
+      operationId: downloadImage
+      parameters:
+        - name: name
+          in: path
+          description: name , which need to find image
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: number
+
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
   /images:
     post:
       summary: Method for created image
       tags:
         - ImageController
-      operationId: createImage
+      operationId: uploadImage
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Image'
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
       responses:
         '200':
           description: successful operation
@@ -402,6 +439,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
+
 
 components:
   schemas:
@@ -466,17 +504,18 @@ components:
         link:
           type: string
           example: photo link
+        name:
+          type: string
+          example: name
+        type:
+          type: string
+          example: type
         pageId:
           type: integer
           format: int64
         coverId:
           type: integer
           format: int64
-
-    Pages:
-      type: array
-      items:
-        $ref: '#/components/schemas/Page'
 
     Covers:
       type: array

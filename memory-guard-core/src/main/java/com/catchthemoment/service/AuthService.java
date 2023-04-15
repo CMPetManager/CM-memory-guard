@@ -37,7 +37,6 @@ public class AuthService {
         return loginResponse;
     }
 
-
     public LoginResponse refresh(RefreshToken refreshToken) throws ServiceProcessingException {
         return jwtTokenManager.refreshUserTokens(refreshToken.getRefreshToken(), refreshToken.getUserId());
     }
