@@ -18,20 +18,136 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Album'
+              $ref: '#/components/schemas/AlbumModel'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Album'
+                $ref: '#/components/schemas/AlbumModel'
         '400':
           description: something wrong
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
+  /albums/{userId}:
+    get:
+      tags:
+        - AlbumController
+      description: Get all user's albums
+      operationId: getUserAlbums
+      parameters:
+        - name: userId
+          in: path
+          description: userId for finding user's albums
+          required: true
+          schema:
+            type: number
+            format: int64
+      responses:
+        '200':
+          description: all user's album found
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/AlbumModel'
+        '500':
+          description: something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
+
+  /albums/{id}:
+    get:
+      tags:
+        - AlbumController
+      summary: Find album by album id
+      description: Get album by item id
+      operationId: getAlbumByItemId
+      parameters:
+        - name: id
+          in: path
+          description: albumId must defined to find album
+          required: true
+          schema:
+            type: number
+            format: int64
+      responses:
+        '200':
+          description: album found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumModel'
+        '404':
+            description: album not found
+        '500':
+          description: something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+    put:
+      tags:
+        - AlbumController
+      summary: Update Album
+      description: Update album by albumId
+      operationId: updateAlbum
+      parameters:
+        - name: id
+          in: path
+          description: id , need for updating album
+          required: true
+          schema:
+            type: number
+            format: int64
+      responses:
+        '200':
+          description: album updated without errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumModel'
+        '404':
+          description: album not found by its id
+        '500':
+          description: something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+    delete:
+      tags:
+        - AlbumController
+      summary: Remove album by id
+      description: delete album by its id
+      operationId: deleteAlbum
+      parameters:
+        - name: id
+          in : path
+          description: id of the album
+          required: true
+          schema:
+            type: number
+            format: int64
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
 
   /albums/{coverId}:
     get:
@@ -54,7 +170,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Album'
+                $ref: '#/components/schemas/AlbumModel'
         '404':
           description: not found
         '500':
@@ -68,7 +184,7 @@ paths:
         - AlbumController
       summary: Delete album by coverId
       description: Method for delete album
-      operationId: deleteAlbum
+      operationId: deleteAlbumByCover
       parameters:
         - name: coverId
           in: path
@@ -428,12 +544,14 @@ components:
           type: string
           example: Germany,Berlin
         animation:
-          type: string
+          type: array
           example: slide
+          items:
+            $ref: '#/components/schemas/Image'
         album:
-          $ref: '#/components/schemas/Album'
+          $ref: '#/components/schemas/AlbumModel'
 
-    Album:
+    AlbumModel:
       type: object
       properties:
         id:
@@ -445,6 +563,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Page'
+        user:
+          type: object
+
 
     Cover:
       type: object
