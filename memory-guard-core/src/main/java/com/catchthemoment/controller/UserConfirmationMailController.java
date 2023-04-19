@@ -4,7 +4,10 @@ import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.CreateReadUserMapper;
+import com.catchthemoment.mappers.ImageMapper;
 import com.catchthemoment.model.CreateReadUser;
+import com.catchthemoment.model.ImageModel;
+import com.catchthemoment.service.ImageService;
 import com.catchthemoment.service.UserConfirmMailService;
 import com.catchthemoment.service.UserService;
 import com.catchthemoment.util.SiteUrlUtil;
@@ -19,6 +22,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Slf4j
 @RestController
 @RequestMapping("/users")
@@ -35,7 +44,7 @@ public class UserConfirmationMailController {
     public ResponseEntity<CreateReadUser> confirmUserAccount(@RequestBody @NotNull CreateReadUser createReadUser, HttpServletRequest request)
             throws Exception {
         log.info("Received a registration request by email: {}", createReadUser.getEmail());
-        if(!validator.isValid(createReadUser))
+        if (!validator.isValid(createReadUser))
             throw new ServiceProcessingException(ApplicationErrorEnum.INCORRECT_INPUT.getCode(),
                     ApplicationErrorEnum.INCORRECT_INPUT.getMessage());
         User user = userMapper.toEntity(createReadUser);

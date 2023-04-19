@@ -19,6 +19,7 @@
         <passay.version>1.6.2</passay.version>
         <h2.version>2.1.212</h2.version>
         <model.version>0.0.1</model.version>
+        <springdoc.version>2.0.0</springdoc.version>
     </properties>
 
     <dependencies>
@@ -149,5 +150,12 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+
     </dependencies>
 </project>

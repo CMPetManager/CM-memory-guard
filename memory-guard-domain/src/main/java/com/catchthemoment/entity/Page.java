@@ -38,7 +38,7 @@ public class Page {
     private String tagPlace;
 
     @Column(name = "animation")
-    private byte [] animation;
+    private String animation;
 
     @ManyToOne
     @JoinColumn(name = "album_id",referencedColumnName = "id")
