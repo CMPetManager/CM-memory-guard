@@ -1,6 +1,7 @@
 package com.catchthemoment.mappers;
 
-import com.catchthemoment.model.Album;
+import com.catchthemoment.entity.Album;
+import com.catchthemoment.model.AlbumModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
@@ -9,7 +10,7 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AlbumMapper {
 
-    com.catchthemoment.entity.Album toEntity(Album albumDto);
+    Album toEntity(AlbumModel albumModel);
 
-    Album toDto(com.catchthemoment.entity.Album album);
+    AlbumModel toModel(Album album);
 }

@@ -32,7 +32,7 @@ public class ImageService {
         if (imageRepository.findImageByName(file.getOriginalFilename()).isPresent()) {
             throw new ServiceProcessingException(ILLEGAL_STATE.getCode(),ILLEGAL_STATE.getMessage());
         }
-        log.info("Validation passed, This name is not in the database");
+        log.info("Validation passed, This name doesn't exist in the database");
         String filePath = FOLDER_PATH + file.getOriginalFilename();
         Image buildImage = getBuildImage(file, filePath);
         log.info("Save object image into db");

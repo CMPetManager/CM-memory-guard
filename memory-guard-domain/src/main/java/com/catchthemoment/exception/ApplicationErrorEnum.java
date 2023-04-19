@@ -15,8 +15,8 @@ public enum ApplicationErrorEnum {
 
 	INCORRECT_INPUT(4001,"The entered data did not pass validation"),
 	MAIL_INCORRECT(4002,"The mail incorrect"),
-	VALID_ACCOUNT_ERROR(4003, "Verify account went wrong..");
-
+	VALID_ACCOUNT_ERROR(4003, "Verify account went wrong.."),
+	EMPTY_REQUEST(4004," The request is empty");
 	private final int code;
 	private final String message;
 }

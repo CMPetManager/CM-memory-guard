@@ -1,6 +1,7 @@
 package com.catchthemoment.mappers;
 
-import com.catchthemoment.model.Image;
+import com.catchthemoment.entity.Image;
+import com.catchthemoment.model.ImageModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
@@ -9,8 +10,8 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ImageMapper {
 
-    com.catchthemoment.entity.Image toEntity(Image imageDto);
+    Image toEntity(ImageModel imageModel);
 
-    Image toDto(com.catchthemoment.entity.Image image);
+    ImageModel toModel(Image image);
 
 }
