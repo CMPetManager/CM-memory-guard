@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                /*.exceptionHandling()
+                .exceptionHandling()
                 .authenticationEntryPoint(((request, response, authException) -> {
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.getWriter().write("Unauthorized.");
@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/login", "/users**", "/users/**", "/refresh-token","/forgot-password").permitAll()
                 .anyRequest().authenticated()
-                .and()*/
+                .and()
                 .anonymous().disable()
                 .addFilterBefore(new JwtTokenFilter(jwtTokenManager), UsernamePasswordAuthenticationFilter.class);
 
