@@ -44,7 +44,7 @@ paths:
           description: userId for finding user's albums
           required: true
           schema:
-            type: number
+            type: integer
             format: int64
       responses:
         '200':
@@ -53,7 +53,8 @@ paths:
             application/json:
               schema:
                 type: array
-                $ref: '#/components/schemas/AlbumModel'
+                items:
+                  $ref: '#/components/schemas/AlbumModel'
         '500':
           description: something went wrong
           content:
@@ -75,7 +76,7 @@ paths:
           description: albumId must defined to find album
           required: true
           schema:
-            type: number
+            type: integer
             format: int64
       responses:
         '200':
@@ -104,7 +105,7 @@ paths:
           description: id , need for updating album
           required: true
           schema:
-            type: number
+            type: integer
             format: int64
       responses:
         '200':
@@ -133,7 +134,7 @@ paths:
           description: id of the album
           required: true
           schema:
-            type: number
+            type: integer
             format: int64
       responses:
         '201':
@@ -332,14 +333,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Page'
+              $ref: '#/components/schemas/PageModel'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Page'
+                $ref: '#/components/schemas/PageModel'
         '400':
           description: something wrong
           content:
@@ -399,7 +400,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Page'
+                $ref: '#/components/schemas/PageModel'
         '400':
           description: something wrong
           content:
@@ -424,14 +425,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Page'
+              $ref: '#/components/schemas/PageModel'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Page'
+                $ref: '#/components/schemas/PageModel'
         '400':
           description: something wrong
           content:
@@ -521,7 +522,7 @@ paths:
 
 components:
   schemas:
-    Page:
+    PageModel:
       type: object
       properties:
         id:
@@ -544,10 +545,8 @@ components:
           type: string
           example: Germany,Berlin
         animation:
-          type: array
+          type: string
           example: slide
-          items:
-            $ref: '#/components/schemas/Image'
         album:
           $ref: '#/components/schemas/AlbumModel'
 
@@ -562,9 +561,11 @@ components:
         pages:
           type: array
           items:
-            $ref: '#/components/schemas/Page'
+            $ref: '#/components/schemas/PageModel'
         user:
           type: object
+          items:
+            $ref: '#/components/schemas/UserModel'
 
 
     Cover:
@@ -597,12 +598,32 @@ components:
     Pages:
       type: array
       items:
-        $ref: '#/components/schemas/Page'
+        $ref: '#/components/schemas/PageModel'
 
     Covers:
       type: array
       items:
         $ref: '#/components/schemas/Cover'
+
+    UserModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: user's name
+        password:
+          type: string
+          example: user's password
+        email:
+          type: string
+          example: user's email
+        albums:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlbumModel'
 
     ApplicationError:
       type: object

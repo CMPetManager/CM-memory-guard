@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-//TODO fix mapping user to album
+
 public class AlbumMapperTest {
 
     private AlbumMapper albumMapper = Mappers.getMapper(AlbumMapper.class);

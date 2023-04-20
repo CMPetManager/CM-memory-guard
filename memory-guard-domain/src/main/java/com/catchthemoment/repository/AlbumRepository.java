@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AlbumRepository extends JpaRepository<Album, Long> {
-    @EntityGraph(value = "album-graph", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "album-graph", type = EntityGraph.EntityGraphType.LOAD)
    Optional<Album> findAlbumById(Long id);
 
     @EntityGraph(value = "album_graph", type = EntityGraph.EntityGraphType.LOAD)
