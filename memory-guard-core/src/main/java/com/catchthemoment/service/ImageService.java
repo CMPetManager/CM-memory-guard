@@ -1,7 +1,6 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.entity.Image;
-import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,25 +29,20 @@ public class ImageService {
     public Image uploadImage(MultipartFile file) throws IOException, ServiceProcessingException {
         log.info("Checking the image name for uniqueness");
         if (imageRepository.findImageByName(file.getOriginalFilename()).isPresent()) {
+            log.error("*** This image is already exists ***");
             throw new ServiceProcessingException(ILLEGAL_STATE.getCode(),ILLEGAL_STATE.getMessage());
         }
         log.info("Validation passed, This name doesn't exist in the database");
         String filePath = FOLDER_PATH + file.getOriginalFilename();
+
         Image buildImage = getBuildImage(file, filePath);
         log.info("Save object image into db");
+
         Image image = imageRepository.save(buildImage);
         log.info("Image successful saved");
         file.transferTo(new File(filePath));
 
         return image;
-    }
-
-    private static Image getBuildImage(MultipartFile file, String filePath) {
-        return Image.builder()
-                .name(file.getOriginalFilename())
-                .type(file.getContentType())
-                .link(filePath)
-                .build();
     }
 
     public byte[] downloadImage(String fileName) throws ServiceProcessingException, IOException {
@@ -59,7 +53,14 @@ public class ImageService {
                         IMAGE_NOT_FOUND.getMessage()));
         log.info("Name successfully found");
         String filePath = currentImage.getLink();
-        byte[] images = Files.readAllBytes(new File(filePath).toPath());
-        return images;
+        return Files.readAllBytes(new File(filePath).toPath());
+    }
+
+    private static Image getBuildImage(MultipartFile file, String filePath) {
+        return Image.builder()
+                .name(file.getOriginalFilename())
+                .type(file.getContentType())
+                .link(filePath)
+                .build();
     }
 }
