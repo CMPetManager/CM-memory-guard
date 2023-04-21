@@ -412,22 +412,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ImageModel'
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
   /images/{id}:
     delete:
       tags:
