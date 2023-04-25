@@ -44,9 +44,11 @@ public class UserConfirmationMailController {
     public ResponseEntity<CreateReadUser> confirmUserAccount(@RequestBody @NotNull CreateReadUser createReadUser, HttpServletRequest request)
             throws Exception {
         log.info("Received a registration request by email: {}", createReadUser.getEmail());
-        if (!validator.isValid(createReadUser))
+        if (!validator.isValid(createReadUser)) {
+            log.error("CreateReadUser didn't pass validation");
             throw new ServiceProcessingException(ApplicationErrorEnum.INCORRECT_INPUT.getCode(),
                     ApplicationErrorEnum.INCORRECT_INPUT.getMessage());
+        }
         User user = userMapper.toEntity(createReadUser);
         CreateReadUser createdUser = userMapper.toDto(userService.create(user, SiteUrlUtil.getSiteURL(request)));
         ResponseEntity<CreateReadUser> response = new ResponseEntity<>(createdUser, HttpStatus.CREATED);

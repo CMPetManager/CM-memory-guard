@@ -247,14 +247,13 @@ components:
         refreshToken:
           type: string
 
-    Page:
+    AlbumModel:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          example: 11
-        description:
+        albumDescription:
           type: string
           example: some words about page
         color:
@@ -272,19 +271,34 @@ components:
         animation:
           type: string
           example: slide
-        album:
-          $ref: '#/components/schemas/Album'
+        coverDescription:
+          type: string
+          example: place description
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageModel'
 
-    Album:
+    ImageModel:
       type: object
+      required:
+        - link
       properties:
         id:
           type: integer
           format: int64
-        pages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Page'
+        link:
+          type: string
+          example: photo link
+        name:
+          type: string
+          example: name
+        type:
+          type: string
+          example: type
+        albumId:
+          type: integer
+          format: int64
 
     ApplicationError:
       type: object

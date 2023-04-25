@@ -46,7 +46,7 @@ public class ImageService {
     }
 
     public byte[] downloadImage(String fileName) throws ServiceProcessingException, IOException {
-        log.info("Find image name in db");
+        log.info("Find image name in the db");
         Image currentImage = imageRepository.findImageByName(fileName)
                 .orElseThrow(() -> new ServiceProcessingException(
                         IMAGE_NOT_FOUND.getCode(),
