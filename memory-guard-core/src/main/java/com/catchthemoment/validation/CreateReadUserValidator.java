@@ -18,7 +18,6 @@ public class CreateReadUserValidator {
     }
 
     private boolean checkPassword(CreateReadUser createReadUser) {
-        log.info("");
         if (!StringUtils.hasText(createReadUser.getPassword())) {
             log.error("Password is null");
             return false;

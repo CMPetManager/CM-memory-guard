@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   description: This specification is intended to describe the functionality of the
-    photo album application (User's part)
+    photo album application (Album and image part)
   title: Photo album OpenAPI specification
   version: 1.0.11
 servers:
@@ -33,215 +33,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-  /albums/{coverId}:
+  /albums/{userId}:
     get:
       tags:
         - AlbumController
-      summary: Find album by coverId
-      description: Find album by coverId
-      operationId: getAlbumByCoverId
-      parameters:
-        - name: coverId
-          in: path
-          description: coverId , which need to find an album
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AlbumModel'
-        '404':
-          description: not found
-        '500':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-    delete:
-      tags:
-        - AlbumController
-      summary: Delete album by coverId
-      description: Method for delete album
-      operationId: deleteAlbum
-      parameters:
-        - name: coverId
-          in: path
-          description: ID of the cover that needs to be deleted
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema: { }
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-  /covers:
-    post:
-      summary: Method for created cover
-      tags:
-        - CoverController
-      operationId: createCover
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Cover'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Cover'
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-  /covers/{userId}:
-    get:
-      tags:
-        - CoverController
-      summary: Find covers by userId
-      operationId: getAllCoverByUserId
+      summary: Find album by userId
+      description: Find album by userId
+      operationId: getAlbumByUserId
       parameters:
         - name: userId
           in: path
-          description: userId , which need to find covers
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Covers'
-        '404':
-          description: not found
-        '500':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-  /covers/{coverId}:
-    put:
-      summary: Update cover
-      tags:
-        - CoverController
-      description: Method for update cover
-      operationId: updateCover
-      parameters:
-        - name: coverId
-          in: path
-          description: id that need to update cover
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Update an existent cover
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Cover'
-        required: true
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Cover'
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-    delete:
-      tags:
-        - CoverController
-      summary: Delete cover by coverId
-      description: Method for delete cover
-      operationId: deleteCover
-      parameters:
-        - name: coverId
-          in: path
-          description: ID for delete cover
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema: { }
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-  /pages:
-    post:
-      summary: Method for created page
-      tags:
-        - PageController
-      operationId: createPage
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PageModel'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PageModel'
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-  /pages/{albumId}:
-    get:
-      tags:
-        - PageController
-      summary: Find all pages by albumId
-      description: Find pages by albumId
-      operationId: getAllPagesByAlbumId
-      parameters:
-        - name: albumId
-          in: path
-          description: albumId , which need to find pages
+          description: userId , which need to find an album
           required: true
           schema:
             type: integer
@@ -254,7 +56,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/PageModel'
+                  $ref: '#/components/schemas/AlbumModel'
         '404':
           description: not found
         '500':
@@ -264,15 +66,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-  /pages/{id}:
+  /albums/{albumId}:
     get:
       tags:
-        - PageController
-      summary: Find page by ID
-      description: Find page by ID
-      operationId: getPage
+        - AlbumController
+      summary: Find album by ID
+      description: Find album by ID
+      operationId: getAlbum
       parameters:
-        - name: id
+        - name: albumId
           in: path
           description: id , which need to find page
           required: true
@@ -285,39 +87,42 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PageModel'
+                $ref: '#/components/schemas/AlbumModel'
+        '404':
+          description: Not found
         '400':
           description: something wrong
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
+
     put:
-      summary: Update cover
+      summary: Update album
       tags:
-        - PageController
-      description: Method for update page
-      operationId: updatePage
+        - AlbumController
+      description: Method for update album
+      operationId: updateAlbum
       parameters:
-        - name: id
+        - name: albumId
           in: path
-          description: id that need to update page
+          description: id that need to update album
           required: true
           schema:
             type: string
       requestBody:
-        description: Update an existent page in the album
+        description: Update an existent user in the store
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PageModel'
+              $ref: '#/components/schemas/AlbumModel'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PageModel'
+                $ref: '#/components/schemas/AlbumModel'
         '400':
           description: something wrong
           content:
@@ -327,14 +132,14 @@ paths:
 
     delete:
       tags:
-        - PageController
-      summary: Delete page by id
-      description: Method for delete page
-      operationId: deletePage
+        - AlbumController
+      summary: Delete album by albumId
+      description: Method for delete album
+      operationId: deleteAlbum
       parameters:
-        - name: id
+        - name: albumId
           in: path
-          description: id for delete page
+          description: ID of the cover that needs to be deleted
           required: true
           schema:
             type: integer
@@ -375,7 +180,6 @@ paths:
                 items:
                   type: string
                   format: byte
-
         '400':
           description: something wrong
           content:
@@ -405,22 +209,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ImageModel'
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ImageModel'
         '400':
           description: something wrong
           content:
@@ -458,14 +246,13 @@ paths:
 
 components:
   schemas:
-    PageModel:
+    AlbumModel:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          example: 11
-        description:
+        albumDescription:
           type: string
           example: some words about page
         color:
@@ -483,30 +270,13 @@ components:
         animation:
           type: string
           example: slide
-        album:
-          $ref: '#/components/schemas/AlbumModel'
-
-    AlbumModel:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        cover:
-          $ref: '#/components/schemas/Cover'
-        pages:
-          type: array
-          items:
-            $ref: '#/components/schemas/PageModel'
-
-    Cover:
-      type: object
-      properties:
-        description:
+        coverDescription:
           type: string
           example: place description
-        coverImage:
-          $ref: '#/components/schemas/ImageModel'
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageModel'
 
     ImageModel:
       type: object
@@ -525,17 +295,9 @@ components:
         type:
           type: string
           example: type
-        pageId:
+        albumId:
           type: integer
           format: int64
-        coverId:
-          type: integer
-          format: int64
-
-    Covers:
-      type: array
-      items:
-        $ref: '#/components/schemas/Cover'
 
     ApplicationError:
       type: object
