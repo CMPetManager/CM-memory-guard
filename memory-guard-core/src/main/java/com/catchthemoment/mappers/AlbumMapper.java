@@ -37,7 +37,6 @@ public interface AlbumMapper {
 
     User fromUserModel(UserModel userModel);
 
-    // List<User> fromUserModels(List<UserModel> models);
 
 
 }
