@@ -39,18 +39,18 @@ paths:
         - AlbumController
       summary: Find album by userId
       description: Find album by userId
-      operationId: getAlbumByUserId
+      operationId: getUserAlbums
       parameters:
         - name: userId
           in: path
-          description: userId , which need to find an album
+          description: userId for finding user's albums
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '200':
-          description: successful operation
+          description: all user's album found
           content:
             application/json:
               schema:
@@ -60,72 +60,67 @@ paths:
         '404':
           description: not found
         '500':
-          description: something wrong
+          description: something went wrong
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-  /albums/{albumId}:
+  /albums/{id}:
     get:
       tags:
         - AlbumController
-      summary: Find album by ID
-      description: Find album by ID
-      operationId: getAlbum
+      summary: Find album by album id
+      description: Get album by item id
+      operationId: getAlbumByItemId
       parameters:
-        - name: albumId
+        - name: id
           in: path
-          description: id , which need to find page
+          description: albumId must defined to find album
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '200':
-          description: successful operation
+          description: album found successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AlbumModel'
         '404':
-          description: Not found
-        '400':
-          description: something wrong
+            description: album not found
+        '500':
+          description: something went wrong
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
-
     put:
-      summary: Update album
       tags:
         - AlbumController
-      description: Method for update album
+      summary: Update Album
+      description: Update album by albumId
       operationId: updateAlbum
       parameters:
-        - name: albumId
+        - name: id
           in: path
-          description: id that need to update album
+          description: id , need for updating album
           required: true
           schema:
             type: integer
             format: int64
-      requestBody:
-        description: Update an existent user in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AlbumModel'
       responses:
         '200':
-          description: successful operation
+          description: album updated without errors
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AlbumModel'
-        '400':
-          description: something wrong
+        '404':
+          description: album not found by its id
+        '500':
+          description: something went wrong
           content:
             application/json:
               schema:
@@ -134,11 +129,11 @@ paths:
     delete:
       tags:
         - AlbumController
-      summary: Delete album by albumId
+      summary: Delete album by id
       description: Method for delete album
       operationId: deleteAlbum
       parameters:
-        - name: albumId
+        - name: id
           in: path
           description: ID of the cover that needs to be deleted
           required: true
@@ -150,7 +145,7 @@ paths:
           description: successful operation
           content:
             application/json:
-              schema: { }
+              schema: {}
         '400':
           description: something wrong
           content:
@@ -237,7 +232,7 @@ paths:
           description: successful operation
           content:
             application/json:
-              schema: { }
+              schema: {}
         '400':
           description: something wrong
           content:
@@ -299,6 +294,23 @@ components:
         albumId:
           type: integer
           format: int64
+
+    UserModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: user's name
+        password:
+          type: string
+          example: user's password
+        email:
+          type: string
+          example: user's email
+
 
     ApplicationError:
       type: object
