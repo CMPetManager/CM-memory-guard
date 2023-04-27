@@ -4,10 +4,7 @@ import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.CreateReadUserMapper;
-import com.catchthemoment.mappers.ImageMapper;
 import com.catchthemoment.model.CreateReadUser;
-import com.catchthemoment.model.ImageModel;
-import com.catchthemoment.service.ImageService;
 import com.catchthemoment.service.UserConfirmMailService;
 import com.catchthemoment.service.UserService;
 import com.catchthemoment.util.SiteUrlUtil;
@@ -22,11 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @RestController
@@ -39,20 +31,21 @@ public class UserConfirmationMailController {
     private final CreateReadUserMapper userMapper;
     private final CreateReadUserValidator validator;
 
-    @GetMapping(value = "/confirm-account",
+    @PostMapping(value = "/confirm-account",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CreateReadUser> confirmUserAccount(@RequestBody @NotNull CreateReadUser createReadUser, HttpServletRequest request)
             throws Exception {
-        log.info("Received a registration request by email: {}", createReadUser.getEmail());
+        log.info("*** Received a registration request by email: {} ***", createReadUser.getEmail());
         if (!validator.isValid(createReadUser)) {
-            log.error("CreateReadUser didn't pass validation");
+            log.error("*** CreateReadUser didn't pass validation ***");
             throw new ServiceProcessingException(ApplicationErrorEnum.INCORRECT_INPUT.getCode(),
                     ApplicationErrorEnum.INCORRECT_INPUT.getMessage());
         }
         User user = userMapper.toEntity(createReadUser);
-        CreateReadUser createdUser = userMapper.toDto(userService.create(user, SiteUrlUtil.getSiteURL(request)));
+        User currentUser = userService.create(user, SiteUrlUtil.getSiteURL(request));
+        CreateReadUser createdUser = userMapper.toDto(currentUser);
         ResponseEntity<CreateReadUser> response = new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-        log.info("The user has been successfully registered");
+        log.info("*** The user has been successfully registered ***");
         return response;
     }
 

@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users
     email VARCHAR(64) NOT NULL UNIQUE,
     password VARCHAR(200) NOT NULL,
     confirmation_reset_token VARCHAR(250) NULL,
+    reset_password_token VARCHAR(250) NULL,
     role VARCHAR(45) NOT NULL
     );
 
