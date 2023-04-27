@@ -15,7 +15,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ApplicationError> handle(ServiceProcessingException exception) {
-        log.error("ServiceProcessingException: {}", exception.toString());
+        log.error("*** ServiceProcessingException: {} ***", exception.toString());
         ApplicationError applicationError = new ApplicationError()
                 .code(exception.getCode())
                 .message(exception.getMessage());
@@ -24,7 +24,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ApplicationError> handleAll(Exception exception) {
-        log.error("Exception: {}", exception.toString());
+        log.error("*** Exception: {} ***", exception.toString());
         ApplicationError errorResponse = new ApplicationError()
                 .code(ApplicationErrorEnum.DEFAULT_EXCEPTION.getCode())
                 .message(ApplicationErrorEnum.DEFAULT_EXCEPTION.getMessage());

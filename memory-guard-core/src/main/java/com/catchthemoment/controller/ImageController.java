@@ -27,10 +27,10 @@ public class ImageController implements ImageControllerApiDelegate {
 
     @Override
     public ResponseEntity<ImageModel> uploadImage(MultipartFile file) throws Exception {
-        log.info("Received an upload image request with file name: {}", file.getOriginalFilename());
+        log.info("*** Received an upload image request with file name: {} ***", file.getOriginalFilename());
         if (!file.isEmpty()) {
             Image uploadedImage = imageService.uploadImage(file);
-            log.info("Upload was successful");
+            log.info("*** Upload was successful ***");
             ImageModel currentImage = imageMapper.toModel(uploadedImage);
             return ResponseEntity.ok(currentImage);
         } else {
@@ -42,10 +42,10 @@ public class ImageController implements ImageControllerApiDelegate {
 
     @Override
     public ResponseEntity<List<byte[]>> downloadImage(String name) throws Exception {
-        log.info("Received an download image request by name: {}", name);
+        log.info("*** Received an download image request by name: {} ***", name);
         byte[] imageData = imageService.downloadImage(name);
         List<byte[]> bytes = List.of(imageData);
-        log.info("Upload was successful");
+        log.info("*** Upload was successful ***");
         return ResponseEntity.ok(bytes);
     }
 }
