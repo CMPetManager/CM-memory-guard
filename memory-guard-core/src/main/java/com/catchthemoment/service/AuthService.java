@@ -26,17 +26,16 @@ public class AuthService {
 
         User currentUser = userService.getByEmail(loginRequest.getEmail());
 
-        log.info("The beginning of authentication");
+        log.info("*** The beginning of authentication ***");
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-        log.info("Authentication successfully");
+        log.info("*** Authentication successfully ***");
 
-        log.info("Create object for response");
+        log.info("*** Create object for response ***");
         LoginResponse loginResponse = getLoginResponse(currentUser);
-        log.info("LoginResponse successfully created");
+        log.info("*** LoginResponse successfully created ***");
         return loginResponse;
     }
-
 
     public LoginResponse refresh(RefreshToken refreshToken) throws ServiceProcessingException {
         return jwtTokenManager.refreshUserTokens(refreshToken.getRefreshToken(), refreshToken.getUserId());

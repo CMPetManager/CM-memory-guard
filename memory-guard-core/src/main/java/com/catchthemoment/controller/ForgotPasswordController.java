@@ -44,7 +44,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
             resetPasswordService.sendResetPasswordEmail(email, resetPasswordLink);
             model.addAttribute("message",
                     "We have sent a reset password link to your email. Please check.");
-            log.debug("email was sent to user",resetPasswordLink);
+            log.debug("*** email was sent to user: {} ***",resetPasswordLink);
         } catch (ServiceProcessingException e) {
             model.addAttribute("error", e.getMessage());
             throw new RuntimeException(e);
@@ -78,7 +78,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
             model.addAttribute("message", "Something went wrong..");
             return new ResponseEntity<>(model, HttpStatus.BAD_REQUEST);
         } else {
-            log.info("user changed password {}", userFromResetToken);
+            log.info("*** user changed password {} ***", userFromResetToken);
             resetPasswordService.updatePassword(userFromResetToken, password);
 
             model.addAttribute("message", "You have successfully changed your password.");

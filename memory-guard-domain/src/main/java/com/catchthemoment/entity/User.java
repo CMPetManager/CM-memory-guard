@@ -42,7 +42,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-
     @Column(name = "confirmation_reset_token", length = 20)
     private String confirmationResetToken;
 

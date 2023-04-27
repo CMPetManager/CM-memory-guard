@@ -32,36 +32,36 @@ public class UserService implements UserDetailsService {
     private final UserConfirmMailService confirmMailService;
 
     public User getByEmail(String email) throws ServiceProcessingException {
-        log.info("Request to get a user by email");
+        log.info("*** Request to get a user by email ***");
         User currentUser = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage()));
-        log.info("User successfully found");
+        log.info("*** User successfully found ***");
         return currentUser;
     }
 
     public User getById(Long userId) throws ServiceProcessingException {
-        log.info("Request to get a user by ID");
+        log.info("*** Request to get a user by ID ***");
         User currentUser = userRepository.findUserById(userId)
                 .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage()));
-        log.info("User successfully found");
+        log.info("*** User successfully found ***");
         return currentUser;
     }
 
     @Transactional
     public User create(User user, String siteURL) throws ServiceProcessingException,
             UnsupportedEncodingException, MessagingException {
-        log.info("Checking for mail uniqueness");
+        log.info("*** Checking for mail uniqueness ***");
         if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
             throw new ServiceProcessingException(ILLEGAL_STATE.getCode(),ILLEGAL_STATE.getMessage());
         }
-        log.info("The check was successful");
+        log.info("*** The check was successful ***");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.ROlE_USER);
         String randomCode = RandomString.make(20);
         user.setConfirmationResetToken(randomCode);
         User createdUser = userRepository.save(user);
         confirmMailService.sendVerificationEmail(user, siteURL);
-        log.info("The user has been successfully added to the database");
+        log.info("*** The user has been successfully added to the database ***");
         return createdUser;
     }
 

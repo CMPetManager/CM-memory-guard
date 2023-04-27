@@ -1,7 +1,6 @@
 package com.catchthemoment.entity.embedded;
 
-import com.catchthemoment.entity.Image;
-import jakarta.persistence.*;
+import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,8 +10,5 @@ import lombok.Setter;
 public class Cover {
 
     private String description;
-
-    @OneToOne(mappedBy = "cover")
-    private Image coverImage;
 
 }

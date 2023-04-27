@@ -2,13 +2,15 @@ package com.catchthemoment.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "image")
 public class Image {
 
@@ -17,11 +19,16 @@ public class Image {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "type")
+    private String type;
+
     @Column(name = "link")
     private String link;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "album_id", referencedColumnName = "id")
-    private Album cover;
-
+    private Album album;
 }
