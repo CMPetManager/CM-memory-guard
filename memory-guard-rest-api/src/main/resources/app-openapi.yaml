@@ -323,150 +323,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-  /pages:
-    post:
-      summary: Method for created page
-      tags:
-        - PageController
-      operationId: createPage
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PageModel'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PageModel'
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-  /pages/{albumId}:
-    get:
-      tags:
-        - PageController
-      summary: Find all pages by albumId
-      description: Find pages by albumId
-      operationId: getAllPagesByAlbumId
-      parameters:
-        - name: albumId
-          in: path
-          description: albumId , which need to find pages
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pages'
-        '404':
-          description: not found
-        '500':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-  /pages/{id}:
-    get:
-      tags:
-        - PageController
-      summary: Find page by ID
-      description: Find page by ID
-      operationId: getPage
-      parameters:
-        - name: id
-          in: path
-          description: id , which need to find page
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PageModel'
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-    put:
-      summary: Update cover
-      tags:
-        - PageController
-      description: Method for update page
-      operationId: updatePage
-      parameters:
-        - name: id
-          in: path
-          description: id that need to update page
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Update an existent page in the album
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PageModel'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PageModel'
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-    delete:
-      tags:
-        - PageController
-      summary: Delete page by id
-      description: Method for delete page
-      operationId: deletePage
-      parameters:
-        - name: id
-          in: path
-          description: id for delete page
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema: {}
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
   /images:
     post:
       summary: Method for created image
@@ -522,34 +378,6 @@ paths:
 
 components:
   schemas:
-    PageModel:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 11
-        description:
-          type: string
-          example: some words about page
-        color:
-          type: string
-          example: red
-        templatePage:
-          type: string
-          example: Horizontal image and text field below
-        tagPeople:
-          type: string
-          example: Andrew,Egor
-        tagPlace:
-          type: string
-          example: Germany,Berlin
-        animation:
-          type: string
-          example: slide
-        album:
-          $ref: '#/components/schemas/AlbumModel'
-
     AlbumModel:
       type: object
       properties:
@@ -558,10 +386,6 @@ components:
           format: int64
         cover:
           $ref: '#/components/schemas/Cover'
-        pages:
-          type: array
-          items:
-            $ref: '#/components/schemas/PageModel'
         user:
           type: object
           items:
@@ -595,11 +419,6 @@ components:
           type: integer
           format: int64
 
-    Pages:
-      type: array
-      items:
-        $ref: '#/components/schemas/PageModel'
-
     Covers:
       type: array
       items:
@@ -620,10 +439,7 @@ components:
         email:
           type: string
           example: user's email
-        albums:
-          type: array
-          items:
-            $ref: '#/components/schemas/AlbumModel'
+
 
     ApplicationError:
       type: object

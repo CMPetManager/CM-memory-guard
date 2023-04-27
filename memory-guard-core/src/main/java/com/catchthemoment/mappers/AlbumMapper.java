@@ -23,8 +23,7 @@ public interface AlbumMapper {
 
     @Named("mapUserModel")
     default List<UserModel> mapUsers(User user) {
-        List<UserModel> userModelList = new ArrayList<>();
-        return userModelList;
+        return new ArrayList<>();
     }
 
     @Named("mapUserEntity")
@@ -37,6 +36,8 @@ public interface AlbumMapper {
     }
 
     User fromUserModel(UserModel userModel);
+
+    // List<User> fromUserModels(List<UserModel> models);
 
 
 }

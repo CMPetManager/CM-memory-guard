@@ -24,8 +24,4 @@ public class Image {
     @JoinColumn(name = "album_id", referencedColumnName = "id")
     private Album cover;
 
-    @ManyToOne
-    @JoinColumn(name = "page_id",referencedColumnName = "id")
-    private Page page;
-
 }

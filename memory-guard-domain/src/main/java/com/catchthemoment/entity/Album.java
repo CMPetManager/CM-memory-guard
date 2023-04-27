@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -29,6 +28,10 @@ public class Album {
     @NotNull
     private Long id;
 
+    public void setCover(Cover cover) {
+        this.cover = cover;
+    }
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "description", column = @Column(name = "cover_description")),
@@ -39,8 +42,6 @@ public class Album {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "album")
-    private List<Page> pages;
 
     @Override
     public boolean equals(Object o) {
@@ -64,7 +65,6 @@ public class Album {
                 .append("id", id)
                 .append("cover", cover)
                 .append("user", user)
-                .append("pages", pages)
                 .toString();
     }
 }
