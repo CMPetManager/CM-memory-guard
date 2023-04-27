@@ -36,4 +36,6 @@ public class UserController implements UserControllerApiDelegate {
         log.info("*** " + RESPONSE_UPDATE_PASSWORD + " ***");
         return ResponseEntity.ok(RESPONSE_UPDATE_PASSWORD);
     }
+
+
 }

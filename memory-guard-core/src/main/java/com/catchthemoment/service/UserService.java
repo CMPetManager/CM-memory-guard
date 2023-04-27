@@ -6,6 +6,7 @@ import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.UserRepository;
 import jakarta.mail.MessagingException;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
@@ -52,7 +53,7 @@ public class UserService implements UserDetailsService {
             UnsupportedEncodingException, MessagingException {
         log.info("*** Checking for mail uniqueness ***");
         if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
-            throw new ServiceProcessingException(ILLEGAL_STATE.getCode(),ILLEGAL_STATE.getMessage());
+            throw new ServiceProcessingException(ILLEGAL_STATE.getCode(), ILLEGAL_STATE.getMessage());
         }
         log.info("*** The check was successful ***");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -75,4 +76,12 @@ public class UserService implements UserDetailsService {
         }
         return JwtEntityFactory.create(currentUser);
     }
+
+    public void deleteUserById(@NotNull Long id) {
+        userRepository.deleteById(id);
+
+    }
+
+
 }
+

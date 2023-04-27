@@ -1,7 +1,6 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.entity.User;
-import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.UserRepository;
 import jakarta.mail.MessagingException;
