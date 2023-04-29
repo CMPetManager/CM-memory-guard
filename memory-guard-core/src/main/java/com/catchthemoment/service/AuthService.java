@@ -34,6 +34,7 @@ public class AuthService {
         log.info("*** Create object for response ***");
         LoginResponse loginResponse = getLoginResponse(currentUser);
         log.info("*** LoginResponse successfully created ***");
+
         return loginResponse;
     }
 

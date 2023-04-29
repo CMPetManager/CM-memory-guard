@@ -46,7 +46,10 @@ class AlbumServiceTest {
     @BeforeEach
     void setUp() {
         cover = new Cover();
-        album = new Album(1L, cover, user);
+        album = new Album();
+        album.setId(1L);
+        album.setCover(cover);
+        album.setUser(user);
         model1 = new AlbumModel();
         model2 = new AlbumModel();
         albumModelList = List.of(model1, model2);

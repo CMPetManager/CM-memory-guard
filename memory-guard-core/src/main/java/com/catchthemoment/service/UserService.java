@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
         log.info("*** Request to get a user by email ***");
         User currentUser = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage()));
-        log.info("*** User successfully found ***");
+        log.info("*** User successfully found by email ***");
         return currentUser;
     }
 
@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService {
         log.info("*** Request to get a user by ID ***");
         User currentUser = userRepository.findUserById(userId)
                 .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage()));
-        log.info("*** User successfully found ***");
+        log.info("*** User successfully found by ID ***");
         return currentUser;
     }
 
@@ -52,7 +52,8 @@ public class UserService implements UserDetailsService {
             UnsupportedEncodingException, MessagingException {
         log.info("*** Checking for mail uniqueness ***");
         if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
-            throw new ServiceProcessingException(ILLEGAL_STATE.getCode(),ILLEGAL_STATE.getMessage());
+            log.info("*** This user is already exists ***");
+            throw new ServiceProcessingException(ILLEGAL_STATE.getCode(), ILLEGAL_STATE.getMessage());
         }
         log.info("*** The check was successful ***");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -75,4 +76,16 @@ public class UserService implements UserDetailsService {
         }
         return JwtEntityFactory.create(currentUser);
     }
+
+    @Transactional
+    public void deleteUserById(Long userId) throws ServiceProcessingException {
+        log.info("*** Request to delete a user by ID ***");
+        User currentUser = userRepository.findUserById(userId)
+                .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage()));
+        log.info("*** User successfully found by ID ***");
+        userRepository.deleteById(currentUser.getId());
+        log.info("*** User successfully deleted ***");
+    }
+
 }
+
