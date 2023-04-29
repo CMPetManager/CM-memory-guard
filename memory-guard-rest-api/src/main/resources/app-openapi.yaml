@@ -71,12 +71,12 @@ paths:
       tags:
         - AlbumController
       summary: Find album by album id
-      description: Get album by item id
-      operationId: getAlbumByItemId
+      description: Get album by id
+      operationId: getAlbum
       parameters:
         - name: id
           in: path
-          description: albumId must defined to find album
+          description: album Id must defined to find album
           required: true
           schema:
             type: integer
