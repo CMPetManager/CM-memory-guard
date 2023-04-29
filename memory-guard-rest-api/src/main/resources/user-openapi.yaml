@@ -147,9 +147,43 @@ paths:
                 $ref: '#/components/schemas/ApplicationError'
 
   /users/{userId}:
+    put:
+      summary: Update password
+      tags:
+        - UserController
+      description: Method for update password
+      operationId: updatePassword
+      parameters:
+        - name: userId
+          in: path
+          description: userId to update password
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePassword'
+
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
     delete:
       tags:
-        - AuthController
+        - UserController
       summary: Delete user userId
       description: Method for delete user
       operationId: deleteUser
@@ -161,40 +195,6 @@ paths:
           schema:
             type: integer
             format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema: { }
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-    put:
-      summary: Update password
-      tags:
-        - UserController
-      description: Method for update password
-      operationId: updateEmail
-      parameters:
-        - name: userId
-          in: path
-          description: userId to update password
-          required: true
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        description: Update an existent password in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdatePassword'
-
       responses:
         '200':
           description: successful operation
