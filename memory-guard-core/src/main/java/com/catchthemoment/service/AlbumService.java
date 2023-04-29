@@ -40,7 +40,6 @@ public class AlbumService {
                 .stream().sorted()
                 .distinct()
                 .toList());
-
     }
 
     public void deleteAlbumById(@NotNull Long albumId) throws ServiceProcessingException {

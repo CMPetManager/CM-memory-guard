@@ -18,13 +18,14 @@ import org.springframework.stereotype.Service;
 public class UserController implements UserControllerApiDelegate {
 
     private static final String RESPONSE_UPDATE_PASSWORD = "Password successfully updated";
+    private static final String RESPONSE_DELETE_USER = "User successfully deleted";
 
     private final UserResetPasswordService userResetPasswordService;
     private final UserService userService;
     private final UpdatePasswordValidator validator;
 
     @Override
-    public ResponseEntity<String> updateEmail(Long userId, UpdatePassword updatePassword) throws Exception {
+    public ResponseEntity<String> updatePassword(Long userId, UpdatePassword updatePassword) throws Exception {
         if(!validator.isValid(updatePassword)){
             log.error("*** Password didn't pass validation ***");
             throw new ServiceProcessingException(ApplicationErrorEnum.INCORRECT_INPUT.getCode(),
@@ -34,6 +35,16 @@ public class UserController implements UserControllerApiDelegate {
         log.info("*** Received an update password request with email: {} ***", currentUser.getEmail());
         userResetPasswordService.updatePassword(currentUser, updatePassword.getPassword());
         log.info("*** " + RESPONSE_UPDATE_PASSWORD + " ***");
+
         return ResponseEntity.ok(RESPONSE_UPDATE_PASSWORD);
+    }
+
+    @Override
+    public ResponseEntity<String> deleteUser(Long userId) throws Exception {
+        log.info("*** Received an delete account request ***");
+        userService.deleteUserById(userId);
+        log.info("*** " + RESPONSE_DELETE_USER + " ***");
+
+        return ResponseEntity.ok(RESPONSE_DELETE_USER);
     }
 }

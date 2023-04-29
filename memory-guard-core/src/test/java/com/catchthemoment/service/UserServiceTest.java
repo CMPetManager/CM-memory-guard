@@ -19,6 +19,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith({MockitoExtension.class})
 class UserServiceTest {
 
+
     private static final Long USER_ID = 1L;
     @Mock
     private UserRepository userRepository;
@@ -44,7 +45,7 @@ class UserServiceTest {
     }
 
     @Test
-    void registrationExceptionIfUSerAlreadyExists(){
+    void registrationExceptionIfUSerAlreadyExists() {
         User user = getUser();
         doReturn(Optional.of(user)).when(userRepository).findUserByEmail(user.getEmail());
         assertThrows(ServiceProcessingException.class, () -> userService.create(user, user.getConfirmationResetToken()));
@@ -87,6 +88,22 @@ class UserServiceTest {
     void getByEmailThrowException() {
         assertThrows(ServiceProcessingException.class, () -> userService.getByEmail(getUser().getEmail()));
     }
+
+    @Test
+    void deleteUserByIdSuccessful() {
+        User user = getUser();
+
+        doReturn(Optional.of(user)).when(userRepository).findUserById(USER_ID);
+        doNothing().when(userRepository).deleteById(USER_ID);
+
+        assertDoesNotThrow(() -> userService.deleteUserById(USER_ID));
+    }
+
+    @Test
+    void deleteUserByIdThrowExceptionIfUserDoesNotExists() {
+        assertThrows(ServiceProcessingException.class, () -> userService.deleteUserById(USER_ID));
+    }
+
 
     private User getUser() {
         User user = new User();
