@@ -17,14 +17,6 @@ import org.springframework.stereotype.Service;
 public class AuthController implements AuthControllerApiDelegate {
 
 	private final AuthService authService;
-	private final UserService service;
-
-
-	@Override
-	public ResponseEntity<Object> deleteUser(Long userId) throws Exception {
-		service.deleteUserById(userId);
-		return ResponseEntity.ok().build();
-	}
 
 	@Override
 	public ResponseEntity<LoginResponse> login(LoginRequest loginRequest) throws ServiceProcessingException {

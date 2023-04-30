@@ -222,35 +222,21 @@ paths:
           schema:
             type: integer
             format: int64
-        -  name: email
-           in: query
-           description: email
-           required: false
-           schema:
-             type: string
-             example: user' email format
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateReadUser'
-
       responses:
         '200':
           description: successfully update email
-
         '400':
           description: something went wrong..
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
-
-
-
-
-
 
 components:
   schemas:

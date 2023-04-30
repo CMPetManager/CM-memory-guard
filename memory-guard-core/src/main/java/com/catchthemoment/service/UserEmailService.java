@@ -5,10 +5,14 @@ import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.CreateReadUserMapper;
 import com.catchthemoment.model.CreateReadUser;
 import com.catchthemoment.repository.UserRepository;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.UnsupportedEncodingException;
 
 import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 
@@ -19,15 +23,20 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 public class UserEmailService {
 
     private final UserRepository repository;
-    private CreateReadUserMapper mapper;
+    private final UserConfirmMailService userConfirmMailService;
 
-    public void changeUserEmail(Long userId, CreateReadUser readUser) throws ServiceProcessingException {
-        if (readUser.getEmail().isEmpty() || readUser == null) {
-            log.error("*** user not found or empty***");
+    public void changeUserEmail(Long userId, CreateReadUser readUser, String sitUrl) throws ServiceProcessingException, MessagingException, UnsupportedEncodingException {
+        if (readUser.getEmail().isEmpty()) {
+            log.error("*** user not found or empty ***");
             throw new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage());
         }
-        var usr = repository.findUserById(userId).orElse(new User());
-        usr.setEmail(readUser.getEmail());
-        repository.save(usr);
+        var user = repository.findUserById(userId).orElse(new User());
+        user.setEmail(readUser.getEmail());
+
+        String randomCode = RandomString.make(20);
+        user.setConfirmationResetToken(randomCode);
+        repository.save(user);
+
+        userConfirmMailService.sendVerificationEmail(user, sitUrl);
     }
 }

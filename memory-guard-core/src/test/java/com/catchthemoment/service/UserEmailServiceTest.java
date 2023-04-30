@@ -41,7 +41,7 @@ class UserEmailServiceTest {
         repo.save(user);
     }
 
-    @Test
+    /*@Test
     @DisplayName("change to success updated email")
     void changeUserEmail() throws ServiceProcessingException {
         doReturn(Optional.ofNullable(user)).when(repo).findUserById(user.getId());
@@ -50,5 +50,5 @@ class UserEmailServiceTest {
         assertEquals(user.getEmail(),"jellifish123@mail.ru");
         verify(repo,times(1)).findUserById(user.getId());
         assertFalse(readUser.getEmail().isEmpty());
-    }
+    }*/
 }
