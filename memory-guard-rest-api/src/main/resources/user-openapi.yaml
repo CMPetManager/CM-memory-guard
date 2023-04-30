@@ -208,6 +208,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
+    patch:
+      summary: Method to update user's email
+      tags:
+        - UserController
+      description: update email
+      operationId: updateExistsEmail
+      parameters:
+        - name: userId
+          in: path
+          description: usr id for checking email
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReadUser'
+      responses:
+        '200':
+          description: successfully update email
+        '400':
+          description: something went wrong..
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
 components:
   schemas:
     CreateReadUser:

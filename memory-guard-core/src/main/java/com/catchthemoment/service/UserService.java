@@ -6,6 +6,7 @@ import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.UserRepository;
 import jakarta.mail.MessagingException;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
@@ -52,7 +53,7 @@ public class UserService implements UserDetailsService {
             UnsupportedEncodingException, MessagingException {
         log.info("*** Checking for mail uniqueness ***");
         if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
-            log.info("*** This user is already exists ***");
+            log.error("*** This user is already exists ***");
             throw new ServiceProcessingException(ILLEGAL_STATE.getCode(), ILLEGAL_STATE.getMessage());
         }
         log.info("*** The check was successful ***");
@@ -86,6 +87,4 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(currentUser.getId());
         log.info("*** User successfully deleted ***");
     }
-
 }
-

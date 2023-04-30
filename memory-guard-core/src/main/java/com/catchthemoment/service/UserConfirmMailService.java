@@ -3,7 +3,6 @@ package com.catchthemoment.service;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.mappers.UserMapper;
 import com.catchthemoment.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -23,7 +22,6 @@ import java.io.UnsupportedEncodingException;
 public class UserConfirmMailService {
     private final JavaMailSender mailSender;
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
     @Value("${spring.mail.username}")
     private String mailAddress;
@@ -45,9 +43,9 @@ public class UserConfirmMailService {
         String toAddress = user.getEmail();
         String fromAddress = mailAddress;
         String senderName = sender;
-        String subject = "Please verify your registration";
+        String subject = "Please verify your email";
         String content = "Dear [[name]],<br>"
-                + "Please click the link below to verify your registration:<br>"
+                + "Please click the link below to verify your email:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
                 + "Thank you,<br>"
                 + "CatchTheMomentTeam.";
