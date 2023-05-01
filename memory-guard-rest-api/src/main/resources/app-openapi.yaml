@@ -32,6 +32,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
+  /albums/{name}:
+    get:
+      summary: Method for searching album by name
+      tags:
+        - AlbumController
+      operationId: getAlbumByName
+      parameters:
+        - name: name
+          in: path
+          description: albumName for searches
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: album found
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AlbumModel'
+        '400':
+          description: wrong searching attempt ..
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
+
+
 
   /albums/{userId}:
     get:
@@ -251,6 +280,9 @@ components:
         albumDescription:
           type: string
           example: some words about page
+        albumName:
+          type: string
+          example: the name of album
         color:
           type: string
           example: red

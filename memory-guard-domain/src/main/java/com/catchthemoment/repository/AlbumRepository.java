@@ -21,4 +21,9 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     @Query("select al from Album al where al.id =:id ")
     void deleteAlbumById(@Param("id") Long id);
 
+    @Query(value = "select a from Album  a where a.albumName = : name and a.albumName is not null " +
+            "order by a.albumName asc nulls last ")
+    @EntityGraph(value = "album_graph", type = EntityGraph.EntityGraphType.FETCH)
+    Optional<Album> findAlbumByAlbumName(@Param("name") String name);
+
 }

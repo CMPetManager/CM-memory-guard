@@ -35,6 +35,9 @@ public class Album {
     @JdbcTypeCode(SqlTypes.LONGVARCHAR)
     private String albumDescription;
 
+    @Column(name = "album_name", nullable = false, unique = true)
+    private String albumName;
+
     @Column(name = "color")
     private String color;
 
