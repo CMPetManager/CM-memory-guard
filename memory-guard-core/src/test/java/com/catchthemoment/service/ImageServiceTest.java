@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
@@ -59,10 +60,10 @@ class ImageServiceTest {
         Image expectedImage = getImage(getMockMultipartFile());
         doReturn(Optional.of(expectedImage)).when(imageRepository).findImageByName(expectedImage.getName());
 
-        byte[] bytes = imageService.downloadImage(expectedImage.getName());
+        Resource resource = imageService.downloadImage(expectedImage.getName());
 
-        assertNotNull(bytes);
-        assertEquals(bytes.length, getMockMultipartFile().getBytes().length);
+        assertNotNull(resource);
+        assertEquals(resource.getContentAsByteArray().length, getMockMultipartFile().getBytes().length);
 
     }
 

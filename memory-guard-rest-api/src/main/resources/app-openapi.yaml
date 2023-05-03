@@ -202,9 +202,7 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  type: string
-                  format: byte
+                type: object
         '400':
           description: something wrong
           content:
@@ -241,21 +239,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-  /images/{id}:
+    put:
+      tags:
+        - ImageController
+      summary: Add description
+      description: Add photo description
+      operationId: addDescription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageModel'
+      responses:
+        '200':
+          description: add photo description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageModel'
+
+        '500':
+          description: something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
+  /images/delete/{name}:
     delete:
       tags:
         - ImageController
-      summary: Delete image by ID
+      summary: Delete image by name
       description: Method for delete image
       operationId: deleteImage
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: ID for delete image
+          description: name for delete image
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '200':
           description: successful operation
@@ -317,12 +340,12 @@ components:
         link:
           type: string
           example: photo link
+        description:
+          type: string
+          example: It was a good day
         name:
           type: string
           example: name
-        type:
-          type: string
-          example: type
         albumId:
           type: integer
           format: int64

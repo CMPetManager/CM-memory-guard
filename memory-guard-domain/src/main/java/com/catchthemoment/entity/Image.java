@@ -22,8 +22,8 @@ public class Image {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @Column(name = "type")
-    private String type;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "link")
     private String link;
