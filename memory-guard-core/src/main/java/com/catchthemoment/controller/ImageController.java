@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.catchthemoment.exception.ApplicationErrorEnum.EMPTY_REQUEST;
 
 @Slf4j
@@ -45,6 +48,18 @@ public class ImageController implements ImageControllerApiDelegate {
         log.info("*** Download was successful ***");
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
     }
+
+    @Override
+    public ResponseEntity<List<ImageModel>> uploadImages(List<MultipartFile> images) throws Exception {
+        List<ImageModel> savingImages = new ArrayList<>();
+        for (MultipartFile image : images) {
+            Image currentImage = imageService.uploadImage(image);
+            ImageModel currentModel = imageMapper.toModel(currentImage);
+            savingImages.add(currentModel);
+        }
+        return ResponseEntity.ok().body(savingImages);
+    }
+
 
     @Override
     public ResponseEntity<Object> deleteImage(String name) throws Exception {
