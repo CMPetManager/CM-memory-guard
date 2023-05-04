@@ -26,7 +26,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AlbumModel'
-        '400':
+        '500':
           description: something wrong
           content:
             application/json:
@@ -51,8 +51,8 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/AlbumModel'
-        '400':
+                $ref: '#/components/schemas/AlbumModel'
+        '500':
           description: wrong searching attempt ..
           content:
             application/json:
@@ -118,7 +118,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AlbumModel'
         '404':
-            description: album not found
+          description: album not found
         '500':
           description: something went wrong
           content:
@@ -175,7 +175,7 @@ paths:
           content:
             application/json:
               schema: {}
-        '400':
+        '500':
           description: something wrong
           content:
             application/json:
@@ -203,7 +203,7 @@ paths:
             application/json:
               schema:
                 type: object
-        '400':
+        '500':
           description: something wrong
           content:
             application/json:
@@ -232,7 +232,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ImageModel'
-        '400':
+        '500':
           description: something wrong
           content:
             application/json:
@@ -290,7 +290,7 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/ImageModel'
-        '400':
+        '500':
           description: something wrong
           content:
             application/json:
@@ -318,7 +318,35 @@ paths:
           content:
             application/json:
               schema: {}
-        '400':
+        '500':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
+  /images/deleteImages:
+    delete:
+      tags:
+        - ImageController
+      summary: Deletes multiple images from the system
+      operationId: deleteImages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Images not found
+        '500':
           description: something wrong
           content:
             application/json:
@@ -376,6 +404,9 @@ components:
         description:
           type: string
           example: It was a good day
+        type:
+          type: string
+          example: type
         name:
           type: string
           example: name

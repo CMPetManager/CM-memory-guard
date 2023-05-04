@@ -25,6 +25,9 @@ public class Image {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "type")
+    private String type;
+
     @Column(name = "link")
     private String link;
 

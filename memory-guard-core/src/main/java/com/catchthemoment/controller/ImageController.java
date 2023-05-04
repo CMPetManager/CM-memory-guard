@@ -28,7 +28,7 @@ public class ImageController implements ImageControllerApiDelegate {
 
     @Override
     public ResponseEntity<ImageModel> uploadImage(MultipartFile file) throws Exception {
-       log.info("*** Received an upload image request with file name: {} ***", file.getOriginalFilename());
+        log.info("*** Received an upload image request with file name: {} ***", file.getOriginalFilename());
         if (!file.isEmpty()) {
             Image uploadedImage = imageService.uploadImage(file);
             log.info("*** Upload was successful ***");
@@ -74,5 +74,15 @@ public class ImageController implements ImageControllerApiDelegate {
         Image image = imageService.addDescription(imageModel);
         ImageModel currentModel = imageMapper.toModel(image);
         return ResponseEntity.ok(currentModel);
+    }
+
+    @Override
+    public ResponseEntity<Object> deleteImages(List<String> requestBody) throws Exception {
+        log.info("*** Received a delete images request by names: {} ***", requestBody);
+        for (String name : requestBody){
+            imageService.deleteImage(name);
+        }
+        log.info("*** Images successfully deleted ***");
+        return ResponseEntity.ok("Images successfully deleted");
     }
 }
