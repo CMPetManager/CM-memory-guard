@@ -59,12 +59,14 @@ public class AlbumService {
         return albumMapper.fromAlbumEntity(albumRepository.save(album));
 
     }
+
     public AlbumModel createAlbum(AlbumModel model) throws ServiceProcessingException {
-        if (model == null){
+        if (model == null) {
             throw new ServiceProcessingException(ApplicationErrorEnum.ALBUM_ERROR_INPUT.getCode(),
                     ApplicationErrorEnum.ALBUM_ERROR_INPUT.getMessage());
         }
         Album album = albumMapper.fromAlbumModel(model);
         return albumMapper.fromAlbumEntity(albumRepository.save(album));
     }
+
 }

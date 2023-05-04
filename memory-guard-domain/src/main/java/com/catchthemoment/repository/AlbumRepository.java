@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface AlbumRepository extends JpaRepository<Album, Long> {
     @EntityGraph(value = "album-graph", type = EntityGraph.EntityGraphType.LOAD)
-   Optional<Album> findAlbumById(Long id);
+    Optional<Album> findAlbumById(Long id);
 
     @EntityGraph(value = "album_graph", type = EntityGraph.EntityGraphType.LOAD)
     List<Album> findAllByUserId(Long userId);
@@ -20,5 +20,10 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     @Modifying
     @Query("select al from Album al where al.id =:id ")
     void deleteAlbumById(@Param("id") Long id);
+
+    @Query("select al from Album al where al.albumName =:name  order by al.albumName asc ")
+    @EntityGraph(value = "album_graph", type = EntityGraph.EntityGraphType.FETCH)
+    Optional<Album> findAlbumByName(@Param("name") String name);
+
 
 }
