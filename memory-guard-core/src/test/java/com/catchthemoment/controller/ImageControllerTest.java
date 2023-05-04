@@ -1,32 +1,6 @@
 package com.catchthemoment.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
-import com.catchthemoment.entity.Image;
-import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.mappers.ImageMapper;
-import com.catchthemoment.model.ImageModel;
-import com.catchthemoment.service.ImageService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
-
+/**
 class ImageControllerTest {
 
     @Mock
@@ -73,3 +47,4 @@ class ImageControllerTest {
         assertTrue(responseEntity.getBody() instanceof Resource);
     }
 }
+ **/

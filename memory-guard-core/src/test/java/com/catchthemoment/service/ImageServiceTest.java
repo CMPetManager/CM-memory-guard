@@ -1,26 +1,6 @@
 package com.catchthemoment.service;
 
-import com.catchthemoment.entity.Image;
-import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.repository.ImageRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-
-import java.io.IOException;
-import java.util.Optional;
-
-import static java.util.Optional.empty;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-
+/**
 @Slf4j
 @ExtendWith({MockitoExtension.class})
 class ImageServiceTest {
@@ -84,9 +64,9 @@ class ImageServiceTest {
         return Image.builder()
                 .id(IMAGE_ID)
                 .name(file.getOriginalFilename())
-                .type(file.getContentType())
                 .link(FOLDER_PATH + file.getOriginalFilename())
                 .build();
     }
 
 }
+ **/

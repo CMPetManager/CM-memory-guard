@@ -23,6 +23,8 @@ public class AlbumController implements AlbumControllerApiDelegate {
     }
 
 
+
+
     public ResponseEntity<Object> deleteAlbum(@PathVariable Long albumId) throws ServiceProcessingException {
         albumService.deleteAlbumById(albumId);
         return ResponseEntity.accepted().build();
@@ -31,6 +33,7 @@ public class AlbumController implements AlbumControllerApiDelegate {
     public ResponseEntity<List<AlbumModel>> getUserAlbums(@PathVariable Long userId) throws ServiceProcessingException {
         return ResponseEntity.ok().body((List<AlbumModel>) albumService.findAllAlbumsUser(userId));
     }
+
 
     public ResponseEntity<AlbumModel> createAlbum(@RequestBody @ModelAttribute AlbumModel model) throws ServiceProcessingException {
         return ResponseEntity.ok().body(albumService.createAlbum(model));

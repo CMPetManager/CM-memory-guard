@@ -65,6 +65,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
+  /albums/{name}:
+    get:
+      tags:
+        - AlbumCOntroller
+      summary: find an album
+      description: Get album by item name
+      operationId: getAlbumByName
+      parameters:
+        - name: name
+          in : path
+          description: album name
+          required: true
+          schema:
+            type: string
+            example: name of album
+      responses:
+        '200':
+          description: album found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumModel'
+        '400':
+          description: not found within name
+        '500':
+          description: something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
 
   /albums/{id}:
     get:
@@ -266,6 +297,9 @@ components:
         animation:
           type: string
           example: slide
+        name:
+          type: string
+          example: album name
         coverDescription:
           type: string
           example: place description
@@ -291,6 +325,9 @@ components:
         type:
           type: string
           example: type
+        description:
+          type: string
+          example: desc of photo
         albumId:
           type: integer
           format: int64
