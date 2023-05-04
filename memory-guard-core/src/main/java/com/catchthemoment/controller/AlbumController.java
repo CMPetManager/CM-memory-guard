@@ -45,5 +45,4 @@ public class AlbumController implements AlbumControllerApiDelegate {
         return ResponseEntity.ok().body(albumService.updateAlbum(albId));
     }
 
-
 }

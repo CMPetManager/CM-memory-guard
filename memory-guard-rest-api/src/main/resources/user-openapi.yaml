@@ -321,6 +321,9 @@ components:
         albumDescription:
           type: string
           example: some words about page
+        albumName:
+          type: string
+          example: name of album
         color:
           type: string
           example: red

@@ -16,7 +16,7 @@ public interface AlbumMapper {
     //@Mapping(target = "user", qualifiedByName = "mapUserModel", ignore = true)
     AlbumModel fromAlbumEntity(Album album);
 
-    @Mapping(target = "user", qualifiedByName = "mapUserEntity", ignore = true)
+   // @Mapping(target = "user", qualifiedByName = "mapUserEntity", ignore = true)
     Album fromAlbumModel(AlbumModel albumModel);
 
     List<AlbumModel> fromAlbumEntities(List<Album> albumList);

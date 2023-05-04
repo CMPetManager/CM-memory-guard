@@ -2,7 +2,6 @@ package com.catchthemoment.service;
 
 import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.mappers.CreateReadUserMapper;
 import com.catchthemoment.model.CreateReadUser;
 import com.catchthemoment.repository.UserRepository;
 import jakarta.mail.MessagingException;
@@ -25,9 +24,10 @@ public class UserEmailService {
     private final UserRepository repository;
     private final UserConfirmMailService userConfirmMailService;
 
-    public void changeUserEmail(Long userId, CreateReadUser readUser, String sitUrl) throws ServiceProcessingException, MessagingException, UnsupportedEncodingException {
+    public void changeUserEmail(Long userId, CreateReadUser readUser, String sitUrl) throws ServiceProcessingException,
+            MessagingException, UnsupportedEncodingException {
         if (readUser.getEmail().isEmpty()) {
-            log.error("*** user not found or empty ***");
+            log.error("*** user's email is  not found or empty ***");
             throw new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage());
         }
         var user = repository.findUserById(userId).orElse(new User());

@@ -1,13 +1,17 @@
 package com.catchthemoment.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import com.catchthemoment.entity.Image;
+import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.ImageMapper;
 import com.catchthemoment.model.ImageModel;
 import com.catchthemoment.service.ImageService;
@@ -15,7 +19,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,14 +57,19 @@ class ImageControllerTest {
     }
 
     @Test
-    void testDownloadImage() throws Exception {
-        byte[] data = "test image".getBytes();
-        String name = "test.jpg";
+    void downloadImageShouldReturnResource() throws Exception {
+        String imageName = "test-image.jpg";
+        String imageContent = "Test image content";
+        InputStream inputStream = new ByteArrayInputStream(imageContent.getBytes(StandardCharsets.UTF_8));
+        Resource expectedResource = new InputStreamResource(inputStream);
+        when(imageService.downloadImage(imageName)).thenReturn(expectedResource);
 
-        doReturn(data).when(imageService).downloadImage(name);
+        ResponseEntity<Object> responseEntity = imageController.downloadImage(imageName);
 
-        ResponseEntity<List<byte[]>> response = imageController.downloadImage(name);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(data.length, response.getBody().get(0).length);
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(MediaType.IMAGE_JPEG, responseEntity.getHeaders().getContentType());
+        assertNotNull(responseEntity.getBody());
+        assertTrue(responseEntity.getBody() instanceof Resource);
     }
 }

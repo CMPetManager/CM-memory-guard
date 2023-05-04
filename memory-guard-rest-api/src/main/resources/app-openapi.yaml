@@ -32,37 +32,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
-  /albums/{name}:
-    get:
-      tags:
-        - AlbumController
-      summary: Find album within name
-      description: Searching album by item name
-      operationId: getAlbumByName
-      parameters:
-        - name: name
-          in: path
-          description: name for searching album
-          required: true
-          schema:
-            type: string
-            example: param name
-      responses:
-        '200':
-          description: album found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AlbumModel'
-        '400':
-          description: album not found wrong request
-        '500':
-          description: something went wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
 
   /albums/{userId}:
     get:
