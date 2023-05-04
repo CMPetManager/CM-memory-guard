@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS album
     tag_people VARCHAR(200) NOT NULL,
     tag_place VARCHAR(200) NOT NULL,
     animation VARCHAR(60) NOT NULL,
+    album_name varchar(60) not null,
     user_id INT REFERENCES users (id) ON DELETE CASCADE
     );
 

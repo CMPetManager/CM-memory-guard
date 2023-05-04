@@ -22,11 +22,6 @@ public class AlbumController implements AlbumControllerApiDelegate {
         return ResponseEntity.ok(albumService.getByAlbum(albumId));
     }
 
-    @Override
-    public ResponseEntity<AlbumModel> getAlbumByName( String name) throws Exception {
-        return ResponseEntity.ok().body(albumService.getAlbumByName(name));
-    }
-
 
     public ResponseEntity<Object> deleteAlbum(@PathVariable Long albumId) throws ServiceProcessingException {
         albumService.deleteAlbumById(albumId);
@@ -44,6 +39,5 @@ public class AlbumController implements AlbumControllerApiDelegate {
     public ResponseEntity<AlbumModel> updateAlbum(@PathVariable Long albId){
         return ResponseEntity.ok().body(albumService.updateAlbum(albId));
     }
-
 
 }

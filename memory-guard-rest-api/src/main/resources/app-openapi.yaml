@@ -32,35 +32,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
-  /albums/{name}:
-    get:
-      summary: Method for searching album by name
-      tags:
-        - AlbumController
-      operationId: getAlbumByName
-      parameters:
-        - name: name
-          in: path
-          description: albumName for searches
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: album found
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/AlbumModel'
-        '400':
-          description: wrong searching attempt ..
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-
-
 
   /albums/{userId}:
     get:
@@ -202,7 +173,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                items:
+                  type: string
+                  format: byte
         '400':
           description: something wrong
           content:
@@ -239,79 +212,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-    put:
-      tags:
-        - ImageController
-      summary: Add description
-      description: Add photo description
-      operationId: addDescription
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ImageModel'
-      responses:
-        '200':
-          description: add photo description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ImageModel'
-
-        '500':
-          description: something went wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-  /images/upload-multiple:
-    post:
-      summary: Method for upload list images
-      tags:
-        - ImageController
-      operationId: uploadImages
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                images:
-                  type: array
-                  items:
-                    type: string
-                    format: binary
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ImageModel'
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
-
-  /images/delete/{name}:
+  /images/{id}:
     delete:
       tags:
         - ImageController
-      summary: Delete image by name
+      summary: Delete image by ID
       description: Method for delete image
       operationId: deleteImage
       parameters:
-        - name: name
+        - name: id
           in: path
-          description: name for delete image
+          description: ID for delete image
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         '200':
           description: successful operation
@@ -336,9 +251,6 @@ components:
         albumDescription:
           type: string
           example: some words about page
-        albumName:
-          type: string
-          example: the name of album
         color:
           type: string
           example: red
@@ -373,12 +285,12 @@ components:
         link:
           type: string
           example: photo link
-        description:
-          type: string
-          example: It was a good day
         name:
           type: string
           example: name
+        type:
+          type: string
+          example: type
         albumId:
           type: integer
           format: int64

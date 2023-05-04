@@ -17,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "album", indexes = @Index(name = "album_usr_ind",columnList = "id,user_id"))
+@Table(name = "album", indexes = @Index(name = "album_usr_ind", columnList = "id,user_id"))
 @NamedEntityGraph(name = "album-graph", attributeNodes = {
         @NamedAttributeNode("id"),
         @NamedAttributeNode("cover"),
@@ -52,6 +52,8 @@ public class Album {
 
     @Column(name = "animation")
     private String animation;
+    @Column(name = "album_name", nullable = false)
+    private String name;
 
     public void setCover(Cover cover) {
         this.cover = cover;
@@ -59,12 +61,12 @@ public class Album {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride( name = "description", column = @Column(name = "cover_description")),
+            @AttributeOverride(name = "description", column = @Column(name = "cover_description")),
     })
     private Cover cover;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @OneToMany(mappedBy = "album")
