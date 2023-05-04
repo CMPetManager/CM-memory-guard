@@ -78,6 +78,7 @@ public class ImageService {
         return Image.builder()
                 .name(file.getOriginalFilename())
                 .link(filePath.toString())
+                .type(file.getContentType())
                 .build();
     }
 
@@ -95,6 +96,7 @@ public class ImageService {
         }
     }
 
+    @Transactional
     public Image addDescription(ImageModel imageModel) {
         Optional<Image> currentImage = imageRepository.findImageByName(imageModel.getName());
         currentImage.ifPresent(image -> {
