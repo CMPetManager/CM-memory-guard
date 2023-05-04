@@ -52,8 +52,6 @@ public class Album {
 
     @Column(name = "animation")
     private String animation;
-    @Column(name = "album_name", nullable = false)
-    private String name;
 
     public void setCover(Cover cover) {
         this.cover = cover;
