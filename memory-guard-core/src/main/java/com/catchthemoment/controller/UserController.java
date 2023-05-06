@@ -1,10 +1,13 @@
 package com.catchthemoment.controller;
 
+import com.catchthemoment.entity.Image;
 import com.catchthemoment.entity.User;
-import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.model.CreateReadUser;
+import com.catchthemoment.mappers.ImageMapper;
+import com.catchthemoment.model.ImageModel;
 import com.catchthemoment.model.UpdatePassword;
+import com.catchthemoment.model.UserModel;
+import com.catchthemoment.service.ImageService;
 import com.catchthemoment.service.UserEmailService;
 import com.catchthemoment.service.UserResetPasswordService;
 import com.catchthemoment.service.UserService;
@@ -20,8 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.catchthemoment.exception.ApplicationErrorEnum.*;
 
@@ -37,13 +40,14 @@ public class UserController implements UserControllerApiDelegate {
     private final UserService userService;
     private final UserEmailService userEmailservice;
     private final UpdatePasswordValidator validator;
-
+    private final ImageService imageService;
+    private final ImageMapper imageMapper;
 
     @PatchMapping(value = "/users/{userId}",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateEmail(@PathVariable Long userId, @RequestBody @NotNull CreateReadUser createReadUser, HttpServletRequest request) throws Exception {
-        log.info("*** change user's email from request create user model: {}", createReadUser.getEmail());
-        userEmailservice.changeUserEmail(userId, createReadUser, SiteUrlUtil.getSiteURL(request));
+    public ResponseEntity<Void> updateEmail(@PathVariable Long userId, @RequestBody @NotNull UserModel userModel, HttpServletRequest request) throws Exception {
+        log.info("*** change user's email from request create user model: {}", userModel.getEmail());
+        userEmailservice.changeUserEmail(userId, userModel, SiteUrlUtil.getSiteURL(request));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -69,5 +73,20 @@ public class UserController implements UserControllerApiDelegate {
         log.info("*** " + RESPONSE_DELETE_USER + " ***");
 
         return ResponseEntity.ok(RESPONSE_DELETE_USER);
+    }
+
+    @Override
+    public ResponseEntity<Object> addProfilePhoto(Long userId, MultipartFile image) throws Exception {
+        log.info("*** Received an upload image request with file name: {} ***", image.getOriginalFilename());
+        if (!image.isEmpty()) {
+            Image uploadedImage = imageService.uploadImage(userId, image);
+            log.info("*** Upload was successful ***");
+            ImageModel currentImage = imageMapper.toModel(uploadedImage);
+            return ResponseEntity.ok(currentImage);
+        } else {
+            throw new ServiceProcessingException(
+                    EMPTY_REQUEST.getCode(),
+                    EMPTY_REQUEST.getMessage());
+        }
     }
 }

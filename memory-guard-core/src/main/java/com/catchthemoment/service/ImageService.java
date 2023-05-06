@@ -1,9 +1,11 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.entity.Image;
+import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.ImageModel;
 import com.catchthemoment.repository.ImageRepository;
+import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -20,8 +22,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
-import static com.catchthemoment.exception.ApplicationErrorEnum.ILLEGAL_STATE;
-import static com.catchthemoment.exception.ApplicationErrorEnum.IMAGE_NOT_FOUND;
+import static com.catchthemoment.exception.ApplicationErrorEnum.*;
+import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -31,6 +33,7 @@ public class ImageService {
     private static final String FOLDER_PATH = "C:\\Users\\Admin\\gitlab\\";
 
     private final ImageRepository imageRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Image uploadImage(MultipartFile file) throws IOException, ServiceProcessingException {
@@ -40,20 +43,43 @@ public class ImageService {
             throw new ServiceProcessingException(ILLEGAL_STATE.getCode(), ILLEGAL_STATE.getMessage());
         }
         log.info("*** Validation passed, This imageName doesn't exist in the database ***");
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
-        Path uploadPath = Paths.get(FOLDER_PATH);
-        Path filePath = uploadPath.resolve(fileName).normalize();
-
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
+        Path filePath = getPath(file);
         Image buildImage = getBuildImage(file, filePath);
         log.info("*** Save object image into db ***");
-
         Image image = imageRepository.save(buildImage);
         log.info("*** Image successful saved ***");
-
         return image;
+    }
+
+    @Transactional
+    public Image uploadImage(Long userId, MultipartFile file) throws IOException, ServiceProcessingException {
+        Path filePath = getPath(file);
+        Image buildImage = getBuildImage(file, filePath);
+        User currentUser = userRepository.findUserById(userId)
+                .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage()));
+        buildImage.setUser(currentUser);
+        log.info("*** Save object image into db ***");
+        Image image = imageRepository.save(buildImage);
+        currentUser.setImage(image);
+        userRepository.save(currentUser);
+        log.info("*** Image successful set to User ***");
+        return image;
+    }
+
+    private static Path getPath(MultipartFile file) throws IOException {
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        Path uploadPath = Paths.get(FOLDER_PATH);
+        Path filePath = uploadPath.resolve(fileName).normalize();
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        return filePath;
+    }
+
+    private static Image getBuildImage(MultipartFile file, Path filePath) {
+        return Image.builder()
+                .name(file.getOriginalFilename())
+                .link(filePath.toString())
+                .type(file.getContentType())
+                .build();
     }
 
     public Resource downloadImage(String fileName) throws ServiceProcessingException, IOException {
@@ -63,23 +89,13 @@ public class ImageService {
                         IMAGE_NOT_FOUND.getCode(),
                         IMAGE_NOT_FOUND.getMessage()));
         log.info("*** Name successfully found in the db ***");
-
         Path filePath = Paths.get(FOLDER_PATH).resolve(currentImage.getName()).normalize();
         Resource resource = new UrlResource(filePath.toUri());
-
         if (!resource.exists()) {
             log.error("*** Image not found on the server ***");
             throw new ServiceProcessingException(IMAGE_NOT_FOUND.getCode(), IMAGE_NOT_FOUND.getMessage());
         }
         return resource;
-    }
-
-    private static Image getBuildImage(MultipartFile file, Path filePath) {
-        return Image.builder()
-                .name(file.getOriginalFilename())
-                .link(filePath.toString())
-                .type(file.getContentType())
-                .build();
     }
 
     @Transactional
