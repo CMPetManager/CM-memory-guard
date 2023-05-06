@@ -28,7 +28,7 @@ public class ImageController implements ImageControllerApiDelegate {
 
     @Override
     public ResponseEntity<ImageModel> uploadImage(MultipartFile file) throws Exception {
-       log.info("*** Received an upload image request with file name: {} ***", file.getOriginalFilename());
+        log.info("*** Received an upload image request with file name: {} ***", file.getOriginalFilename());
         if (!file.isEmpty()) {
             Image uploadedImage = imageService.uploadImage(file);
             log.info("*** Upload was successful ***");

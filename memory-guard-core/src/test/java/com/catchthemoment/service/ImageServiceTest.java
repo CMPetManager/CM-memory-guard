@@ -84,7 +84,6 @@ class ImageServiceTest {
         return Image.builder()
                 .id(IMAGE_ID)
                 .name(file.getOriginalFilename())
-                .type(file.getContentType())
                 .link(FOLDER_PATH + file.getOriginalFilename())
                 .build();
     }
