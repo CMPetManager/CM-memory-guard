@@ -3,12 +3,12 @@ package com.catchthemoment.controller;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.mappers.CreateReadUserMapper;
-import com.catchthemoment.model.CreateReadUser;
+import com.catchthemoment.mappers.UserModelMapper;
+import com.catchthemoment.model.UserModel;
 import com.catchthemoment.service.UserConfirmMailService;
 import com.catchthemoment.service.UserService;
 import com.catchthemoment.util.SiteUrlUtil;
-import com.catchthemoment.validation.CreateReadUserValidator;
+import com.catchthemoment.validation.UserModelValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -27,23 +27,23 @@ public class UserConfirmationMailController {
 
     private final UserConfirmMailService userConfirmMailService;
     private final UserService userService;
-    private final CreateReadUserMapper userMapper;
-    private final CreateReadUserValidator validator;
+    private final UserModelMapper userMapper;
+    private final UserModelValidator validator;
 
     @PostMapping(value = "/confirm-account",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CreateReadUser> confirmUserAccount(@RequestBody @NotNull CreateReadUser createReadUser, HttpServletRequest request)
+    public ResponseEntity<UserModel> confirmUserAccount(@RequestBody @NotNull UserModel userModel, HttpServletRequest request)
             throws Exception {
-        log.info("*** Received a registration request by email: {} ***", createReadUser.getEmail());
-        if (!validator.isValid(createReadUser)) {
+        log.info("*** Received a registration request by email: {} ***", userModel.getEmail());
+        if (!validator.isValid(userModel)) {
             log.error("*** CreateReadUser didn't pass validation ***");
             throw new ServiceProcessingException(ApplicationErrorEnum.INCORRECT_INPUT.getCode(),
                     ApplicationErrorEnum.INCORRECT_INPUT.getMessage());
         }
-        User user = userMapper.toEntity(createReadUser);
+        User user = userMapper.toEntity(userModel);
         User currentUser = userService.create(user, SiteUrlUtil.getSiteURL(request));
-        CreateReadUser createdUser = userMapper.toDto(currentUser);
-        ResponseEntity<CreateReadUser> response = new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        UserModel createdUser = userMapper.toDto(currentUser);
+        ResponseEntity<UserModel> response = new ResponseEntity<>(createdUser, HttpStatus.CREATED);
         log.info("*** The user has been successfully registered ***");
         return response;
     }

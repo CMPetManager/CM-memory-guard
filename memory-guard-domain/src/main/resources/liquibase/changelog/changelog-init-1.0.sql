@@ -35,5 +35,7 @@ CREATE TABLE IF NOT EXISTS image
     description text ,
     name VARCHAR(150) UNIQUE NOT NULL ,
     type VARCHAR(150) NOT NULL ,
-    album_id INT UNIQUE REFERENCES album (id)
+    user_id INT UNIQUE,
+    album_id INT UNIQUE REFERENCES album (id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
     );

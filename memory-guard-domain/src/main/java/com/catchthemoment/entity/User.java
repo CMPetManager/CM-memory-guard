@@ -54,6 +54,9 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Album> albums;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Image image;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

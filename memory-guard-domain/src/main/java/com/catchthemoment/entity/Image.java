@@ -34,4 +34,8 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "album_id", referencedColumnName = "id")
     private Album album;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

@@ -1,31 +1,31 @@
 package com.catchthemoment.validation;
 
-import com.catchthemoment.model.CreateReadUser;
+import com.catchthemoment.model.UserModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 @Slf4j
 @Component
-public class CreateReadUserValidator {
+public class UserModelValidator {
     private static final String REGEX_EMAIL = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+)";
     private static final String REGEX_NAME = "[a-zA-Z0-9_.-]";
 
-    public boolean isValid(CreateReadUser createReadUser) {
-        return checkName(createReadUser.getName())
-                && checkEmail(createReadUser.getEmail())
-                && checkPassword(createReadUser);
+    public boolean isValid(UserModel userModel) {
+        return checkName(userModel.getName())
+                && checkEmail(userModel.getEmail())
+                && checkPassword(userModel);
     }
 
-    private boolean checkPassword(CreateReadUser createReadUser) {
-        if (!StringUtils.hasText(createReadUser.getPassword())) {
+    private boolean checkPassword(UserModel userModel) {
+        if (!StringUtils.hasText(userModel.getPassword())) {
             log.error("*** Password is null ***");
             return false;
-        } else if (createReadUser.getPassword().length() < 6 || createReadUser.getPassword().length() > 64) {
+        } else if (userModel.getPassword().length() < 6 || userModel.getPassword().length() > 64) {
             log.error("*** Password length is not correct ***");
             return false;
-        } else if (createReadUser.getPassword().equals(createReadUser.getEmail()) &&
-                createReadUser.getPassword().equals(createReadUser.getName())) {
+        } else if (userModel.getPassword().equals(userModel.getEmail()) &&
+                userModel.getPassword().equals(userModel.getName())) {
             log.error("*** Password length shouldn't be equal name or email ***");
             return false;
         } else return true;
