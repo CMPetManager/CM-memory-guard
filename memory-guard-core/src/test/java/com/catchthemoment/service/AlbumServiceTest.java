@@ -83,19 +83,18 @@ class AlbumServiceTest {
         doNothing().when(albumRepository).deleteAlbumById(album.getId());
         albumService.deleteAlbumById(album.getId());
     }
-    /**
+
     @Test
     void test_getAlbum_By_Name() throws ServiceProcessingException {
-        doReturn(Optional.ofNullable(album)).when(albumRepository).(anyString());
+        doReturn(Optional.ofNullable(album)).when(albumRepository).findAlbumByName(anyString());
         doReturn(model1).when(mapper).fromAlbumEntity(album);
         var alModel = albumService.getAlbumByName(album.getAlbumName());
         assertNotNull(alModel);
-        verify(albumRepository,times(1)).findAlbumByAlbumName(album.getAlbumName());
+        verify(albumRepository,times(1)).findAlbumByName(album.getAlbumName());
         verify(mapper,atLeastOnce()).fromAlbumEntity(album);
         assertThrows(ServiceProcessingException.class, ()-> albumService.getAlbumByName(eq("")));
 
 
     }
-    **/
 
 }
