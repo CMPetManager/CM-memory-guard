@@ -75,4 +75,14 @@ public class ImageController implements ImageControllerApiDelegate {
         ImageModel currentModel = imageMapper.toModel(image);
         return ResponseEntity.ok(currentModel);
     }
+
+    @Override
+    public ResponseEntity<Object> deleteImages(List<String> requestBody) throws Exception {
+        log.info("*** Received a delete images request by names: {} ***", requestBody);
+        for (String name : requestBody){
+            imageService.deleteImage(name);
+        }
+        log.info("*** Images successfully deleted ***");
+        return ResponseEntity.ok("Images successfully deleted");
+    }
 }

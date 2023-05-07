@@ -26,4 +26,5 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     Optional<Album> findAlbumByName(@Param("name") String name);
 
 
+
 }

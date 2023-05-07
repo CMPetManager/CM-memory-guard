@@ -1,444 +1,427 @@
-
-
-  openapi: 3.0.3
-  info:
-    description: This specification is intended to describe the functionality of the
-      photo album application (Album and image part)
-    title: Photo album OpenAPI specification
-    version: 1.0.11
-  servers:
-    - description: Dev server
-      url: http://localhost:8080
-  paths:
-    /albums:
-      post:
-        summary: Method for created album
-        tags:
-          - AlbumController
-        operationId: createAlbum
-        requestBody:
+openapi: 3.0.3
+info:
+  description: This specification is intended to describe the functionality of the
+    photo album application (Album and image part)
+  title: Photo album OpenAPI specification
+  version: 1.0.11
+servers:
+  - description: Dev server
+    url: http://localhost:8080
+paths:
+  /albums:
+    post:
+      summary: Method for created album
+      tags:
+        - AlbumController
+      operationId: createAlbum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlbumModel'
+      responses:
+        '200':
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AlbumModel'
-        responses:
-          '200':
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/AlbumModel'
-          '500':
-            description: something wrong
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ApplicationError'
-    /albums/{name}:
-      get:
-        summary: Method for searching album by name
-        tags:
-          - AlbumController
-        operationId: getAlbumByName
-        parameters:
-          - name: name
-            in: path
-            description: albumName for searches
-            required: true
-            schema:
-              type: string
-        responses:
-          '200':
-            description: album found
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/AlbumModel'
-          '500':
-            description: wrong searching attempt ..
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ApplicationError'
-
-    /albums/{userId}:
-      get:
-        tags:
-          - AlbumController
-        summary: Find album by userId
-        description: Find album by userId
-        operationId: getUserAlbums
-        parameters:
-          - name: userId
-            in: path
-            description: userId for finding user's albums
-            required: true
-            schema:
-              type: integer
-              format: int64
-        responses:
-          '200':
-            description: all user's album found
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/AlbumModel'
-          '404':
-            description: not found
-          '500':
-            description: something went wrong
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ApplicationError'
-
-    /albums/{id}:
-      get:
-        tags:
-          - AlbumController
-        summary: Find album by album id
-        description: Get album by id
-        operationId: getAlbum
-        parameters:
-          - name: id
-            in: path
-            description: album Id must defined to find album
-            required: true
-            schema:
-              type: integer
-              format: int64
-        responses:
-          '200':
-            description: album found successfully
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/AlbumModel'
-          '404':
-            description: album not found
-          '500':
-            description: something went wrong
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ApplicationError'
-      put:
-        tags:
-          - AlbumController
-        summary: Update Album
-        description: Update album by albumId
-        operationId: updateAlbum
-        parameters:
-          - name: id
-            in: path
-            description: id , need for updating album
-            required: true
-            schema:
-              type: integer
-              format: int64
-        requestBody:
+        '500':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+  /albums/{name}:
+    get:
+      summary: Method for searching album by name
+      tags:
+        - AlbumController
+      operationId: getAlbumByName
+      parameters:
+        - name: name
+          in: path
+          description: albumName for searches
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: album found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AlbumModel'
-        responses:
-          '200':
-            description: album updated without errors
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/AlbumModel'
-          '404':
-            description: album not found by its id
-          '500':
-            description: something went wrong
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ApplicationError'
-
-      delete:
-        tags:
-          - AlbumController
-        summary: Delete album by id
-        description: Method for delete album
-        operationId: deleteAlbum
-        parameters:
-          - name: id
-            in: path
-            description: ID of the cover that needs to be deleted
-            required: true
-            schema:
-              type: integer
-              format: int64
-        responses:
-          '200':
-            description: successful operation
-            content:
-              application/json:
-                schema: { }
-          '500':
-            description: something wrong
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ApplicationError'
-
-    /images/{name}:
-      get:
-        tags:
-          - ImageController
-        summary: Find image by name
-        description: Find image by name
-        operationId: downloadImage
-        parameters:
-          - name: name
-            in: path
-            description: name , which need to find image
-            required: true
-            schema:
-              type: string
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  type: object
-          '500':
-            description: something wrong
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ApplicationError'
-
-    /images:
-      post:
-        summary: Method for created image
-        tags:
-          - ImageController
-        operationId: uploadImage
-        requestBody:
-          content:
-            multipart/form-data:
-              schema:
-                type: object
-                properties:
-                  image:
-                    type: string
-                    format: binary
-        responses:
-          '200':
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ImageModel'
-          '500':
-            description: something wrong
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ApplicationError'
-
-      put:
-        tags:
-          - ImageController
-        summary: Add description
-        description: Add photo description
-        operationId: addDescription
-        requestBody:
+        '500':
+          description: wrong searching attempt ..
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ImageModel'
-        responses:
-          '200':
-            description: add photo description
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ImageModel'
+                $ref: '#/components/schemas/ApplicationError'
 
-          '500':
-            description: something went wrong
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ApplicationError'
-
-    /images/upload-multiple:
-      post:
-        summary: Method for upload list images
-        tags:
-          - ImageController
-        operationId: uploadImages
-        requestBody:
-          content:
-            multipart/form-data:
-              schema:
-                type: object
-                properties:
-                  images:
-                    type: array
-                    items:
-                      type: string
-                      format: binary
-        responses:
-          '200':
-            description: successful operation
-            content:
-              application/json:
-                schema:
-                  items:
-                    $ref: '#/components/schemas/ImageModel'
-          '500':
-            description: something wrong
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ApplicationError'
-
-
-    /images/delete/{name}:
-      delete:
-        tags:
-          - ImageController
-        summary: Delete image by name
-        description: Method for delete image
-        operationId: deleteImage
-        parameters:
-          - name: name
-            in: path
-            description: name for delete image
-            required: true
-            schema:
-              type: string
-        responses:
-          '200':
-            description: successful operation
-            content:
-              application/json:
-                schema: { }
-          '500':
-            description: something wrong
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ApplicationError'
-
-    /images/deleteImages:
-      delete:
-        tags:
-          - ImageController
-        summary: Deletes multiple images from the system
-        operationId: deleteImages
-        requestBody:
+  /albums/{userId}:
+    get:
+      tags:
+        - AlbumController
+      summary: Find album by userId
+      description: Find album by userId
+      operationId: getUserAlbums
+      parameters:
+        - name: userId
+          in: path
+          description: userId for finding user's albums
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: all user's album found
           content:
             application/json:
               schema:
                 type: array
                 items:
+                  $ref: '#/components/schemas/AlbumModel'
+        '404':
+          description: not found
+        '500':
+          description: something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
+  /albums/{id}:
+    get:
+      tags:
+        - AlbumController
+      summary: Find album by album id
+      description: Get album by id
+      operationId: getAlbum
+      parameters:
+        - name: id
+          in: path
+          description: album Id must defined to find album
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: album found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumModel'
+        '404':
+          description: album not found
+        '500':
+          description: something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+    put:
+      tags:
+        - AlbumController
+      summary: Update Album
+      description: Update album by albumId
+      operationId: updateAlbum
+      parameters:
+        - name: id
+          in: path
+          description: id , need for updating album
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlbumModel'
+      responses:
+        '200':
+          description: album updated without errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumModel'
+        '404':
+          description: album not found by its id
+        '500':
+          description: something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
+    delete:
+      tags:
+        - AlbumController
+      summary: Delete album by id
+      description: Method for delete album
+      operationId: deleteAlbum
+      parameters:
+        - name: id
+          in: path
+          description: ID of the cover that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: {}
+        '500':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
+  /images/{name}:
+    get:
+      tags:
+        - ImageController
+      summary: Find image by name
+      description: Find image by name
+      operationId: downloadImage
+      parameters:
+        - name: name
+          in: path
+          description: name , which need to find image
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
+  /images:
+    post:
+      summary: Method for created image
+      tags:
+        - ImageController
+      operationId: uploadImage
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
                   type: string
-        responses:
-          '200':
-            description: successful operation
-            content:
-              application/json:
-                schema: { }
-          '404':
-            description: Images not found
-          '500':
-            description: something wrong
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ApplicationError'
+                  format: binary
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageModel'
+        '500':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
 
-  components:
-    schemas:
-      AlbumModel:
-        type: object
-        properties:
-          id:
-            type: integer
-            format: int64
-          albumDescription:
-            type: string
-            example: some words about page
-          albumName:
-            type: string
-            example: the name of album
-          color:
-            type: string
-            example: red
-          templatePage:
-            type: string
-            example: Horizontal image and text field below
-          tagPeople:
-            type: string
-            example: Andrew,Egor
-          tagPlace:
-            type: string
-            example: Germany,Berlin
-          animation:
-            type: string
-            example: slide
-          coverDescription:
-            type: string
-            example: place description
-          images:
-            type: array
-            items:
+    put:
+      tags:
+        - ImageController
+      summary: Add description
+      description: Add photo description
+      operationId: addDescription
+      requestBody:
+        content:
+          application/json:
+            schema:
               $ref: '#/components/schemas/ImageModel'
+      responses:
+        '200':
+          description: add photo description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageModel'
 
-      ImageModel:
-        type: object
-        required:
-          - link
-        properties:
-          id:
-            type: integer
-            format: int64
-          link:
-            type: string
-            example: photo link
-          description:
-            type: string
-            example: It was a good day
-          type:
-            type: string
-            example: type
-          name:
-            type: string
-            example: name
-          albumId:
-            type: integer
-            format: int64
+        '500':
+          description: something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
 
-      UserModel:
-        type: object
-        properties:
-          id:
-            type: integer
-            format: int64
-          name:
-            type: string
-            example: user's name
-          password:
-            type: string
-            example: user's password
-          email:
-            type: string
-            example: user's email
+  /images/upload-multiple:
+    post:
+      summary: Method for upload list images
+      tags:
+        - ImageController
+      operationId: uploadImages
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ImageModel'
+        '500':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
 
 
-      ApplicationError:
-        type: object
-        properties:
-          code:
-            type: integer
-          message:
+  /images/delete/{name}:
+    delete:
+      tags:
+        - ImageController
+      summary: Delete image by name
+      description: Method for delete image
+      operationId: deleteImage
+      parameters:
+        - name: name
+          in: path
+          description: name for delete image
+          required: true
+          schema:
             type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: {}
+        '500':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
+  /images/delete-images:
+    delete:
+      tags:
+        - ImageController
+      summary: Deletes multiple images from the system
+      operationId: deleteImages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Images not found
+        '500':
+          description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
+components:
+  schemas:
+    AlbumModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        albumDescription:
+          type: string
+          example: some words about page
+        albumName:
+          type: string
+          example: the name of album
+        color:
+          type: string
+          example: red
+        templatePage:
+          type: string
+          example: Horizontal image and text field below
+        tagPeople:
+          type: string
+          example: Andrew,Egor
+        tagPlace:
+          type: string
+          example: Germany,Berlin
+        animation:
+          type: string
+          example: slide
+        coverDescription:
+          type: string
+          example: place description
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageModel'
+
+    ImageModel:
+      type: object
+      required:
+        - link
+      properties:
+        id:
+          type: integer
+          format: int64
+        link:
+          type: string
+          example: photo link
+        description:
+          type: string
+          example: It was a good day
+        type:
+          type: string
+          example: type
+        name:
+          type: string
+          example: name
+        albumId:
+          type: integer
+          format: int64
+
+    ApplicationError:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+

@@ -53,7 +53,6 @@ public class Album {
     @Column(name = "animation")
     private String animation;
 
-
     public void setCover(Cover cover) {
         this.cover = cover;
     }

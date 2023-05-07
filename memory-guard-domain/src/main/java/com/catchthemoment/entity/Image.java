@@ -25,10 +25,17 @@ public class Image {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "type")
+    private String type;
+
     @Column(name = "link")
     private String link;
 
     @ManyToOne
     @JoinColumn(name = "album_id", referencedColumnName = "id")
     private Album album;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
