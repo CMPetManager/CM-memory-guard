@@ -1,17 +1,6 @@
 package com.catchthemoment.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
 import com.catchthemoment.entity.Image;
-import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.ImageMapper;
 import com.catchthemoment.model.ImageModel;
 import com.catchthemoment.service.ImageService;
@@ -26,6 +15,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 class ImageControllerTest {
 
@@ -64,7 +62,7 @@ class ImageControllerTest {
         Resource expectedResource = new InputStreamResource(inputStream);
         when(imageService.downloadImage(imageName)).thenReturn(expectedResource);
 
-        ResponseEntity<Object> responseEntity = imageController.downloadImage(imageName);
+        ResponseEntity<?> responseEntity = imageController.downloadImage(imageName);
 
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

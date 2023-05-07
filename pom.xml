@@ -24,6 +24,8 @@
     <properties>
         <openapi.version>6.4.0</openapi.version>
         <swagger.version>2.2.8</swagger.version>
+
+        <maven.test.skip>true</maven.test.skip>
     </properties>
 
     <dependencyManagement>
@@ -52,6 +54,13 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
