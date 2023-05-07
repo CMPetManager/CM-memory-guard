@@ -14,7 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -24,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
+@Import(AopAutoConfiguration.class)
 //TODO fix controller test
 class AlbumControllerTest {
 
@@ -68,26 +71,40 @@ class AlbumControllerTest {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         this.albumRepository.save(fakeEntity);
         assertNotNull(albumRepository);
+        controller = new AlbumController(service);
     }
 
-    /*@Test
-    void getAlbumByName() throws Exception {
-        String name = fakeEntity.getAlbumName();
-        given(service.getAlbumByName(name)).willReturn(model);
-        mockMvc.perform(MockMvcRequestBuilders.get("/albums/{name}", name).param("name", name)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(name));
+    /**
+     * @Test void getAlbumByName() throws Exception {
+     * String name = fakeEntity.getAlbumName();
+     * given(service.getAlbumByName(name)).willReturn(model);
+     * mockMvc.perform(MockMvcRequestBuilders.get("/albums/{name}", name).param("name", name)
+     * .accept(MediaType.APPLICATION_JSON)
+     * .contentType(MediaType.APPLICATION_JSON))
+     * .andDo(print())
+     * .andExpect(status().isOk())
+     * .andExpect((ResultMatcher) jsonPath("$.name").value(name));
+     * <p>
+     * }
 
-    }*/
+
+    @Test
+    void deleteAlbumById_Should_remove_album() throws Exception {
+        Long fakeId = fakeEntity.getId();
+        doNothing().when(service).deleteAlbumById(anyLong());
+        mockMvc.perform(MockMvcRequestBuilders.delete("/albums/{id}", fakeId).param("id", "id")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted());
+    }
+     **/
 
     @AfterEach
+
     public void tearDownTests() {
         fakeUser = null;
         fakeUser2 = null;
         userList = null;
+        albumRepository.deleteAll();
     }
 
     public static String asJsonString(final Object obj) {
