@@ -32,4 +32,4 @@ EXPOSE 8084
 ARG JAVA_OPTS=""
 
 
-ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+ENTRYPOINT ["java","-Dspring.profiles.active=prod","org.springframework.boot.loader.JarLauncher"]
