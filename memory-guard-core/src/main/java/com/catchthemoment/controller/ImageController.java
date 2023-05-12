@@ -40,6 +40,7 @@ public class ImageController implements ImageControllerApiDelegate {
             ImageModel currentImage = imageMapper.toModel(uploadedImage);
             return ResponseEntity.ok(currentImage);
         } else {
+            log.error("*** It is getting empty request ***");
             throw new ServiceProcessingException(
                     EMPTY_REQUEST.getCode(),
                     EMPTY_REQUEST.getMessage());
@@ -56,6 +57,7 @@ public class ImageController implements ImageControllerApiDelegate {
 
     @Override
     public ResponseEntity<List<ImageModel>> uploadImages(Long albumId, List<MultipartFile> images) throws Exception {
+        log.info("*** Received an upload images request ***");
         List<ImageModel> savingImages = new ArrayList<>();
         AlbumModel currentAlbumModel = albumService.getByAlbum(albumId);
         for (MultipartFile image : images) {
@@ -63,9 +65,9 @@ public class ImageController implements ImageControllerApiDelegate {
             ImageModel currentModel = imageMapper.toModel(currentImage);
             savingImages.add(currentModel);
         }
+        log.info("*** Upload was successful ***");
         return ResponseEntity.ok().body(savingImages);
     }
-
 
     @Override
     public ResponseEntity<Object> deleteImage(String name) throws Exception {

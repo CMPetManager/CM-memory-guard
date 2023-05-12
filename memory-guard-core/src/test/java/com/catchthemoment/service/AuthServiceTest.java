@@ -6,18 +6,20 @@ import com.catchthemoment.entity.User;
 import com.catchthemoment.auth.JwtTokenManager;
 import com.catchthemoment.config.JwtProperties;
 import com.catchthemoment.model.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 @ExtendWith({MockitoExtension.class})
 class AuthServiceTest {
@@ -38,7 +40,7 @@ class AuthServiceTest {
         LoginResponse expectedResult = getLoginResponse();
         LoginRequest loginRequest = getLoginRequest();
         User user = getUser();
-        doReturn(user).when(userService).getByEmail(loginRequest.getEmail());
+        doReturn(user).when(userService).getByEmail(any());
         doReturn(getToken()).when(jwtTokenManager).getToken(user);
 
         LoginResponse actualResult = authService.login(loginRequest);
