@@ -211,13 +211,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
-
-  /images:
+  /images/{albumId}:
     post:
       summary: Method for created image
       tags:
         - ImageController
       operationId: uploadImage
+      parameters:
+        - name: albumId
+          in: path
+          description: albumId , which need to set image into album
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           multipart/form-data:
@@ -241,6 +248,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
+  /images:
     put:
       tags:
         - ImageController
@@ -251,7 +259,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ImageModel'
+              $ref: '#/components/schemas/ImageDescriptionModel'
       responses:
         '200':
           description: add photo description
@@ -267,12 +275,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-  /images/upload-multiple:
+  /images/upload-multiple/{albumId}:
     post:
       summary: Method for upload list images
       tags:
         - ImageController
       operationId: uploadImages
+      parameters:
+        - name: albumId
+          in: path
+          description: albumId , which need to set image into album
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           multipart/form-data:
@@ -416,6 +432,16 @@ components:
           type: integer
           format: int64
 
+    ImageDescriptionModel:
+      type: object
+      properties:
+        name:
+          type: string
+          example: name
+        description:
+          type: string
+          example: It was a good day
+
     ApplicationError:
       type: object
       properties:
@@ -423,5 +449,3 @@ components:
           type: integer
         message:
           type: string
-
-

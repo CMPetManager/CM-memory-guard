@@ -66,7 +66,6 @@ public class JwtTokenManager {
     }
 
     public LoginResponse refreshUserTokens(String refreshToken, Long userId) throws ServiceProcessingException {
-        LoginResponse loginResponse = new LoginResponse();
 
         if (!validateToken(refreshToken)) {
             throw new ServiceProcessingException(ApplicationErrorEnum.ACCESS_DENIED.getCode(),
@@ -75,10 +74,15 @@ public class JwtTokenManager {
         User user = userService.getById(userId);
         Token token = createTokenForResponse(userId, user);
 
+        return getLoginResponse(userId, user, token);
+
+    }
+
+    private static LoginResponse getLoginResponse(Long userId, User user, Token token) {
+        LoginResponse loginResponse = new LoginResponse();
         loginResponse.setUserId(userId);
         loginResponse.setName(user.getName());
         loginResponse.setToken(token);
-
         return loginResponse;
     }
 

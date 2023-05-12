@@ -1,9 +1,13 @@
 package com.catchthemoment.service;
 
+import com.catchthemoment.entity.Album;
 import com.catchthemoment.entity.Image;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.model.ImageModel;
+import com.catchthemoment.mappers.AlbumMapper;
+import com.catchthemoment.model.AlbumModel;
+import com.catchthemoment.model.ImageDescriptionModel;
+import com.catchthemoment.repository.AlbumRepository;
 import com.catchthemoment.repository.ImageRepository;
 import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Optional;
 
 import static com.catchthemoment.exception.ApplicationErrorEnum.*;
@@ -34,9 +39,11 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
+    private final AlbumRepository albumRepository;
+    private final AlbumMapper albumMapper;
 
     @Transactional
-    public Image uploadImage(MultipartFile file) throws IOException, ServiceProcessingException {
+    public Image uploadImage(AlbumModel albumModel, MultipartFile file) throws IOException, ServiceProcessingException {
         log.info("*** Checking the image name for uniqueness ***");
         if (imageRepository.findImageByName(file.getOriginalFilename()).isPresent()) {
             log.error("*** This image is already exists ***");
@@ -45,8 +52,12 @@ public class ImageService {
         log.info("*** Validation passed, This imageName doesn't exist in the database ***");
         Path filePath = getPath(file);
         Image buildImage = getBuildImage(file, filePath);
+        Album currentAlbum = albumMapper.fromAlbumModel(albumModel);
+        buildImage.setAlbum(currentAlbum);
         log.info("*** Save object image into db ***");
         Image image = imageRepository.save(buildImage);
+        currentAlbum.setImages(List.of(image));
+        albumRepository.save(currentAlbum);
         log.info("*** Image successful saved ***");
         return image;
     }
@@ -113,7 +124,7 @@ public class ImageService {
     }
 
     @Transactional
-    public Image addDescription(ImageModel imageModel) {
+    public Image addImageDescription(ImageDescriptionModel imageModel) {
         Optional<Image> currentImage = imageRepository.findImageByName(imageModel.getName());
         currentImage.ifPresent(image -> {
             image.setDescription(imageModel.getDescription());

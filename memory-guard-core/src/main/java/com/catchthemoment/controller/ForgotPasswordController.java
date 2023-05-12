@@ -5,6 +5,7 @@ import com.catchthemoment.model.ForgotPassword;
 import com.catchthemoment.model.UpdatePassword;
 import com.catchthemoment.service.UserResetPasswordService;
 import com.catchthemoment.util.SiteUrlUtil;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
 
     @PostMapping("/forgot-password")
     public ResponseEntity<Object> forgotPassword(@RequestBody @Validated ForgotPassword forgotPassword,
-                                                 HttpServletRequest servletRequest, Model model)
+                                                 @Parameter(hidden = true) HttpServletRequest servletRequest, Model model)
             throws MessagingException {
         String email = forgotPassword.getEmail();
         String token = RandomString.make(20);

@@ -2,7 +2,9 @@ package com.catchthemoment.controller;
 
 import com.catchthemoment.entity.Image;
 import com.catchthemoment.mappers.ImageMapper;
+import com.catchthemoment.model.AlbumModel;
 import com.catchthemoment.model.ImageModel;
+import com.catchthemoment.service.AlbumService;
 import com.catchthemoment.service.ImageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +28,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 class ImageControllerTest {
+    private static final Long ID = 1L;
 
     @Mock
     private ImageService imageService;
@@ -33,12 +36,15 @@ class ImageControllerTest {
     @Mock
     private ImageMapper imageMapper;
 
+    @Mock
+    private AlbumService albumService;
+
     private ImageController imageController;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        imageController = new ImageController(imageService, imageMapper);
+        imageController = new ImageController(imageService, imageMapper, albumService);
     }
 
     @Test
@@ -46,11 +52,13 @@ class ImageControllerTest {
         MultipartFile file = new MockMultipartFile("test.jpg", "test.jpg", "image/jpeg", "test image".getBytes());
         Image image = new Image();
         image.setName("test.jpg");
+        AlbumModel model = new AlbumModel();
+        doReturn(model).when(albumService).getByAlbum(ID);
 
-        doReturn(image).when(imageService).uploadImage(any(MultipartFile.class));
+        doReturn(image).when(imageService).uploadImage(model, any(MultipartFile.class));
         doReturn(new ImageModel()).when(imageMapper).toModel(any(Image.class));
 
-        ResponseEntity<ImageModel> response = imageController.uploadImage(file);
+        ResponseEntity<ImageModel> response = imageController.uploadImage(ID, file);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 

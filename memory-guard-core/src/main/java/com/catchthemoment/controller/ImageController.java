@@ -3,7 +3,10 @@ package com.catchthemoment.controller;
 import com.catchthemoment.entity.Image;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.ImageMapper;
+import com.catchthemoment.model.AlbumModel;
+import com.catchthemoment.model.ImageDescriptionModel;
 import com.catchthemoment.model.ImageModel;
+import com.catchthemoment.service.AlbumService;
 import com.catchthemoment.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +28,14 @@ public class ImageController implements ImageControllerApiDelegate {
 
     private final ImageService imageService;
     private final ImageMapper imageMapper;
+    private final AlbumService albumService;
 
     @Override
-    public ResponseEntity<ImageModel> uploadImage(MultipartFile file) throws Exception {
+    public ResponseEntity<ImageModel> uploadImage(Long albumId, MultipartFile file) throws Exception {
         log.info("*** Received an upload image request with file name: {} ***", file.getOriginalFilename());
         if (!file.isEmpty()) {
-            Image uploadedImage = imageService.uploadImage(file);
+            AlbumModel currentAlbumModel = albumService.getByAlbum(albumId);
+            Image uploadedImage = imageService.uploadImage(currentAlbumModel, file);
             log.info("*** Upload was successful ***");
             ImageModel currentImage = imageMapper.toModel(uploadedImage);
             return ResponseEntity.ok(currentImage);
@@ -50,10 +55,11 @@ public class ImageController implements ImageControllerApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<ImageModel>> uploadImages(List<MultipartFile> images) throws Exception {
+    public ResponseEntity<List<ImageModel>> uploadImages(Long albumId, List<MultipartFile> images) throws Exception {
         List<ImageModel> savingImages = new ArrayList<>();
+        AlbumModel currentAlbumModel = albumService.getByAlbum(albumId);
         for (MultipartFile image : images) {
-            Image currentImage = imageService.uploadImage(image);
+            Image currentImage = imageService.uploadImage(currentAlbumModel,image);
             ImageModel currentModel = imageMapper.toModel(currentImage);
             savingImages.add(currentModel);
         }
@@ -70,8 +76,8 @@ public class ImageController implements ImageControllerApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ImageModel> addDescription(ImageModel imageModel) throws Exception {
-        Image image = imageService.addDescription(imageModel);
+    public ResponseEntity<ImageModel> addDescription(ImageDescriptionModel imageModel) throws Exception {
+        Image image = imageService.addImageDescription(imageModel);
         ImageModel currentModel = imageMapper.toModel(image);
         return ResponseEntity.ok(currentModel);
     }
