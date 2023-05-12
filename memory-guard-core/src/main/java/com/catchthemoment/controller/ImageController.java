@@ -85,6 +85,10 @@ public class ImageController implements ImageControllerApiDelegate {
     @Override
     public ResponseEntity<Object> deleteImages(List<String> requestBody) throws Exception {
         log.info("*** Received a delete images request by names: {} ***", requestBody);
+        if (requestBody.isEmpty()){
+            log.error("Empty request");
+            throw new ServiceProcessingException(EMPTY_REQUEST.getCode(), EMPTY_REQUEST.getMessage());
+        }
         for (String name : requestBody){
             imageService.deleteImage(name);
         }
