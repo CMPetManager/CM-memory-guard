@@ -84,6 +84,7 @@ public class UserController implements UserControllerApiDelegate {
             ImageModel currentImage = imageMapper.toModel(uploadedImage);
             return ResponseEntity.ok(currentImage);
         } else {
+            log.error("*** MultipartFile is empty***");
             throw new ServiceProcessingException(
                     EMPTY_REQUEST.getCode(),
                     EMPTY_REQUEST.getMessage());
