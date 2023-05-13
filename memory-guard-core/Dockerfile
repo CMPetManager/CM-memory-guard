@@ -4,9 +4,9 @@ WORKDIR temp
 ARG JAR_FILE=target/*.jar
 
 
-COPY ${JAR_FILE} memory-guard.jar
+COPY ${JAR_FILE} ./memory-guard-core.jar
 
-RUN java -Djarmode=layertools -jar --enable-preview memory-guard.jar extract
+RUN java -Djarmode=layertools -jar memory-guard-core.jar extract
 
 
 FROM openjdk:17-alpine
@@ -18,7 +18,7 @@ ARG IMAGE_NAME="CatchTheMomentApp"
 
 LABEL version=${IMAGE_VERSION} name=${IMAGE_NAME}
 
-WORKDIR /home/memory/memory-guard
+WORKDIR /home/memory/memory-guard-core
 
 
 COPY --from=builder temp/dependencies/ ./
@@ -32,4 +32,4 @@ EXPOSE 8084
 ARG JAVA_OPTS=""
 
 
-ENTRYPOINT ["java","-Dspring.profiles.active=prod","org.springframework.boot.loader.JarLauncher"]
+ENTRYPOINT ["java","-Dspring.profiles.active=prod","org.springframework.boot.loader.JarLauncher","-jar","/memory-guard-core:0.0.1.jar"]
