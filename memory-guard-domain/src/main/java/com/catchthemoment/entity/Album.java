@@ -4,6 +4,7 @@ import com.catchthemoment.entity.embedded.Cover;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,9 +15,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Data
+@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "album", indexes = @Index(name = "album_usr_ind", columnList = "id,user_id"))
 @NamedEntityGraph(name = "album-graph", attributeNodes = {
         @NamedAttributeNode("id"),

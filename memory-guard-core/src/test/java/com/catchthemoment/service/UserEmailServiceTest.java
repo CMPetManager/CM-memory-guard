@@ -24,9 +24,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserEmailServiceTest {
 
-
     @Mock
     private UserRepository repo;
+    @Mock
+    private UserConfirmMailService userConfirmMailService;
     @Mock
     private UserModelMapper mapper;
 
@@ -47,8 +48,9 @@ class UserEmailServiceTest {
     @DisplayName("change to success updated email")
     void changeUserEmail() throws ServiceProcessingException, MessagingException, UnsupportedEncodingException {
         doReturn(Optional.ofNullable(user)).when(repo).findUserById(user.getId());
+        doNothing().when(userConfirmMailService).sendVerificationEmail(any(),any());
         readUser.setEmail("jellifish123@mail.ru");
-        emailService.changeUserEmail(user.getId(),readUser, anyString());
+        emailService.changeUserEmail(user.getId(),readUser, any());
         assertEquals(user.getEmail(),"jellifish123@mail.ru");
         verify(repo,times(1)).findUserById(user.getId());
         assertFalse(readUser.getEmail().isEmpty());

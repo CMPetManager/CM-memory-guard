@@ -3,7 +3,10 @@ package com.catchthemoment.controller;
 import com.catchthemoment.entity.Image;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.ImageMapper;
+import com.catchthemoment.model.AlbumModel;
+import com.catchthemoment.model.ImageDescriptionModel;
 import com.catchthemoment.model.ImageModel;
+import com.catchthemoment.service.AlbumService;
 import com.catchthemoment.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,16 +28,19 @@ public class ImageController implements ImageControllerApiDelegate {
 
     private final ImageService imageService;
     private final ImageMapper imageMapper;
+    private final AlbumService albumService;
 
     @Override
-    public ResponseEntity<ImageModel> uploadImage(MultipartFile file) throws Exception {
+    public ResponseEntity<ImageModel> uploadImage(Long albumId, MultipartFile file) throws Exception {
         log.info("*** Received an upload image request with file name: {} ***", file.getOriginalFilename());
         if (!file.isEmpty()) {
-            Image uploadedImage = imageService.uploadImage(file);
+            AlbumModel currentAlbumModel = albumService.getByAlbum(albumId);
+            Image uploadedImage = imageService.uploadImage(currentAlbumModel, file);
             log.info("*** Upload was successful ***");
             ImageModel currentImage = imageMapper.toModel(uploadedImage);
             return ResponseEntity.ok(currentImage);
         } else {
+            log.error("*** It is getting empty request ***");
             throw new ServiceProcessingException(
                     EMPTY_REQUEST.getCode(),
                     EMPTY_REQUEST.getMessage());
@@ -50,16 +56,18 @@ public class ImageController implements ImageControllerApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<ImageModel>> uploadImages(List<MultipartFile> images) throws Exception {
+    public ResponseEntity<List<ImageModel>> uploadImages(Long albumId, List<MultipartFile> images) throws Exception {
+        log.info("*** Received an upload images request ***");
         List<ImageModel> savingImages = new ArrayList<>();
+        AlbumModel currentAlbumModel = albumService.getByAlbum(albumId);
         for (MultipartFile image : images) {
-            Image currentImage = imageService.uploadImage(image);
+            Image currentImage = imageService.uploadImage(currentAlbumModel,image);
             ImageModel currentModel = imageMapper.toModel(currentImage);
             savingImages.add(currentModel);
         }
+        log.info("*** Upload was successful ***");
         return ResponseEntity.ok().body(savingImages);
     }
-
 
     @Override
     public ResponseEntity<Object> deleteImage(String name) throws Exception {
@@ -70,8 +78,8 @@ public class ImageController implements ImageControllerApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ImageModel> addDescription(ImageModel imageModel) throws Exception {
-        Image image = imageService.addDescription(imageModel);
+    public ResponseEntity<ImageModel> addDescription(ImageDescriptionModel imageModel) throws Exception {
+        Image image = imageService.addImageDescription(imageModel);
         ImageModel currentModel = imageMapper.toModel(image);
         return ResponseEntity.ok(currentModel);
     }
@@ -79,6 +87,10 @@ public class ImageController implements ImageControllerApiDelegate {
     @Override
     public ResponseEntity<Object> deleteImages(List<String> requestBody) throws Exception {
         log.info("*** Received a delete images request by names: {} ***", requestBody);
+        if (requestBody.isEmpty()){
+            log.error("Empty request");
+            throw new ServiceProcessingException(EMPTY_REQUEST.getCode(), EMPTY_REQUEST.getMessage());
+        }
         for (String name : requestBody){
             imageService.deleteImage(name);
         }
