@@ -5,6 +5,7 @@ import com.catchthemoment.model.AlbumModel;
 import com.catchthemoment.service.AlbumService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class AlbumController implements AlbumControllerApiDelegate {
 
     private final AlbumService albumService;
