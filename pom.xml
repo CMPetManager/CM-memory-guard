@@ -55,9 +55,11 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <configuration>
+                        <mainClass>com.catchthemoment.CatchTheMomentApplication</mainClass>
                         <layers>
                             <enabled>true</enabled>
                         </layers>
+                        <layout>JAR</layout>
                     </configuration>
                     <executions>
                         <execution>

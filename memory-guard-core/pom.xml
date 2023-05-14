@@ -147,6 +147,18 @@
             <version>${springdoc.version}</version>
         </dependency>
 
+        <!--<dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-maven-plugin</artifactId>
+            <version>3.0.0</version>
+        </dependency>-->
+
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
@@ -156,17 +168,22 @@
 
     </dependencies>
     <build>
+        <finalName>CatchTheMoment</finalName>
+        <pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>com.catchthemoment.CatchTheMomentApplication</mainClass>
                     <layers>
                         <enabled>true</enabled>
                     </layers>
+                    <layout>JAR</layout>
                 </configuration>
                 <executions>
                     <execution>
+                        <id>repackage</id>
                         <goals>
                             <goal>repackage</goal>
                         </goals>
@@ -174,6 +191,11 @@
                 </executions>
             </plugin>
             <!--<plugin>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-maven-plugin</artifactId>
+                <version>3.0.3</version>
+            </plugin>
+            <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>1.4.13</version>
@@ -194,6 +216,7 @@
                 </configuration>
             </plugin>-->
         </plugins>
+        </pluginManagement>
     </build>
 
 </project>

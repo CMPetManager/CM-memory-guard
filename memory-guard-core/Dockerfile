@@ -1,35 +1,39 @@
-FROM openjdk:17-alpine as builder
-WORKDIR temp
 
-ARG JAR_FILE=target/*.jar
+#FROM openjdk:17-alpine as builder
+#WORKDIR temp
 
-
-COPY ${JAR_FILE} ./memory-guard-core.jar
-
-RUN java -Djarmode=layertools -jar memory-guard-core.jar extract
+#ARG JAR_FILE=target/*.jar
 
 
-FROM openjdk:17-alpine
+#COPY ${JAR_FILE} ./memory-guard-core.jar
+
+#RUN java -Djarmode=layertools -jar memory-guard-core.jar extract
 
 
-ARG IMAGE_VERSION="0.0.1-SNAPSHOT"
-ARG IMAGE_NAME="CatchTheMomentApp"
+#FROM openjdk:17-alpine
 
 
-LABEL version=${IMAGE_VERSION} name=${IMAGE_NAME}
-
-WORKDIR /home/memory/memory-guard-core
-
-
-COPY --from=builder temp/dependencies/ ./
-COPY --from=builder temp/snapshot-dependencies/ ./
-COPY --from=builder temp/spring-boot-loader/ ./
-COPY --from=builder temp/application/ ./
+#ARG IMAGE_VERSION="0.0.1-SNAPSHOT"
+#ARG IMAGE_NAME="CatchTheMomentApp"
 
 
-EXPOSE 8084
+#LABEL version=${IMAGE_VERSION} name=${IMAGE_NAME}
 
-ARG JAVA_OPTS=""
+#WORKDIR /home/memory/memory-guard-core
 
 
-ENTRYPOINT ["java","-Dspring.profiles.active=prod","org.springframework.boot.loader.JarLauncher","-jar","/memory-guard-core:0.0.1.jar"]
+#COPY --from=builder temp/dependencies/ ./
+#COPY --from=builder temp/snapshot-dependencies/ ./
+#COPY --from=builder temp/spring-boot-loader/ ./
+#COPY --from=builder temp/application/ ./
+
+
+#EXPOSE 8081
+#EXPOSE 8084
+
+#ARG JAVA_OPTS=""
+
+
+#ENTRYPOINT ["java","-Dspring.profiles.active=prod","org.springframework.boot.loader.JarLauncher","-jar","/memory-guard-core:0.0.1.jar",
+#"bash","-c"]
+
