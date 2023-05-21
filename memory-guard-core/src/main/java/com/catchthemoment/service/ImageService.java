@@ -5,12 +5,12 @@ import com.catchthemoment.entity.Image;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.AlbumMapper;
+import com.catchthemoment.mappers.AlbumMapperImpl;
 import com.catchthemoment.model.AlbumModel;
 import com.catchthemoment.model.ImageDescriptionModel;
 import com.catchthemoment.repository.AlbumRepository;
 import com.catchthemoment.repository.ImageRepository;
 import com.catchthemoment.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -28,11 +28,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.catchthemoment.exception.ApplicationErrorEnum.*;
-import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ImageService {
     private static final String FOLDER_PATH = "C:\\Users\\Admin\\gitlab\\";
@@ -41,6 +39,16 @@ public class ImageService {
     private final UserRepository userRepository;
     private final AlbumRepository albumRepository;
     private final AlbumMapper albumMapper;
+
+    public ImageService(ImageRepository imageRepository,
+                        UserRepository userRepository,
+                        AlbumRepository albumRepository,
+                        AlbumMapper albumMapper) {
+        this.imageRepository = imageRepository;
+        this.userRepository = userRepository;
+        this.albumRepository = albumRepository;
+        this.albumMapper = new AlbumMapperImpl();
+    }
 
     @Transactional
     public Image uploadImage(AlbumModel albumModel, MultipartFile file) throws IOException, ServiceProcessingException {

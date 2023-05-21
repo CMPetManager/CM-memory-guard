@@ -3,12 +3,12 @@ package com.catchthemoment.service;
 import com.catchthemoment.entity.Album;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.AlbumMapper;
+import com.catchthemoment.mappers.AlbumMapperImpl;
 import com.catchthemoment.model.AlbumModel;
 import com.catchthemoment.repository.AlbumRepository;
 import com.catchthemoment.repository.UserRepository;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +18,16 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.ALBUM_ERROR_INPU
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class AlbumService {
     private final AlbumRepository albumRepository;
-    private final AlbumMapper albumMapper;
     private final UserRepository userRepository;
+    private final AlbumMapper albumMapper;
+
+    public AlbumService(AlbumRepository albumRepository, UserRepository userRepository, AlbumMapper albumMapper) {
+        this.albumRepository = albumRepository;
+        this.userRepository = userRepository;
+        this.albumMapper = new AlbumMapperImpl();
+    }
 
     public AlbumModel getByAlbum(@NotNull Long albumId) {
         log.info("get album by id from repo");

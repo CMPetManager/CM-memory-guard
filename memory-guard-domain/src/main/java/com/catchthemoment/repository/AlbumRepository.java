@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AlbumRepository extends JpaRepository<Album, Long> {
-    @EntityGraph(value = "album-graph", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "album-graph", type = EntityGraph.EntityGraphType.FETCH)
     Optional<Album> findAlbumById(Long id);
 
     @EntityGraph(value = "album_graph", type = EntityGraph.EntityGraphType.LOAD)
@@ -21,7 +21,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     @Query("select al from Album al where al.id =:id ")
     void deleteAlbumById(@Param("id") Long id);
 
-    @Query("select al from Album al where al.albumName =:name  order by al.albumName asc ")
+    @Query(value = "select al from Album al where al.albumName =:name ")
     @EntityGraph(value = "album_graph", type = EntityGraph.EntityGraphType.FETCH)
     Optional<Album> findAlbumByName(@Param("name") String name);
 

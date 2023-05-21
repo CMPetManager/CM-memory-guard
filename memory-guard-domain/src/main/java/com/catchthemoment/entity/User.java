@@ -55,7 +55,8 @@ public class User {
     private List<Album> albums;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Image image;
+    private Image image; // TODO I have read this is true evil !? Should we need it here?
+    // Might user has multiple image or none of it?
 
     @Override
     public boolean equals(Object o) {

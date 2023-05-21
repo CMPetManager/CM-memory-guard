@@ -1,10 +1,7 @@
 package com.catchthemoment.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Entity
@@ -12,6 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "image")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NamedEntityGraph(name = "image-graph",attributeNodes = {
+        @NamedAttributeNode("id"),
+        @NamedAttributeNode("name"),
+        @NamedAttributeNode("type")
+})
 public class Image {
 
     @Id
