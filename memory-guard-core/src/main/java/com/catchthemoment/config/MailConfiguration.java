@@ -32,6 +32,8 @@ public class MailConfiguration {
         var properties = mailSender.getJavaMailProperties();
         properties.setProperty("mail.transport.protocol", protocol);
         properties.setProperty("mail.debug", debug);
+        properties.put("mail.smtp.port", port); //TLS Port
+        properties.put("mail.smtp.starttls.enable", "true");
         return mailSender;
 
     }
