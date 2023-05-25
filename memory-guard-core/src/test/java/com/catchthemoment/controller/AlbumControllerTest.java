@@ -6,10 +6,8 @@ import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.AlbumModel;
 import com.catchthemoment.repository.AlbumRepository;
 import com.catchthemoment.service.AlbumService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,11 +20,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@WebMvcTest(controllers = AlbumController.class)
-@Import(AlbumControllerApiDelegate.class) // should fix tests
+@WebMvcTest(AlbumController.class)
+@Import(AlbumController.class)
 class AlbumControllerTest {
 
-    private  final String BASE_URI = "/albums/";
+    private final String BASE_URI = "/albums/";
 
     @Autowired
     private WebApplicationContext context;
@@ -36,11 +34,11 @@ class AlbumControllerTest {
 
     @MockBean
     private AlbumRepository albumRepository;
- //   @Mock
- //   private AlbumControllerApiDelegate delegate;
+    //   @Mock
+    //   private AlbumControllerApiDelegate delegate;
 //    @Mock
- //   private AlbumControllerApi albumControllerApi;
- //   @Mock
+    //   private AlbumControllerApi albumControllerApi;
+    //   @Mock
 //    private AlbumMapper mapper;
     private AlbumModel model;
     private Album fakeEntity;
@@ -48,7 +46,7 @@ class AlbumControllerTest {
     private User fakeUser2;
     private List<User> userList;
 
-
+    @Autowired
     private MockMvc mockMvc;
 
     @InjectMocks
@@ -75,8 +73,6 @@ class AlbumControllerTest {
         fakeUser2.setId(3L);
         userList = List.of(fakeUser, fakeUser2);
         model = new AlbumModel();
-        model.setAlbumName("Js");
-        MockitoAnnotations.initMocks(this);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         this.albumRepository.save(fakeEntity);
         assertNotNull(albumRepository);
@@ -86,14 +82,14 @@ class AlbumControllerTest {
 /**
     @Test
     void getAlbumByName() throws Exception {
-        String name = model.getAlbumName();
-        given(service.getAlbumByName(name)).willReturn(model);
-        mockMvc.perform(MockMvcRequestBuilders.get(BASE_URI.concat(name))
+        String mockName = fakeEntity.getAlbumName();
+        when(service.getAlbumByName(mockName)).thenReturn(model);
+        mockMvc.perform(MockMvcRequestBuilders.get(BASE_URI.concat(mockName))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.name").value(name));
+                .andExpect((ResultMatcher) jsonPath("$.name").value(mockName));
 
     }
 
@@ -104,16 +100,8 @@ class AlbumControllerTest {
         doNothing().when(service).deleteAlbumById(anyLong());
         mockMvc.perform(MockMvcRequestBuilders.delete(BASE_URI.concat(String.valueOf(fakeId)))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isAccepted());
+                .andExpect(status().isNotImplemented());
     }
-**/
-
-    @AfterEach
-    public void tearDownTests() {
-        fakeUser = null;
-        fakeUser2 = null;
-        userList = null;
-        albumRepository.deleteAll();
-    }
+    **/
 
 }

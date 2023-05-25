@@ -27,8 +27,8 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
     private final UserResetPasswordService resetPasswordService;
 
     @GetMapping("/forgot-password")
-    public ResponseEntity<Object> forgotPasswordForm(Model model) {
-        model.addAttribute("Return form for reset password");
+    public ResponseEntity<Object> forgotPasswordForm(Model model,@RequestParam String emailParam) {
+        model.addAttribute("Return form for reset password",emailParam);
         return new ResponseEntity<>(model,HttpStatus.OK);
     }
 
