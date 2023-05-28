@@ -30,10 +30,12 @@ public class MailConfiguration {
         mailSender.setPassword(password);
 
         var properties = mailSender.getJavaMailProperties();
+        // Email protocol
         properties.setProperty("mail.transport.protocol", protocol);
         properties.setProperty("mail.debug", debug);
         properties.put("mail.smtp.port", port); //TLS Port
         properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("spring.mail.properties.mail.smtp.ssl.enable", "true");
         return mailSender;
 
     }
