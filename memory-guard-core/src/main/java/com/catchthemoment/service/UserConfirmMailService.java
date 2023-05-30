@@ -4,7 +4,7 @@ import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.UserRepository;
-import jakarta.mail.MessagingException;
+import jakarta.mail.*;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
@@ -20,7 +19,6 @@ import java.io.UnsupportedEncodingException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class UserConfirmMailService {
     private final JavaMailSender mailSender;
     private final UserRepository userRepository;
@@ -30,7 +28,7 @@ public class UserConfirmMailService {
     @Value("${spring.application.name}")
     private String sender;
 
-    @Transactional
+
     public boolean verifyAccount(@NotNull String token) throws ServiceProcessingException {
         User user = userRepository.findUSerByConfirmationResetToken(token).
                 orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.VALID_ACCOUNT_ERROR.getCode(),

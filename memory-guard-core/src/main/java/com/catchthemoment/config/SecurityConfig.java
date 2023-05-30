@@ -49,7 +49,8 @@ public class SecurityConfig {
                 }))
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/login", "/users**", "/users/**", "/refresh-token","/forgot-password").permitAll()
+                .requestMatchers("/login", "/users**", "/users/**", "/refresh-token","/forgot-password","/albums**","/images**"
+                ,"/albums/**","/images/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .anonymous().disable()

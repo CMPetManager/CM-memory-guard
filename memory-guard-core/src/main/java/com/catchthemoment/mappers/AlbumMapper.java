@@ -9,7 +9,7 @@ import org.mapstruct.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+@Mapper(componentModel ="spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AlbumMapper {
 

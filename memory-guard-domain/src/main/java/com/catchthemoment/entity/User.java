@@ -1,7 +1,6 @@
 package com.catchthemoment.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -54,7 +53,8 @@ public class User {
     private List<Album> albums;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Image image;
+    private Image image; // TODO I have read this is true evil !? Should we need it here?
+    // Might user has multiple image or none of it?
 
     @Override
     public boolean equals(Object o) {

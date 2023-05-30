@@ -13,8 +13,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph(value = "usr-entity-graph", type = EntityGraph.EntityGraphType.LOAD)
     @Query(value = "select u from User u where u.id = :id")
     Optional<User> findUserById(@Param("id") Long userId);
-
-    Optional<User> findUserByEmail(String email);
+    
+    @Query(value = "select usr from User usr where usr.email =:email")
+    Optional<User> findUserByEmail(@Param("email") String email);
 
     Optional<User> findUSerByConfirmationResetToken(String code);
 
