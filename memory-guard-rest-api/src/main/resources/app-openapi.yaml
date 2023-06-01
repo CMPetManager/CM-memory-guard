@@ -32,7 +32,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
-  /albums/{name}:
+  /albums/album/{name}:
     get:
       summary: Method for searching album by name
       tags:
@@ -59,7 +59,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-  /albums/{userId}:
+  /albums/user/{userId}:
     get:
       tags:
         - AlbumController
@@ -92,7 +92,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-  /albums/{id}:
+  /albums/album/{id}:
     get:
       tags:
         - AlbumController
@@ -211,7 +211,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
-  /images/{albumId}:
+  /images/album/{albumId}:
     post:
       summary: Method for created image
       tags:
@@ -275,7 +275,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-  /images/upload-multiple/{albumId}:
+  /images/upload-multiple/album/{albumId}:
     post:
       summary: Method for upload list images
       tags:

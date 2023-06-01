@@ -35,7 +35,7 @@ public class MailConfiguration {
         properties.setProperty("mail.debug", debug);
         properties.put("mail.smtp.port", port); //TLS Port
         properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("spring.mail.properties.mail.smtp.ssl.enable", "true");
+    //    properties.put("mail.smtp.auth","true");
         return mailSender;
 
     }
