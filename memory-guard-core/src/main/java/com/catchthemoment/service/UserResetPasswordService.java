@@ -3,9 +3,6 @@ package com.catchthemoment.service;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.UserRepository;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +11,10 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.validation.constraints.NotNull;
 
 import static com.catchthemoment.exception.ApplicationErrorEnum.MAIL_INCORRECT;
 

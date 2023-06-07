@@ -1,16 +1,15 @@
 package com.catchthemoment.entity;
 
 import com.catchthemoment.entity.embedded.Cover;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import liquibase.repackaged.org.apache.commons.lang3.builder.ToStringBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,7 +33,6 @@ public class Album {
     private Long id;
 
     @Column(name = "album_description")
-    @JdbcTypeCode(SqlTypes.LONGVARCHAR)
     private String albumDescription;
 
     @Column(name = "album_name", nullable = false, unique = true)

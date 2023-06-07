@@ -1,17 +1,18 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.entity.Album;
+import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.AlbumMapper;
 import com.catchthemoment.mappers.AlbumMapperImpl;
 import com.catchthemoment.model.AlbumModel;
 import com.catchthemoment.repository.AlbumRepository;
 import com.catchthemoment.repository.UserRepository;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 import static com.catchthemoment.exception.ApplicationErrorEnum.ALBUM_ERROR_INPUT;
@@ -39,7 +40,7 @@ public class AlbumService {
 
     public Collection<AlbumModel> findAllAlbumsUser(@NotNull Long userId) throws ServiceProcessingException {
         log.info(" get user by incoming id");
-        var user = userRepository.findUserById(userId)
+        User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new ServiceProcessingException(
                         ALBUM_ERROR_INPUT.getCode(), ALBUM_ERROR_INPUT.getMessage()));
         log.info("map album model list from incoming entity album list");

@@ -1,10 +1,10 @@
 package com.catchthemoment.entity;
 
-import jakarta.persistence.*;
+import liquibase.repackaged.org.apache.commons.lang3.builder.ToStringBuilder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,8 +53,7 @@ public class User {
     private List<Album> albums;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Image image; // TODO I have read this is true evil !? Should we need it here?
-    // Might user has multiple image or none of it?
+    private Image image;
 
     @Override
     public boolean equals(Object o) {

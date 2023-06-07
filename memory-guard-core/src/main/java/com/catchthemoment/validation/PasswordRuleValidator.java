@@ -1,7 +1,5 @@
 package com.catchthemoment.validation;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
 import org.passay.CharacterCharacteristicsRule;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
@@ -12,6 +10,8 @@ import org.passay.RepeatCharacterRegexRule;
 import org.passay.Rule;
 import org.passay.RuleResult;
 
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import java.util.ArrayList;
 import java.util.List;
 
