@@ -48,14 +48,6 @@ public class ImageController implements ImageControllerApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Object> downloadImage(String name) throws Exception {
-        log.info("*** Received a download image request by name: {} ***", name);
-        Resource resource = imageService.downloadImage(name);
-        log.info("*** Download was successful ***");
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
-    }
-
-    @Override
     public ResponseEntity<List<ImageModel>> uploadImages(Long albumId, List<MultipartFile> images) throws Exception {
         log.info("*** Received an upload images request ***");
         List<ImageModel> savingImages = new ArrayList<>();
@@ -70,11 +62,11 @@ public class ImageController implements ImageControllerApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Object> deleteImage(String name) throws Exception {
-        log.info("*** Received a delete image request by name: {} ***", name);
-        imageService.deleteImage(name);
-        log.info("*** Image successfully deleted ***");
-        return ResponseEntity.ok("Image successfully deleted");
+    public ResponseEntity<Object> downloadImage(String name) throws Exception {
+        log.info("*** Received a download image request by name: {} ***", name);
+        Resource resource = imageService.downloadImage(name);
+        log.info("*** Download was successful ***");
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
     }
 
     @Override
@@ -82,6 +74,14 @@ public class ImageController implements ImageControllerApiDelegate {
         Image image = imageService.addImageDescription(imageModel);
         ImageModel currentModel = imageMapper.toModel(image);
         return ResponseEntity.ok(currentModel);
+    }
+
+    @Override
+    public ResponseEntity<Object> deleteImage(String name) throws Exception {
+        log.info("*** Received a delete image request by name: {} ***", name);
+        imageService.deleteImage(name);
+        log.info("*** Image successfully deleted ***");
+        return ResponseEntity.ok("Image successfully deleted");
     }
 
     @Override

@@ -46,6 +46,9 @@ public class User {
     @Column(name = "reset_password_token", length = 20)
     private String resetPasswordToken;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
