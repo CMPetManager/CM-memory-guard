@@ -1,13 +1,12 @@
 package com.catchthemoment.controller;
 
+import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.ForgotPassword;
 import com.catchthemoment.model.UpdatePassword;
 import com.catchthemoment.service.UserResetPasswordService;
 import com.catchthemoment.util.SiteUrlUtil;
 import io.swagger.v3.oas.annotations.Parameter;
-import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
@@ -17,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +43,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
 
         try {
             resetPasswordService.updateResetPasswordToken(email, token);
-            var resetPasswordLink = SiteUrlUtil.getSiteURL(servletRequest) + "/reset_password?token=" + token;
+            String resetPasswordLink = SiteUrlUtil.getSiteURL(servletRequest) + "/reset_password?token=" + token;
             resetPasswordService.sendResetPasswordEmail(email, resetPasswordLink);
             model.addAttribute("message",
                     "We have sent a reset password link to your email. Please check.");
@@ -49,9 +51,6 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
         } catch (ServiceProcessingException e) {
             model.addAttribute("error", e.getMessage());
             throw new RuntimeException(e);
-        } catch (MessagingException ex) {
-            model.addAttribute("error", "Error appeared while sending email");
-
         }
         return new ResponseEntity<>(model, HttpStatus.CREATED);
 
@@ -59,7 +58,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
 
     @GetMapping(value = "/reset", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<Object> resetPasswordForm(@RequestParam String token, Model model) {
-        var user = resetPasswordService.getUserFromResetToken(token);
+        User user = resetPasswordService.getUserFromResetToken(token);
         model.addAttribute("token",token);
         if (user == null) {
             model.addAttribute("message", "Invalid incoming token");
@@ -73,7 +72,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
     public ResponseEntity<Object> resetPassword(@RequestBody @Validated UpdatePassword updatePasswordModel, Model model) {
         String token = updatePasswordModel.getToken();
         String password = updatePasswordModel.getPassword();
-        var userFromResetToken = resetPasswordService.getUserFromResetToken(token);
+        User userFromResetToken = resetPasswordService.getUserFromResetToken(token);
         model.addAttribute("title", "Reset your password");
         if (userFromResetToken == null) {
             model.addAttribute("message", "Something went wrong..");

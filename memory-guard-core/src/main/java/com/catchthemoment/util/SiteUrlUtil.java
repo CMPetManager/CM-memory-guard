@@ -1,7 +1,7 @@
 package com.catchthemoment.util;
 
-import jakarta.servlet.http.HttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 
 public class SiteUrlUtil {
 

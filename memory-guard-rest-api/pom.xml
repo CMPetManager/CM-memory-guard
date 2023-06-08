@@ -68,7 +68,6 @@
                             <configOptions>
                                 <oas3>true</oas3>
                                 <useTags>true</useTags>
-                                <useSpringBoot3>true</useSpringBoot3>
                                 <interfaceOnly>false</interfaceOnly>
                                 <enableBuilderSupport>true</enableBuilderSupport>
                                 <dateLibrary>java8</dateLibrary>
@@ -94,7 +93,6 @@
                             <configOptions>
                                 <oas3>true</oas3>
                                 <useTags>true</useTags>
-                                <useSpringBoot3>true</useSpringBoot3>
                                 <interfaceOnly>false</interfaceOnly>
                                 <enableBuilderSupport>true</enableBuilderSupport>
                                 <dateLibrary>java8</dateLibrary>

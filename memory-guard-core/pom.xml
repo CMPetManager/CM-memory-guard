@@ -15,11 +15,10 @@
         <jjwt.version>0.11.5</jjwt.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <hibernate-validator.version>8.0.0.Final</hibernate-validator.version>
-        <jakarta-validation.version>3.0.2</jakarta-validation.version>
         <passay.version>1.6.2</passay.version>
         <h2.version>2.1.212</h2.version>
         <model.version>0.0.1</model.version>
-        <springdoc.version>2.0.0</springdoc.version>
+        <springdoc.version>1.6.6</springdoc.version>
         <maven.test.skip>true</maven.test.skip>
         <launcher.version>1.9.3</launcher.version>
 
@@ -79,12 +78,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun.mail</groupId>
-                    <artifactId>javax.mail</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -142,15 +135,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>${springdoc.version}</version>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -160,20 +153,17 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail -->
-
-
     </dependencies>
     <dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.eclipse.angus</groupId>
-            <artifactId>jakarta.mail</artifactId>
-            <version>2.0.0</version>
-        </dependency>
+        <dependencies>
+            <dependency>
+                <groupId>org.eclipse.angus</groupId>
+                <artifactId>jakarta.mail</artifactId>
+                <version>2.0.0</version>
+            </dependency>
 
-    </dependencies>
-</dependencyManagement>
+        </dependencies>
+    </dependencyManagement>
     <build>
         <plugins>
             <plugin>
@@ -212,6 +202,14 @@
                         <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                         <ARTIFACT_ID>${project.artifactId}</ARTIFACT_ID>
                     </buildArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
         </plugins>

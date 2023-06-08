@@ -1,9 +1,9 @@
 package com.catchthemoment.config;
 
+
 import com.catchthemoment.auth.JwtTokenFilter;
 import com.catchthemoment.auth.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtTokenManager jwtTokenManager;
-    private final ApplicationContext applicationContext;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -49,8 +48,7 @@ public class SecurityConfig {
                 }))
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/login", "/users**", "/users/**", "/refresh-token","/forgot-password","/albums**","/images**"
-                ,"/albums/**","/images/**").permitAll()
+                .antMatchers("/verify/**","/login", "/users**", "/users/**", "/refresh-token", "/forgot-password").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .anonymous().disable()

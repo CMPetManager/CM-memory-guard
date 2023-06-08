@@ -19,7 +19,7 @@ public class ControllerExceptionHandler {
         ApplicationError applicationError = new ApplicationError()
                 .code(exception.getCode())
                 .message(exception.getMessage());
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(applicationError);
+        return ResponseEntity.status(BAD_REQUEST).body(applicationError);
     }
 
     @ExceptionHandler

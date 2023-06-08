@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import java.util.Properties;
+
 @Configuration
 public class MailConfiguration {
     @Value("${spring.mail.host}")
@@ -29,7 +31,7 @@ public class MailConfiguration {
         mailSender.setUsername(username);
         mailSender.setPassword(password);
 
-        var properties = mailSender.getJavaMailProperties();
+        Properties properties = mailSender.getJavaMailProperties();
         // Email protocol
         properties.setProperty("mail.transport.protocol", protocol);
         properties.setProperty("mail.debug", debug);

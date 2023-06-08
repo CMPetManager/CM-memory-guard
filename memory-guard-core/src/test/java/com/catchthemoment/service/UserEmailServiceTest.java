@@ -5,7 +5,6 @@ import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.UserModelMapper;
 import com.catchthemoment.model.UserModel;
 import com.catchthemoment.repository.UserRepository;
-import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 

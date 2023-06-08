@@ -4,6 +4,7 @@ import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.AlbumModel;
 import com.catchthemoment.service.AlbumService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class AlbumController implements AlbumControllerApiDelegate {
 
     private final AlbumService albumService;
@@ -46,6 +48,7 @@ public class AlbumController implements AlbumControllerApiDelegate {
 
     @Override
     public ResponseEntity<AlbumModel> getAlbumByName(String name) throws Exception {
+        log.info("1");
         return ResponseEntity.ok().body(albumService.getAlbumByName(name));
     }
 

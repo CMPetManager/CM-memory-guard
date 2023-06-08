@@ -33,31 +33,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-  /users:
-    post:
-      summary: Method for registration
-      tags:
-        - AuthController
-      operationId: registration
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserModel'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserModel'
-        '400':
-          description: something wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationError'
-
   /users/refresh-token:
     post:
       summary: Method for refresh token
