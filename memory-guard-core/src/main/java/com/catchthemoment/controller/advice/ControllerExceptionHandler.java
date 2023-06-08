@@ -27,7 +27,7 @@ public class ControllerExceptionHandler {
         log.error("*** Exception: {} ***", exception.toString());
         ApplicationError errorResponse = new ApplicationError()
                 .code(ApplicationErrorEnum.DEFAULT_EXCEPTION.getCode())
-                .message(ApplicationErrorEnum.DEFAULT_EXCEPTION.getMessage());
+                .message(exception.getMessage());
         return new ResponseEntity<>(errorResponse, INTERNAL_SERVER_ERROR);
     }
 

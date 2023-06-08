@@ -27,6 +27,7 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
 
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserConfirmMailService confirmMailService;
@@ -58,6 +59,7 @@ public class UserService implements UserDetailsService {
         log.info("*** The check was successful ***");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.ROlE_USER);
+        user.setEnabled(false);
         String randomCode = RandomString.make(20);
         user.setConfirmationResetToken(randomCode);
         User createdUser = userRepository.save(user);

@@ -34,6 +34,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
         return new ResponseEntity<>(model,HttpStatus.OK);
     }
 
+
     @PostMapping("/forgot-password")
     public ResponseEntity<Object> forgotPassword(@RequestBody @Validated ForgotPassword forgotPassword,
                                                  @Parameter(hidden = true) HttpServletRequest servletRequest, Model model)
@@ -43,7 +44,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
 
         try {
             resetPasswordService.updateResetPasswordToken(email, token);
-            String resetPasswordLink = SiteUrlUtil.getSiteURL(servletRequest) + "/reset_password?token=" + token;
+            String resetPasswordLink = SiteUrlUtil.getSiteURL(servletRequest) + "/users/reset_password?token=" + token;
             resetPasswordService.sendResetPasswordEmail(email, resetPasswordLink);
             model.addAttribute("message",
                     "We have sent a reset password link to your email. Please check.");

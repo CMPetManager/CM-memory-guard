@@ -1,0 +1,1571 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "UserController",
+      "description": "the UserController API"
+    },
+    {
+      "name": "ForgotPasswordController",
+      "description": "the ForgotPasswordController API"
+    },
+    {
+      "name": "AlbumController",
+      "description": "the AlbumController API"
+    },
+    {
+      "name": "ImageController",
+      "description": "the ImageController API"
+    },
+    {
+      "name": "AuthController",
+      "description": "the AuthController API"
+    }
+  ],
+  "paths": {
+    "/users/{userId}": {
+      "put": {
+        "tags": [
+          "UserController"
+        ],
+        "summary": "Update password",
+        "description": "Method for update password",
+        "operationId": "updatePassword",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "userId to update password",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "types": [
+                    "string"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "UserController"
+        ],
+        "summary": "Add profile photo",
+        "description": "Method for add user's photo",
+        "operationId": "addProfilePhoto",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "userId to add photo",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "types": [
+                      "string"
+                    ]
+                  }
+                },
+                "types": [
+                  "object"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "UserController"
+        ],
+        "summary": "Delete user userId",
+        "description": "Method for delete user",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID for delete user",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "types": [
+                    "string"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "UserController"
+        ],
+        "summary": "Method to update user's email",
+        "description": "update email",
+        "operationId": "updateExistsEmail",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "usr id for checking email",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successfully update email"
+          },
+          "400": {
+            "description": "something went wrong..",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images": {
+      "put": {
+        "tags": [
+          "ImageController"
+        ],
+        "summary": "Add description",
+        "description": "Add photo description",
+        "operationId": "addDescription",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageDescriptionModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "add photo description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "something went wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/albums/{id}": {
+      "get": {
+        "tags": [
+          "AlbumController"
+        ],
+        "summary": "Find album by album id",
+        "description": "Get album by id",
+        "operationId": "getAlbum",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "album Id must defined to find album",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "album found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlbumModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "album not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlbumModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "something went wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "AlbumController"
+        ],
+        "summary": "Update Album",
+        "description": "Update album by albumId",
+        "operationId": "updateAlbum",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id , need for updating album",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlbumModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "album updated without errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlbumModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "album not found by its id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlbumModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "something went wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "AlbumController"
+        ],
+        "summary": "Delete album by id",
+        "description": "Method for delete album",
+        "operationId": "deleteAlbum",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the cover that needs to be deleted",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": [
+          "forgot-password-controller"
+        ],
+        "operationId": "resetPassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePassword"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/reset-password": {
+      "post": {
+        "tags": [
+          "AuthController"
+        ],
+        "summary": "Reset user's password",
+        "description": "Method for reset user's password",
+        "operationId": "resetPasswordForgotPasswordController",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/users/refresh-token": {
+      "post": {
+        "tags": [
+          "AuthController"
+        ],
+        "summary": "Method for refresh token",
+        "description": "refresh user's auth",
+        "operationId": "refresh",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshToken"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/forgot-password": {
+      "get": {
+        "tags": [
+          "forgot-password-controller"
+        ],
+        "operationId": "forgotPasswordForm",
+        "parameters": [
+          {
+            "name": "emailParam",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "types": [
+                "string"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ForgotPasswordController",
+          "forgot-password-controller"
+        ],
+        "summary": "Forgot password",
+        "description": "after this method user should check his email",
+        "operationId": "forgotPassword_1_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPassword"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "something wrong with password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "successful operation of creation new password"
+          }
+        }
+      }
+    },
+    "/users/confirm-account": {
+      "post": {
+        "tags": [
+          "user-confirmation-mail-controller"
+        ],
+        "operationId": "confirmUserAccount",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "AuthController"
+        ],
+        "summary": "Method for user authorization",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/{albumId}": {
+      "post": {
+        "tags": [
+          "ImageController"
+        ],
+        "summary": "Method for created image",
+        "operationId": "uploadImage",
+        "parameters": [
+          {
+            "name": "albumId",
+            "in": "path",
+            "description": "albumId , which need to set image into album",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "types": [
+                      "string"
+                    ]
+                  }
+                },
+                "types": [
+                  "object"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/upload-multiple/{albumId}": {
+      "post": {
+        "tags": [
+          "ImageController"
+        ],
+        "summary": "Method for upload list images",
+        "operationId": "uploadImages",
+        "parameters": [
+          {
+            "name": "albumId",
+            "in": "path",
+            "description": "albumId , which need to set image into album",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary",
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "types": [
+                      "array"
+                    ]
+                  }
+                },
+                "types": [
+                  "object"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ImageModel"
+                  },
+                  "types": [
+                    "array"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/albums": {
+      "post": {
+        "tags": [
+          "AlbumController"
+        ],
+        "summary": "Method for created album",
+        "operationId": "createAlbum",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlbumModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlbumModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/verify": {
+      "get": {
+        "tags": [
+          "user-confirmation-mail-controller"
+        ],
+        "operationId": "verifyAccount",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "types": [
+                "string"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/reset": {
+      "get": {
+        "tags": [
+          "ForgotPasswordController",
+          "forgot-password-controller"
+        ],
+        "summary": "Get user token",
+        "description": "Method for getting user token",
+        "operationId": "resetPasswordForm_1_1",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "types": [
+                "string"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "types": [
+                    "string"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid token value",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "types": [
+                    "string"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/{name}": {
+      "get": {
+        "tags": [
+          "ImageController"
+        ],
+        "summary": "Find image by name",
+        "description": "Find image by name",
+        "operationId": "downloadImage",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name , which need to find image",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "types": [
+                "string"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/albums/{userId}": {
+      "get": {
+        "tags": [
+          "AlbumController"
+        ],
+        "summary": "Find album by userId",
+        "description": "Find album by userId",
+        "operationId": "getUserAlbums",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "userId for finding user's albums",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "all user's album found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AlbumModel"
+                  },
+                  "types": [
+                    "array"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AlbumModel"
+                  },
+                  "types": [
+                    "array"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "something went wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/albums/{name}": {
+      "get": {
+        "tags": [
+          "AlbumController"
+        ],
+        "summary": "Method for searching album by name",
+        "operationId": "getAlbumByName",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "albumName for searches",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "types": [
+                "string"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "album found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlbumModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "wrong searching attempt ..",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/delete/{name}": {
+      "delete": {
+        "tags": [
+          "ImageController"
+        ],
+        "summary": "Delete image by name",
+        "description": "Method for delete image",
+        "operationId": "deleteImage",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name for delete image",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "types": [
+                "string"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/delete-images": {
+      "delete": {
+        "tags": [
+          "ImageController"
+        ],
+        "summary": "Deletes multiple images from the system",
+        "operationId": "deleteImages",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "types": [
+                    "string"
+                  ]
+                },
+                "types": [
+                  "array"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Images not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "something wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApplicationError": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "types": [
+              "integer"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "UpdatePassword": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "types": [
+              "string"
+            ]
+          },
+          "password": {
+            "type": "string",
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Update an existent user in the store"
+      },
+      "ImageModel": {
+        "required": [
+          "link"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "types": [
+              "integer"
+            ]
+          },
+          "link": {
+            "type": "string",
+            "example": "photo link",
+            "types": [
+              "string"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "example": "It was a good day",
+            "types": [
+              "string"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "example": "type",
+            "types": [
+              "string"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "example": "name",
+            "types": [
+              "string"
+            ]
+          },
+          "albumId": {
+            "type": "integer",
+            "format": "int64",
+            "types": [
+              "integer"
+            ]
+          }
+        }
+      },
+      "ImageDescriptionModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "name",
+            "types": [
+              "string"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "example": "It was a good day",
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "AlbumModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "types": [
+              "integer"
+            ]
+          },
+          "albumDescription": {
+            "type": "string",
+            "example": "some words about page",
+            "types": [
+              "string"
+            ]
+          },
+          "albumName": {
+            "type": "string",
+            "example": "the name of album",
+            "types": [
+              "string"
+            ]
+          },
+          "color": {
+            "type": "string",
+            "example": "red",
+            "types": [
+              "string"
+            ]
+          },
+          "templatePage": {
+            "type": "string",
+            "example": "Horizontal image and text field below",
+            "types": [
+              "string"
+            ]
+          },
+          "tagPeople": {
+            "type": "string",
+            "example": "Andrew,Egor",
+            "types": [
+              "string"
+            ]
+          },
+          "tagPlace": {
+            "type": "string",
+            "example": "Germany,Berlin",
+            "types": [
+              "string"
+            ]
+          },
+          "animation": {
+            "type": "string",
+            "example": "slide",
+            "types": [
+              "string"
+            ]
+          },
+          "coverDescription": {
+            "type": "string",
+            "example": "place description",
+            "types": [
+              "string"
+            ]
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageModel"
+            },
+            "types": [
+              "array"
+            ]
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64",
+            "types": [
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "types": [
+              "string"
+            ]
+          },
+          "token": {
+            "$ref": "#/components/schemas/Token"
+          }
+        }
+      },
+      "Token": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "types": [
+              "string"
+            ]
+          },
+          "expirationIn": {
+            "type": "integer",
+            "format": "int64",
+            "types": [
+              "integer"
+            ]
+          },
+          "refreshToken": {
+            "type": "string",
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "RefreshToken": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64",
+            "types": [
+              "integer"
+            ]
+          },
+          "refreshToken": {
+            "type": "string",
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "ForgotPassword": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "egor@email.com",
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "UserModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "types": [
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "example": "theUser",
+            "types": [
+              "string"
+            ]
+          },
+          "email": {
+            "type": "string",
+            "example": "egor@email.com",
+            "types": [
+              "string"
+            ]
+          },
+          "password": {
+            "type": "string",
+            "example": "2uffu4fuo",
+            "types": [
+              "string"
+            ]
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "egor@email.com",
+            "types": [
+              "string"
+            ]
+          },
+          "password": {
+            "type": "string",
+            "example": "MyNew_pass",
+            "types": [
+              "string"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

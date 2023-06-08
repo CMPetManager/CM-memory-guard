@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS users
     name VARCHAR(64) NOT NULL,
     email VARCHAR(64) NOT NULL UNIQUE,
     password VARCHAR(200) NOT NULL,
+    enabled BOOLEAN,
     confirmation_reset_token VARCHAR(250) NULL,
     reset_password_token VARCHAR(250) NULL,
     role VARCHAR(45) NOT NULL

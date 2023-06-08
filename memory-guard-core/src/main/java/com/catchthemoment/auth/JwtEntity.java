@@ -15,6 +15,7 @@ public class JwtEntity implements UserDetails {
     private final String name;
     private final String email;
     private final String password;
+    private final boolean enabled;
     private final Collection<? extends GrantedAuthority> authorities;
 
     @Override
@@ -39,6 +40,6 @@ public class JwtEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

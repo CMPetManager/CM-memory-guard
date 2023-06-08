@@ -34,6 +34,7 @@ public class UserConfirmMailService {
                 orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.VALID_ACCOUNT_ERROR.getCode(),
                         ApplicationErrorEnum.VALID_ACCOUNT_ERROR.getMessage()));
         user.setConfirmationResetToken(null);
+        user.setEnabled(true);
         userRepository.save(user);
         return true;
     }
