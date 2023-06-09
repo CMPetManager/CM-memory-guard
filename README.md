@@ -12,4 +12,11 @@
 - for bug fix on prod create branch from main - hotfix/{task-number}
 - create short but self-defining commit messages, but there is always place for fun)
 
-#### test line to check pushes to dev
+
+## docker:
+
+### build:
+`docker build -t memory-guard .`
+
+### run
+`docker run -e "SPRING_PROFILES_ACTIVE=<profile_name>" -p 8080:8080 <image_name>`

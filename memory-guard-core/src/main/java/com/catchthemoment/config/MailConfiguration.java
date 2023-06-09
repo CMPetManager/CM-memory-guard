@@ -19,7 +19,7 @@ public class MailConfiguration {
     @Value("${spring.mail.protocol}")
     private String protocol;
     @Value("${spring.mail.port}")
-    private String port;
+    private int port;
     @Value("${mail.debug}")
     private String debug;
 
@@ -27,7 +27,7 @@ public class MailConfiguration {
     public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(host);
-        mailSender.setPort(Integer.parseInt(port));
+        mailSender.setPort(port);
         mailSender.setUsername(username);
         mailSender.setPassword(password);
 
