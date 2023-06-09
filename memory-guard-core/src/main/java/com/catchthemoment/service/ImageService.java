@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,13 +26,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.catchthemoment.exception.ApplicationErrorEnum.*;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
+@Transactional(readOnly = true,rollbackFor = Exception.class)
 public class ImageService {
     private static final String FOLDER_PATH = "C:\\Users\\Admin\\gitlab\\";
 
@@ -50,7 +52,7 @@ public class ImageService {
         this.albumMapper = new AlbumMapperImpl();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class, isolation = Isolation.REPEATABLE_READ)
     public Image uploadImage(AlbumModel albumModel, MultipartFile file) throws IOException, ServiceProcessingException {
         log.info("*** Checking the image name for uniqueness ***");
         if (imageRepository.findImageByName(file.getOriginalFilename()).isPresent()) {
@@ -86,7 +88,7 @@ public class ImageService {
     }
 
     private static Path getPath(MultipartFile file) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         Path uploadPath = Paths.get(FOLDER_PATH);
         Path filePath = uploadPath.resolve(fileName).normalize();
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
@@ -131,13 +133,14 @@ public class ImageService {
         }
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Image addImageDescription(ImageDescriptionModel imageModel) {
         Optional<Image> currentImage = imageRepository.findImageByName(imageModel.getName());
         currentImage.ifPresent(image -> {
             image.setDescription(imageModel.getDescription());
             imageRepository.save(image);
         });
-        return currentImage.get();
+        Image image = currentImage.get();
+        return image;
     }
 }

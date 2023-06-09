@@ -19,7 +19,7 @@ import java.io.UnsupportedEncodingException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserConfirmMailService {
+public class UserConfirmMailService  {
     private final JavaMailSender mailSender;
     private final UserRepository userRepository;
 
@@ -46,10 +46,15 @@ public class UserConfirmMailService {
         String senderName = sender;
         String subject = "Please verify your email";
         String content = "Dear [[name]],<br>"
-                + "Please click the link below to verify your email:<br>"
+                + "Thank you for registering on our website. Your account has been created and is now ready for use."
+                +"To complete your registration and activate your account, please click on the following link:"+
+                ":<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-                + "Thank you,<br>"
-                + "CatchTheMomentTeam.";
+                + "If you are unable to click the link, please copy and paste it into your web browser's address bar.\n" +
+                "Thank you for choosing our platform. We hope you enjoy using our services.\n" +
+                "Best regards,\n" +
+                "Catch The Moment Team<br>";
+
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
