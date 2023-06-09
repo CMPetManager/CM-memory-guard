@@ -88,6 +88,12 @@ paths:
         - ForgotPasswordController
       description: Method for getting user token
       operationId: resetPasswordForm
+      parameters:
+        - name: token
+          in: query
+          description: token for request user to reset password
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -102,10 +108,9 @@ paths:
     post:
       summary: Reset user's password
       tags:
-        - AuthController
+        - ForgotPasswordController
       description: Method for reset user's password
       operationId: resetPassword
-        - ForgotPasswordController
       requestBody:
         content:
           application/json:

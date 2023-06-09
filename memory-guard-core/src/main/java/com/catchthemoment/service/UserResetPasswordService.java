@@ -33,7 +33,7 @@ public class UserResetPasswordService {
     @Value("${spring.application.name}")
     private String sender;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void updateResetPasswordToken(@NotNull String email, String token) throws ServiceProcessingException {
         var user = repository.findUserByEmail(email).orElseThrow(
                 () -> new ServiceProcessingException(MAIL_INCORRECT.getCode(), MAIL_INCORRECT.getMessage()));
