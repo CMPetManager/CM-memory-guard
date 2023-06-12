@@ -127,6 +127,35 @@ paths:
                 $ref: '#/components/schemas/ApplicationError'
 
   /users/{userId}:
+    get:
+      tags:
+        - UserController
+      summary: Find user by userId
+      description: Find user by userId
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path
+          description: userId for finding user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: user found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+        '404':
+          description: not found
+        '500':
+          description: something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
     put:
       summary: Update password
       tags:

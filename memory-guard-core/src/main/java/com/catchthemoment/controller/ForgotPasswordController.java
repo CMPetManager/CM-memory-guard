@@ -43,7 +43,6 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
         return new ResponseEntity<>(model, HttpStatus.OK);
     }
 
-
     @Override
     public ResponseEntity<Void> resetPassword(UpdatePassword updatePasswordModel) {
         String token = updatePasswordModel.getToken();

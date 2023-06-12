@@ -12,24 +12,12 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "users", indexes = @Index(name = "usr_mail_index", columnList = "email,name"))
-@NamedEntityGraph(name = "usr-entity-graph", attributeNodes = {
-        @NamedAttributeNode("id"),
-        @NamedAttributeNode("name"),
-        @NamedAttributeNode("password") //entity graph for avoiding n+1 problem multiple select queries
-})
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    public User(Long id, String name, String email, String password) {
-        Objects.requireNonNull(this.id = id);
-        Objects.requireNonNull(this.name = name, "Invalid or empty name ");
-        Objects.requireNonNull(this.email = email, "Invalid email address");
-        Objects.requireNonNull(this.password = password, "Invalid password ");
-    }
 
     @Column(name = "name")
     private String name;
@@ -85,5 +73,13 @@ public class User {
                 .append("albums", albums)
                 .toString();
 
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

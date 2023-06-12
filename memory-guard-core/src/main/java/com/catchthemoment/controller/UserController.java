@@ -4,6 +4,7 @@ import com.catchthemoment.entity.Image;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.ImageMapper;
+import com.catchthemoment.mappers.UserModelMapper;
 import com.catchthemoment.model.ImageModel;
 import com.catchthemoment.model.UpdatePassword;
 import com.catchthemoment.model.UserModel;
@@ -43,6 +44,7 @@ public class UserController implements UserControllerApiDelegate {
     private final UpdatePasswordValidator validator;
     private final ImageService imageService;
     private final ImageMapper imageMapper;
+    private final UserModelMapper userModelMapper;
 
     @PatchMapping(value = "/users/{userId}",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -50,6 +52,14 @@ public class UserController implements UserControllerApiDelegate {
         log.info("*** change user's email from request create user model: {}", userModel.getEmail());
         userEmailservice.changeUserEmail(userId, userModel, SiteUrlUtil.getSiteURL(request));
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<UserModel> getUser(Long userId) throws Exception {
+        log.info("*** Received a getting user request ***");
+        User currentUser = userService.getById(userId);
+        log.info("*** User was successful getting  ***");
+        return ResponseEntity.ok(userModelMapper.toDto(currentUser));
     }
 
     @Override
@@ -69,7 +79,7 @@ public class UserController implements UserControllerApiDelegate {
 
     @Override
     public ResponseEntity<String> deleteUser(Long userId) throws Exception {
-        log.info("*** Received an delete account request ***");
+        log.info("*** Received a delete account request ***");
         userService.deleteUserById(userId);
         log.info("*** " + RESPONSE_DELETE_USER + " ***");
 
