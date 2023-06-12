@@ -37,6 +37,7 @@ public class UserEmailService {
 
         String randomCode = RandomString.make(20);
         user.setConfirmationResetToken(randomCode);
+        user.setEnabled(false);
         repository.save(user);
 
         userConfirmMailService.sendVerificationEmail(user, sitUrl);

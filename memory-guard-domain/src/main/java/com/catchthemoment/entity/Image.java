@@ -11,11 +11,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "image")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@NamedEntityGraph(name = "image-graph",attributeNodes = {
-        @NamedAttributeNode("id"),
-        @NamedAttributeNode("name"),
-        @NamedAttributeNode("type")
-})
 public class Image {
 
     @Id

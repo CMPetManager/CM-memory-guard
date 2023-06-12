@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
-    @EntityGraph(value = "image-graph", type = EntityGraph.EntityGraphType.LOAD)
     Optional<Image> findImageByName(String fileName);
 
     void deleteImageById(Long id);

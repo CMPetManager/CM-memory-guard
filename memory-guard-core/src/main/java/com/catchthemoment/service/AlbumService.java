@@ -10,6 +10,7 @@ import com.catchthemoment.repository.AlbumRepository;
 import com.catchthemoment.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.ALBUM_ERROR_INPU
 
 @Service
 @Slf4j
+@Transactional(readOnly = true)
 public class AlbumService {
     private final AlbumRepository albumRepository;
     private final UserRepository userRepository;
