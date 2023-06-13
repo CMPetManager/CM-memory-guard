@@ -69,7 +69,7 @@ public class AlbumService {
         return albumMapper.fromAlbumEntity(albumRepository.save(album));
     }
 
-    private static void setDataFromModelToEntity(Album requestAlbum, Album album) {
+    private
         album.setCover(requestAlbum.getCover());
         album.setAlbumDescription(requestAlbum.getAlbumDescription());
         album.setAlbumName(requestAlbum.getAlbumName());

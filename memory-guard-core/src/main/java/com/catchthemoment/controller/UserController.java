@@ -46,6 +46,7 @@ public class UserController implements UserControllerApiDelegate {
     private final ImageMapper imageMapper;
     private final UserModelMapper userModelMapper;
 
+    //todo delete and implement interface
     @PatchMapping(value = "/users/{userId}",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateEmail(@PathVariable Long userId, @RequestBody @NotNull UserModel userModel, HttpServletRequest request) throws Exception {

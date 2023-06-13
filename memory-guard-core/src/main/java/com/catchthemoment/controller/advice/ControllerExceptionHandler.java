@@ -27,8 +27,9 @@ public class ControllerExceptionHandler {
         log.error("*** Exception: {} ***", exception.toString());
         ApplicationError applicationError = new ApplicationError()
                 .code(DEFAULT_EXCEPTION.getCode())
-                .message(DEFAULT_EXCEPTION.getMessage());
+                .message(DEFAULT_EXCEPTION.getMessage() + " : " + exception.getMessage());
         return ResponseEntity.internalServerError().body(applicationError);
     }
 
+    //todo handle required properties abscense exception
 }

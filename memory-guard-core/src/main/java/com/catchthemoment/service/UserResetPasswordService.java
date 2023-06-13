@@ -16,6 +16,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.validation.constraints.NotNull;
 
+import java.util.Optional;
+
 import static com.catchthemoment.exception.ApplicationErrorEnum.MAIL_INCORRECT;
 
 @Service
@@ -41,8 +43,8 @@ public class UserResetPasswordService {
             repository.save(user);
     }
 
-    public User getUserFromResetToken(String token) {
-        return repository.findUserByResetPasswordToken(token).orElse(new User());
+    public Optional<User> getUserFromResetToken(String token) {
+        return repository.findUserByResetPasswordToken(token);
 
     }
 

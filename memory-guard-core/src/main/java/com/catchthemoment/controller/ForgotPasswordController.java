@@ -30,6 +30,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
 
     private final UserResetPasswordService resetPasswordService;
 
+    //todo delete this
     /**
      * Get form for input email for sending message to change password
      *
@@ -47,6 +48,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
     public ResponseEntity<Void> resetPassword(UpdatePassword updatePasswordModel) {
         String token = updatePasswordModel.getToken();
         String password = updatePasswordModel.getPassword();
+        //todo return user as optional, if user abscent throw exception
         User userFromResetToken = resetPasswordService.getUserFromResetToken(token);
         if (userFromResetToken == null) {
             log.error("something goes wrong within" + userFromResetToken);

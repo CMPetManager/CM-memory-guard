@@ -11,6 +11,7 @@ import com.catchthemoment.model.ImageDescriptionModel;
 import com.catchthemoment.repository.AlbumRepository;
 import com.catchthemoment.repository.ImageRepository;
 import com.catchthemoment.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -33,6 +34,7 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true,rollbackFor = Exception.class)
 public class ImageService {
     private static final String FOLDER_PATH = "C:\\Users\\Admin\\gitlab\\";
@@ -41,16 +43,6 @@ public class ImageService {
     private final UserRepository userRepository;
     private final AlbumRepository albumRepository;
     private final AlbumMapper albumMapper;
-
-    public ImageService(ImageRepository imageRepository,
-                        UserRepository userRepository,
-                        AlbumRepository albumRepository,
-                        AlbumMapper albumMapper) {
-        this.imageRepository = imageRepository;
-        this.userRepository = userRepository;
-        this.albumRepository = albumRepository;
-        this.albumMapper = new AlbumMapperImpl();
-    }
 
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.REPEATABLE_READ)
     public Image uploadImage(AlbumModel albumModel, MultipartFile file) throws IOException, ServiceProcessingException {
@@ -87,7 +79,7 @@ public class ImageService {
         return image;
     }
 
-    private static Path getPath(MultipartFile file) throws IOException {
+    private Path getPath(MultipartFile file) throws IOException {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         Path uploadPath = Paths.get(FOLDER_PATH);
         Path filePath = uploadPath.resolve(fileName).normalize();
@@ -95,7 +87,7 @@ public class ImageService {
         return filePath;
     }
 
-    private static Image getBuildImage(MultipartFile file, Path filePath) {
+    private Image getBuildImage(MultipartFile file, Path filePath) {
         return Image.builder()
                 .name(file.getOriginalFilename())
                 .link(filePath.toString())

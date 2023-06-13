@@ -31,6 +31,7 @@ public class UserConfirmationMailController {
     private final UserModelMapper userMapper;
     private final UserModelValidator validator;
 
+    //todo rewrite
     @PostMapping(value = "/confirm-account",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserModel> confirmUserAccount(@RequestBody @NotNull UserModel userModel, HttpServletRequest request)

@@ -28,7 +28,7 @@ public class UserConfirmMailService  {
     @Value("${spring.application.name}")
     private String sender;
 
-
+//todo make it void or use returned value
     public boolean verifyAccount(@NotNull String token) throws ServiceProcessingException {
         User user = userRepository.findUSerByConfirmationResetToken(token).
                 orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.VALID_ACCOUNT_ERROR.getCode(),
@@ -39,7 +39,7 @@ public class UserConfirmMailService  {
         return true;
     }
 
-    void sendVerificationEmail(User user, String siteURL)
+    public void sendVerificationEmail(User user, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
         String fromAddress = mailAddress;
