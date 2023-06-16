@@ -16,10 +16,12 @@ import javax.mail.internet.MimeMessage;
 import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
 
+import static com.catchthemoment.exception.ApplicationErrorEnum.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserConfirmMailService  {
+public class UserConfirmMailService {
     private final JavaMailSender mailSender;
     private final UserRepository userRepository;
 
@@ -28,15 +30,12 @@ public class UserConfirmMailService  {
     @Value("${spring.application.name}")
     private String sender;
 
-//todo make it void or use returned value
-    public boolean verifyAccount(@NotNull String token) throws ServiceProcessingException {
+    public void verifyAccount(@NotNull String token) throws ServiceProcessingException {
         User user = userRepository.findUSerByConfirmationResetToken(token).
-                orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.VALID_ACCOUNT_ERROR.getCode(),
-                        ApplicationErrorEnum.VALID_ACCOUNT_ERROR.getMessage()));
+                orElseThrow(() -> new ServiceProcessingException(VALID_ACCOUNT_ERROR));
         user.setConfirmationResetToken(null);
         user.setEnabled(true);
         userRepository.save(user);
-        return true;
     }
 
     public void sendVerificationEmail(User user, String siteURL)
@@ -45,16 +44,18 @@ public class UserConfirmMailService  {
         String fromAddress = mailAddress;
         String senderName = sender;
         String subject = "Please verify your email";
-        String content = "Dear [[name]],<br>"
-                + "Thank you for registering on our website. Your account has been created and is now ready for use."
-                +"To complete your registration and activate your account, please click on the following link:"+
-                ":<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-                + "If you are unable to click the link, please copy and paste it into your web browser's address bar.\n" +
-                "Thank you for choosing our platform. We hope you enjoy using our services.\n" +
-                "Best regards,\n" +
-                "Catch The Moment Team<br>";
-
+        String content = """
+                Dear [[name]],<br>
+                Thank you for registering on our website.
+                Your account has been created and is now ready for use.
+                To complete your registration and activate your account, please click on the following link:
+                :<br>
+                <h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>
+                If you are unable to click the link, please copy and paste it into your web browser's address bar.
+                Thank you for choosing our platform. We hope you enjoy using our services.
+                Best regards,
+                Catch The Moment Team<br> 
+                """;
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);

@@ -49,9 +49,9 @@ public class ImageService {
         log.info("*** Checking the image name for uniqueness ***");
         if (imageRepository.findImageByName(file.getOriginalFilename()).isPresent()) {
             log.error("*** This image is already exists ***");
-            throw new ServiceProcessingException(ILLEGAL_STATE.getCode(), ILLEGAL_STATE.getMessage());
+            throw new ServiceProcessingException(ILLEGAL_STATE);
         }
-        log.info("*** Validation passed, This imageName doesn't exist in the database ***");
+        log.info("*** Validation passed, the imageName doesn't exist in the database ***");
         Path filePath = getPath(file);
         Image buildImage = getBuildImage(file, filePath);
         Album currentAlbum = albumMapper.fromAlbumModel(albumModel);
@@ -69,7 +69,7 @@ public class ImageService {
         Path filePath = getPath(file);
         Image buildImage = getBuildImage(file, filePath);
         User currentUser = userRepository.findUserById(userId)
-                .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND));
         buildImage.setUser(currentUser);
         log.info("*** Save object image into db ***");
         Image image = imageRepository.save(buildImage);
@@ -98,15 +98,13 @@ public class ImageService {
     public Resource downloadImage(String fileName) throws ServiceProcessingException, IOException {
         log.info("*** Find image name in the db ***");
         Image currentImage = imageRepository.findImageByName(fileName)
-                .orElseThrow(() -> new ServiceProcessingException(
-                        IMAGE_NOT_FOUND.getCode(),
-                        IMAGE_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new ServiceProcessingException(IMAGE_NOT_FOUND));
         log.info("*** Name successfully found in the db ***");
         Path filePath = Paths.get(FOLDER_PATH).resolve(currentImage.getName()).normalize();
         Resource resource = new UrlResource(filePath.toUri());
         if (!resource.exists()) {
             log.error("*** Image not found on the server ***");
-            throw new ServiceProcessingException(IMAGE_NOT_FOUND.getCode(), IMAGE_NOT_FOUND.getMessage());
+            throw new ServiceProcessingException(IMAGE_NOT_FOUND);
         }
         return resource;
     }
@@ -121,18 +119,21 @@ public class ImageService {
             Files.deleteIfExists(filePath);
         } else {
             log.error("*** Image not found on the server ***");
-            throw new ServiceProcessingException(IMAGE_NOT_FOUND.getCode(), IMAGE_NOT_FOUND.getMessage());
+            throw new ServiceProcessingException(IMAGE_NOT_FOUND);
         }
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public Image addImageDescription(ImageDescriptionModel imageModel) {
+    public Image addImageDescription(ImageDescriptionModel imageModel) throws ServiceProcessingException {
         Optional<Image> currentImage = imageRepository.findImageByName(imageModel.getName());
         currentImage.ifPresent(image -> {
             image.setDescription(imageModel.getDescription());
             imageRepository.save(image);
         });
-        Image image = currentImage.get();
-        return image;
+        if(currentImage.isPresent()){
+            return currentImage.get();
+        }else
+            log.error("*** Image not found on the server ***");
+            throw new ServiceProcessingException(IMAGE_NOT_FOUND);
     }
 }

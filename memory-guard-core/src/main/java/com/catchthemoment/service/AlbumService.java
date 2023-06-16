@@ -43,8 +43,7 @@ public class AlbumService {
     public Collection<AlbumModel> findAllAlbumsUser(@NotNull Long userId) throws ServiceProcessingException {
         log.info(" get user by incoming id");
         User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new ServiceProcessingException(
-                        ALBUM_ERROR_INPUT.getCode(), ALBUM_ERROR_INPUT.getMessage()));
+                .orElseThrow(() -> new ServiceProcessingException(ALBUM_ERROR_INPUT));
         log.info("map album model list from incoming entity album list");
         return albumMapper.fromAlbumEntities(user.getAlbums()
                 .stream().sorted()
@@ -52,11 +51,10 @@ public class AlbumService {
                 .toList());
     }
 
-    public void deleteAlbumById(@NotNull Long albumId) throws ServiceProcessingException {
+    public void deleteAlbumById(Long albumId) throws ServiceProcessingException {
         if (albumId == null) {
             log.debug("incoming id was not found");
-            throw new ServiceProcessingException(ALBUM_ERROR_INPUT.getCode(),
-                    ALBUM_ERROR_INPUT.getMessage());
+            throw new ServiceProcessingException(ALBUM_ERROR_INPUT);
         }
         albumRepository.deleteAlbumById(albumId);
     }
@@ -69,7 +67,7 @@ public class AlbumService {
         return albumMapper.fromAlbumEntity(albumRepository.save(album));
     }
 
-    private
+    private void setDataFromModelToEntity(Album requestAlbum, Album album) {
         album.setCover(requestAlbum.getCover());
         album.setAlbumDescription(requestAlbum.getAlbumDescription());
         album.setAlbumName(requestAlbum.getAlbumName());
@@ -81,9 +79,9 @@ public class AlbumService {
     }
 
     public AlbumModel createAlbum(AlbumModel model) throws ServiceProcessingException {
+
         if (model == null) {
-            throw new ServiceProcessingException(ALBUM_ERROR_INPUT.getCode(),
-                    ALBUM_ERROR_INPUT.getMessage());
+            throw new ServiceProcessingException(ALBUM_ERROR_INPUT);
         }
         Album album = albumMapper.fromAlbumModel(model);
         return albumMapper.fromAlbumEntity(albumRepository.save(album));
@@ -91,10 +89,8 @@ public class AlbumService {
 
     public AlbumModel getAlbumByName(@NotNull @NotEmpty String name) throws ServiceProcessingException {
         var currentAlbum = albumRepository.findAlbumByName(name)
-                .orElseThrow(() -> new ServiceProcessingException(ALBUM_ERROR_INPUT.getCode(),
-                        ALBUM_ERROR_INPUT.getMessage()));
+                .orElseThrow(() -> new ServiceProcessingException(ALBUM_ERROR_INPUT));
         return albumMapper.fromAlbumEntity(currentAlbum);
 
     }
-
 }
