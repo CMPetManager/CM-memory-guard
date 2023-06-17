@@ -11,6 +11,8 @@ public class ServiceProcessingException extends Exception {
     private String message;
 
     public ServiceProcessingException(ApplicationErrorEnum applicationErrorEnum) {
-        //todo
+        this.message = getMessage();
+        this.code= getCode();
     }
+
 }

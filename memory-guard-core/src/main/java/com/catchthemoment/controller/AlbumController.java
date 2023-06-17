@@ -43,7 +43,8 @@ public class AlbumController implements AlbumControllerApiDelegate {
 
     @Override
     public ResponseEntity<AlbumModel> updateAlbum(Long albumId, AlbumModel albumModel) throws Exception {
-        return ResponseEntity.ok().body(albumService.updateAlbum(albumId,albumModel));
+        albumService.updateAlbum(albumId,albumModel);
+        return (ResponseEntity<AlbumModel>) ResponseEntity.ok();
     }
 
     @Override

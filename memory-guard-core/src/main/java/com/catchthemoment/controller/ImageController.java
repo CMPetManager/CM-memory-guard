@@ -41,9 +41,7 @@ public class ImageController implements ImageControllerApiDelegate {
             return ResponseEntity.ok(currentImage);
         } else {
             log.error("*** It is getting empty request ***");
-            throw new ServiceProcessingException(
-                    EMPTY_REQUEST.getCode(),
-                    EMPTY_REQUEST.getMessage());
+            throw new ServiceProcessingException(EMPTY_REQUEST);
         }
     }
 
@@ -89,7 +87,7 @@ public class ImageController implements ImageControllerApiDelegate {
         log.info("*** Received a delete images request by names: {} ***", requestBody);
         if (requestBody.isEmpty()){
             log.error("Empty request");
-            throw new ServiceProcessingException(EMPTY_REQUEST.getCode(), EMPTY_REQUEST.getMessage());
+            throw new ServiceProcessingException(EMPTY_REQUEST);
         }
         for (String name : requestBody){
             imageService.deleteImage(name);

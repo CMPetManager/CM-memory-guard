@@ -1,6 +1,7 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.entity.User;
+import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.validation.constraints.NotNull;
-
 import java.util.Optional;
-
-import static com.catchthemoment.exception.ApplicationErrorEnum.MAIL_INCORRECT;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +36,7 @@ public class UserResetPasswordService {
     @Transactional(rollbackFor = Exception.class)
     public void updateResetPasswordToken(@NotNull String email, String token) throws ServiceProcessingException {
         var user = repository.findUserByEmail(email).orElseThrow(
-                () -> new ServiceProcessingException(MAIL_INCORRECT.getCode(), MAIL_INCORRECT.getMessage()));
+                () -> new ServiceProcessingException(ApplicationErrorEnum.MAIL_INCORRECT));
             user.setResetPasswordToken(token);
             repository.save(user);
     }

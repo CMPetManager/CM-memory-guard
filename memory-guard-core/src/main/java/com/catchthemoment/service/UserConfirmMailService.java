@@ -19,7 +19,7 @@ import java.io.UnsupportedEncodingException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserConfirmMailService  {
+public class UserConfirmMailService {
     private final JavaMailSender mailSender;
     private final UserRepository userRepository;
 
@@ -27,19 +27,20 @@ public class UserConfirmMailService  {
     private String mailAddress;
     @Value("${spring.application.name}")
     private String sender;
+    @Value("application.url")
+    private String urlValue;
 
-//todo make it void or use returned value
-    public boolean verifyAccount(@NotNull String token) throws ServiceProcessingException {
+    private final static String URL_VERIFY = "/users/verify?code= ";
+
+    public void verifyAccount(@NotNull String token) throws ServiceProcessingException {
         User user = userRepository.findUSerByConfirmationResetToken(token).
-                orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.VALID_ACCOUNT_ERROR.getCode(),
-                        ApplicationErrorEnum.VALID_ACCOUNT_ERROR.getMessage()));
+                orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.USER_NOT_FOUND));
         user.setConfirmationResetToken(null);
         user.setEnabled(true);
         userRepository.save(user);
-        return true;
     }
 
-    public void sendVerificationEmail(User user, String siteURL)
+    public void sendVerificationEmail(User user, String urlValue)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
         String fromAddress = mailAddress;
@@ -47,7 +48,7 @@ public class UserConfirmMailService  {
         String subject = "Please verify your email";
         String content = "Dear [[name]],<br>"
                 + "Thank you for registering on our website. Your account has been created and is now ready for use."
-                +"To complete your registration and activate your account, please click on the following link:"+
+                + "To complete your registration and activate your account, please click on the following link:" +
                 ":<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
                 + "If you are unable to click the link, please copy and paste it into your web browser's address bar.\n" +
@@ -55,14 +56,13 @@ public class UserConfirmMailService  {
                 "Best regards,\n" +
                 "Catch The Moment Team<br>";
 
-
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         helper.setFrom(fromAddress, senderName);
         helper.setTo(toAddress);
         helper.setSubject(subject);
         content = content.replace("[[name]]", user.getName());
-        String verifyURL = siteURL + "/users/verify?code=" + user.getConfirmationResetToken();
+        String verifyURL = urlValue + URL_VERIFY + user.getConfirmationResetToken();
         content = content.replace("[[URL]]", verifyURL);
         helper.setText(content, true);
         mailSender.send(message);

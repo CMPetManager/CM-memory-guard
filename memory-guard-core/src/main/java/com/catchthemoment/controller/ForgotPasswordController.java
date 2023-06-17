@@ -11,10 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.Optional;
 
 /**
  * @author shele
@@ -24,46 +26,30 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
 @Slf4j
 public class ForgotPasswordController implements ForgotPasswordControllerApiDelegate {
 
     private final UserResetPasswordService resetPasswordService;
-
-    //todo delete this
-    /**
-     * Get form for input email for sending message to change password
-     *
-     * @param model
-     * @param emailParam
-     * @retur model form
-     */
-    @GetMapping("/forgot-password")
-    public ResponseEntity<Object> forgotPasswordForm(Model model, @RequestParam String emailParam) {
-        model.addAttribute("Return form for reset password", emailParam);
-        return new ResponseEntity<>(model, HttpStatus.OK);
-    }
+    private final String siteUrl = "/users/reset_password?token=";
 
     @Override
     public ResponseEntity<Void> resetPassword(UpdatePassword updatePasswordModel) {
         String token = updatePasswordModel.getToken();
         String password = updatePasswordModel.getPassword();
         //todo return user as optional, if user abscent throw exception
-        User userFromResetToken = resetPasswordService.getUserFromResetToken(token);
-        if (userFromResetToken == null) {
-            log.error("something goes wrong within" + userFromResetToken);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else {
+        Optional<User> userFromResetToken = resetPasswordService.getUserFromResetToken(token);
+        if (userFromResetToken.get() != null) {
             log.info("*** user changed password {} ***", userFromResetToken);
-            resetPasswordService.updatePassword(userFromResetToken, password);
+            resetPasswordService.updatePassword(userFromResetToken.get(), password);
 
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return null;
     }
 
     /**
-     * When user fill incoming input form , sending email starts to come .
-     * This method  charges of for sending email to user
+     * When user fill incoming input form , sending email starts to come up .
+     * This method  charges of  sending email to user which changes email
      *
      * @param forgotPassword (optional)
      * @return
@@ -75,7 +61,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
         String token = RandomString.make(20);
         try {
             resetPasswordService.updateResetPasswordToken(email, token);
-            String resetPasswordLink = SiteUrlUtil.getSiteURL(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest()) + "/users/reset_password?token=" + token;
+            String resetPasswordLink = SiteUrlUtil.getSiteURL(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest()) + siteUrl + token;
             resetPasswordService.sendResetPasswordEmail(email, resetPasswordLink);
             log.debug("*** email was sent to user: {} ***", resetPasswordLink);
         } catch (ServiceProcessingException e) {
@@ -84,19 +70,4 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    /**
-     * Get reset password html form base input
-     *
-     * @param token token for request user to reset password (optional)
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public ResponseEntity<String> resetPasswordForm(@RequestParam String token) throws Exception {
-        User user = resetPasswordService.getUserFromResetToken(token);
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

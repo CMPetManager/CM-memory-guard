@@ -5,7 +5,6 @@ import com.catchthemoment.entity.Image;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.AlbumMapper;
-import com.catchthemoment.mappers.AlbumMapperImpl;
 import com.catchthemoment.model.AlbumModel;
 import com.catchthemoment.model.ImageDescriptionModel;
 import com.catchthemoment.repository.AlbumRepository;
@@ -49,7 +48,7 @@ public class ImageService {
         log.info("*** Checking the image name for uniqueness ***");
         if (imageRepository.findImageByName(file.getOriginalFilename()).isPresent()) {
             log.error("*** This image is already exists ***");
-            throw new ServiceProcessingException(ILLEGAL_STATE.getCode(), ILLEGAL_STATE.getMessage());
+            throw new ServiceProcessingException(ILLEGAL_STATE);
         }
         log.info("*** Validation passed, This imageName doesn't exist in the database ***");
         Path filePath = getPath(file);
@@ -69,7 +68,7 @@ public class ImageService {
         Path filePath = getPath(file);
         Image buildImage = getBuildImage(file, filePath);
         User currentUser = userRepository.findUserById(userId)
-                .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND));
         buildImage.setUser(currentUser);
         log.info("*** Save object image into db ***");
         Image image = imageRepository.save(buildImage);
@@ -99,14 +98,13 @@ public class ImageService {
         log.info("*** Find image name in the db ***");
         Image currentImage = imageRepository.findImageByName(fileName)
                 .orElseThrow(() -> new ServiceProcessingException(
-                        IMAGE_NOT_FOUND.getCode(),
-                        IMAGE_NOT_FOUND.getMessage()));
+                        IMAGE_NOT_FOUND));
         log.info("*** Name successfully found in the db ***");
         Path filePath = Paths.get(FOLDER_PATH).resolve(currentImage.getName()).normalize();
         Resource resource = new UrlResource(filePath.toUri());
         if (!resource.exists()) {
             log.error("*** Image not found on the server ***");
-            throw new ServiceProcessingException(IMAGE_NOT_FOUND.getCode(), IMAGE_NOT_FOUND.getMessage());
+            throw new ServiceProcessingException(IMAGE_NOT_FOUND);
         }
         return resource;
     }
@@ -121,7 +119,7 @@ public class ImageService {
             Files.deleteIfExists(filePath);
         } else {
             log.error("*** Image not found on the server ***");
-            throw new ServiceProcessingException(IMAGE_NOT_FOUND.getCode(), IMAGE_NOT_FOUND.getMessage());
+            throw new ServiceProcessingException(IMAGE_NOT_FOUND);
         }
     }
 

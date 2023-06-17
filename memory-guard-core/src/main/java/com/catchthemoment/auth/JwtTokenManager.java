@@ -1,13 +1,12 @@
 package com.catchthemoment.auth;
 
-import com.catchthemoment.exception.ApplicationErrorEnum;
+import com.catchthemoment.config.JwtProperties;
+import com.catchthemoment.entity.Role;
+import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.LoginResponse;
-import com.catchthemoment.entity.Role;
 import com.catchthemoment.model.Token;
-import com.catchthemoment.entity.User;
 import com.catchthemoment.service.UserService;
-import com.catchthemoment.config.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -21,6 +20,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.security.Key;
 import java.util.Date;
+
+import static com.catchthemoment.exception.ApplicationErrorEnum.ACCESS_DENIED;
 
 @Component
 @RequiredArgsConstructor
@@ -68,8 +69,7 @@ public class JwtTokenManager {
     public LoginResponse refreshUserTokens(String refreshToken, Long userId) throws ServiceProcessingException {
 
         if (!validateToken(refreshToken)) {
-            throw new ServiceProcessingException(ApplicationErrorEnum.ACCESS_DENIED.getCode(),
-                    ApplicationErrorEnum.ACCESS_DENIED.getMessage());
+            throw new ServiceProcessingException(ACCESS_DENIED);
         }
         User user = userService.getById(userId);
         Token token = createTokenForResponse(userId, user);
