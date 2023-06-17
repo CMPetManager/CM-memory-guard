@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
+import static com.catchthemoment.exception.ApplicationErrorEnum.*;
+
 @Slf4j
 @RestController
 @RequestMapping("/users")
@@ -39,8 +41,7 @@ public class UserConfirmationMailController {
         log.info("*** Received a registration request by email: {} ***", userModel.getEmail());
         if (!validator.isValid(userModel)) {
             log.error("*** CreateReadUser didn't pass validation ***");
-            throw new ServiceProcessingException(ApplicationErrorEnum.INCORRECT_INPUT.getCode(),
-                    ApplicationErrorEnum.INCORRECT_INPUT.getMessage());
+            throw new ServiceProcessingException(INCORRECT_INPUT);
         }
         User user = userMapper.toEntity(userModel);
         User currentUser = userService.create(user, SiteUrlUtil.getSiteURL(request));

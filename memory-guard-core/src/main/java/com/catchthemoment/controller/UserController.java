@@ -12,21 +12,13 @@ import com.catchthemoment.service.ImageService;
 import com.catchthemoment.service.UserEmailService;
 import com.catchthemoment.service.UserResetPasswordService;
 import com.catchthemoment.service.UserService;
-import com.catchthemoment.util.SiteUrlUtil;
 import com.catchthemoment.validation.UpdatePasswordValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 
 import static com.catchthemoment.exception.ApplicationErrorEnum.*;
 
@@ -46,12 +38,11 @@ public class UserController implements UserControllerApiDelegate {
     private final ImageMapper imageMapper;
     private final UserModelMapper userModelMapper;
 
-    //todo delete and implement interface
-    @PatchMapping(value = "/users/{userId}",
-            produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateEmail(@PathVariable Long userId, @RequestBody @NotNull UserModel userModel, HttpServletRequest request) throws Exception {
+
+    @Override
+    public ResponseEntity<Void> updateExistsEmail(Long userId, UserModel userModel) throws Exception {
         log.info("*** change user's email from request create user model: {}", userModel.getEmail());
-        userEmailservice.changeUserEmail(userId, userModel, SiteUrlUtil.getSiteURL(request));
+        userEmailservice.changeUserEmail(userId, userModel);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -83,7 +74,6 @@ public class UserController implements UserControllerApiDelegate {
         log.info("*** Received a delete account request ***");
         userService.deleteUserById(userId);
         log.info("*** " + RESPONSE_DELETE_USER + " ***");
-
         return ResponseEntity.ok(RESPONSE_DELETE_USER);
     }
 
