@@ -2,6 +2,7 @@ package com.catchthemoment.controller;
 
 import com.catchthemoment.exception.ServiceProcessingException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -20,7 +21,8 @@ public class UserLoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         //todo add matcher uri via regular expression
-        if (request.getRequestURI().equalsIgnoreCase(URI)) {
+        final String currentMethod = request.getMethod();
+        if (request.getRequestURI().equalsIgnoreCase(URI)&& HttpMethod.POST.matches(currentMethod)) {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
 
