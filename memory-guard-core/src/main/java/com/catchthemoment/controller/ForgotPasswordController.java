@@ -52,8 +52,6 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
      * This method  charges of  sending email to user which changes email
      *
      * @param forgotPassword (optional)
-     * @return
-     * @throws Exception
      */
     @Override
     public ResponseEntity<Void> forgotPassword(@ModelAttribute ForgotPassword forgotPassword) throws Exception {

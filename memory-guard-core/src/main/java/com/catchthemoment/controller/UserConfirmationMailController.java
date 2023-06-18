@@ -10,10 +10,10 @@ import com.catchthemoment.util.SiteUrlUtil;
 import com.catchthemoment.validation.UserModelValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -32,7 +32,6 @@ public class UserConfirmationMailController implements UserConfirmationMailContr
     private final UserModelMapper userMapper;
     private final UserModelValidator validator;
 
-    //todo rewrite
     @Override
     public ResponseEntity<UserModel> confirmUserAccount(@RequestBody @NotNull UserModel userModel)
             throws Exception {
@@ -50,7 +49,7 @@ public class UserConfirmationMailController implements UserConfirmationMailContr
     }
 
     @Override
-    public ResponseEntity<Void> verifyAccount(@Param("code") String code) throws ServiceProcessingException {
+    public ResponseEntity<Void> verifyAccount(@RequestParam  String code) throws ServiceProcessingException {
         userConfirmMailService.verifyAccount(code);
         return ResponseEntity.ok().build();
     }
