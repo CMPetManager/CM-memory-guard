@@ -23,19 +23,12 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public LoginResponse login(LoginRequest loginRequest) throws ServiceProcessingException {
-
         User currentUser = userService.getByEmail(loginRequest.getEmail());
-
         log.info("*** The beginning of authentication ***");
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-        log.info("*** Authentication successfully ***");
-
-        log.info("*** Create object for response ***");
-        LoginResponse loginResponse = getLoginResponse(currentUser);
-        log.info("*** LoginResponse successfully created ***");
-
-        return loginResponse;
+        log.info("*** Authentication passed successfully ***");
+        return getLoginResponse(currentUser);
     }
 
     public LoginResponse refresh(RefreshToken refreshToken) throws ServiceProcessingException {
@@ -43,10 +36,12 @@ public class AuthService {
     }
 
     private LoginResponse getLoginResponse(User currentUser) {
+        log.info("*** Create object for response ***");
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setUserId(currentUser.getId());
         loginResponse.setName(currentUser.getName());
         loginResponse.setToken(jwtTokenManager.getToken(currentUser));
+        log.info("*** LoginResponse successfully created ***");
         return loginResponse;
     }
 }
