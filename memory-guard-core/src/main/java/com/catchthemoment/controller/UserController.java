@@ -29,7 +29,7 @@ public class UserController implements UserControllerApiDelegate {
 
     private static final String RESPONSE_UPDATE_PASSWORD = "Password successfully updated";
     private static final String RESPONSE_DELETE_USER = "User successfully deleted";
-
+// too much autowired classes
     private final UserResetPasswordService userResetPasswordService;
     private final UserService userService;
     private final UserEmailService userEmailservice;
@@ -58,8 +58,7 @@ public class UserController implements UserControllerApiDelegate {
     public ResponseEntity<String> updatePassword(Long userId, UpdatePassword updatePassword) throws Exception {
         if (!validator.isValid(updatePassword)) {
             log.error("*** Password didn't pass validation ***");
-            throw new ServiceProcessingException(INCORRECT_INPUT.getCode(),
-                    INCORRECT_INPUT.getMessage());
+            throw new ServiceProcessingException(INCORRECT_INPUT);
         }
         User currentUser = userService.getById(userId);
         log.info("*** Received an update password request with email: {} ***", currentUser.getEmail());
@@ -87,9 +86,7 @@ public class UserController implements UserControllerApiDelegate {
             return ResponseEntity.ok(currentImage);
         } else {
             log.error("*** MultipartFile is empty***");
-            throw new ServiceProcessingException(
-                    EMPTY_REQUEST.getCode(),
-                    EMPTY_REQUEST.getMessage());
+            throw new ServiceProcessingException(EMPTY_REQUEST);
         }
     }
 }

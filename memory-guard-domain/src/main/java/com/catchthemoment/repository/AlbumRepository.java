@@ -14,7 +14,9 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     Optional<Album> findAlbumById(Long id);
 
     @EntityGraph(value = "album_graph", type = EntityGraph.EntityGraphType.LOAD)
-    List<Album> findAllByUserId(Long userId);
+    @Query(value = "select *  from Album al where al.id =id group by" +
+            " al.id having al.id is not null ",nativeQuery = true)
+    List<Album> findAllByUserId(@Param("id") Long userId);
 
     @Modifying
     @Query("select al from Album al where al.id =:id ")

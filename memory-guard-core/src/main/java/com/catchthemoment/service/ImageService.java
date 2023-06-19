@@ -5,7 +5,6 @@ import com.catchthemoment.entity.Image;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.AlbumMapper;
-import com.catchthemoment.mappers.AlbumMapperImpl;
 import com.catchthemoment.model.AlbumModel;
 import com.catchthemoment.model.ImageDescriptionModel;
 import com.catchthemoment.repository.AlbumRepository;

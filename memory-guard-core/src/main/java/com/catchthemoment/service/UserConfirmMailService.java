@@ -29,6 +29,10 @@ public class UserConfirmMailService {
     private String mailAddress;
     @Value("${spring.application.name}")
     private String sender;
+    @Value("application.url")
+    private String urlValue;
+
+    private final static String URL_VERIFY = "/users/verify?code= ";
 
     public void verifyAccount(@NotNull String token) throws ServiceProcessingException {
         User user = userRepository.findUSerByConfirmationResetToken(token).
@@ -38,7 +42,7 @@ public class UserConfirmMailService {
         userRepository.save(user);
     }
 
-    public void sendVerificationEmail(User user, String siteURL)
+    public void sendVerificationEmail(User user, String urlValue)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
         String fromAddress = mailAddress;
@@ -63,7 +67,7 @@ public class UserConfirmMailService {
         helper.setTo(toAddress);
         helper.setSubject(subject);
         content = content.replace("[[name]]", user.getName());
-        String verifyURL = siteURL + "/users/verify?code=" + user.getConfirmationResetToken();
+        String verifyURL = urlValue + URL_VERIFY + user.getConfirmationResetToken();
         content = content.replace("[[URL]]", verifyURL);
         helper.setText(content, true);
         mailSender.send(message);

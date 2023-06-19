@@ -1,6 +1,5 @@
 package com.catchthemoment.service;
 
-import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.UserModel;
 import com.catchthemoment.repository.UserRepository;
@@ -27,7 +26,6 @@ public class UserEmailService {
     private final UserConfirmMailService userConfirmMailService;
     @Value("${application.url}")
     private String siteUrl;
-
     public void changeUserEmail(Long userId, @NotNull UserModel readUser) throws ServiceProcessingException,
             MessagingException, UnsupportedEncodingException {
         if (readUser.getEmail().isEmpty()) {
@@ -45,6 +43,3 @@ public class UserEmailService {
         userConfirmMailService.sendVerificationEmail(user, siteUrl);
     }
 }
-
-
-

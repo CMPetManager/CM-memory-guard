@@ -54,7 +54,7 @@ public class UserService implements UserDetailsService {
         log.info("*** Checking for mail uniqueness ***");
         if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
             log.error("*** This user is already exists ***");
-            throw new ServiceProcessingException(ILLEGAL_STATE.getCode(), ILLEGAL_STATE.getMessage());
+            throw new ServiceProcessingException(ILLEGAL_STATE);
         }
         log.info("*** The check was successful ***");
         user.setPassword(passwordEncoder.encode(user.getPassword()));

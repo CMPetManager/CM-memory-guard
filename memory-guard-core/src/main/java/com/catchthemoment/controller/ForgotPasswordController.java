@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -30,6 +29,7 @@ import java.util.Optional;
 public class ForgotPasswordController implements ForgotPasswordControllerApiDelegate {
 
     private final UserResetPasswordService resetPasswordService;
+    private final String siteUrl = "/users/reset_password?token=";
 
     @Override
     public ResponseEntity<Void> resetPassword(UpdatePassword updatePasswordModel) {
@@ -48,12 +48,10 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
     }
 
     /**
-     * When user fill incoming input form , sending email starts to come .
-     * This method  charges of for sending email to user
+     * When user fill incoming input form , sending email starts to come up .
+     * This method  charges of  sending email to user which changes email
      *
      * @param forgotPassword (optional)
-     * @return
-     * @throws Exception
      */
     @Override
     public ResponseEntity<Void> forgotPassword(@ModelAttribute ForgotPassword forgotPassword) throws Exception {
@@ -61,7 +59,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
         String token = RandomString.make(20);
         try {
             resetPasswordService.updateResetPasswordToken(email, token);
-            String resetPasswordLink = SiteUrlUtil.getSiteURL(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest()) + "/users/reset_password?token=" + token;
+            String resetPasswordLink = SiteUrlUtil.getSiteURL(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest()) + siteUrl + token;
             resetPasswordService.sendResetPasswordEmail(email, resetPasswordLink);
             log.debug("*** email was sent to user: {} ***", resetPasswordLink);
         } catch (ServiceProcessingException e) {
@@ -70,19 +68,4 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    /**
-     * Get reset password html form base input
-     *
-     * @param token token for request user to reset password (optional)
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public ResponseEntity<String> resetPasswordForm(@RequestParam String token) throws Exception {
-        Optional<User> user = resetPasswordService.getUserFromResetToken(token);
-        if (user.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

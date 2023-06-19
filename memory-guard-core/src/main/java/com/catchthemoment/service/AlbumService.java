@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
 
 import static com.catchthemoment.exception.ApplicationErrorEnum.ALBUM_ERROR_INPUT;
 
@@ -40,15 +39,12 @@ public class AlbumService {
         return albumMapper.fromAlbumEntity(currentAlbum);
     }
 
-    public Collection<AlbumModel> findAllAlbumsUser(@NotNull Long userId) throws ServiceProcessingException {
+    public Iterable<AlbumModel> findAllAlbumsUser(@NotNull Long userId) throws ServiceProcessingException {
         log.info(" get user by incoming id");
         User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new ServiceProcessingException(ALBUM_ERROR_INPUT));
         log.info("map album model list from incoming entity album list");
-        return albumMapper.fromAlbumEntities(user.getAlbums()
-                .stream().sorted()
-                .distinct()
-                .toList());
+        return albumMapper.fromAlbumEntities(user.getAlbums());
     }
 
     public void deleteAlbumById(Long albumId) throws ServiceProcessingException {
