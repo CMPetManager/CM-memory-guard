@@ -6,6 +6,7 @@ import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +24,9 @@ public class UserEmailService {
 
     private final UserRepository repository;
     private final UserConfirmMailService userConfirmMailService;
-
-    public void changeUserEmail(Long userId, @NotNull UserModel readUser, String siteUrl) throws ServiceProcessingException,
+    @Value("${application.url}")
+    private String siteUrl;
+    public void changeUserEmail(Long userId, @NotNull UserModel readUser) throws ServiceProcessingException,
             MessagingException, UnsupportedEncodingException {
         if (readUser.getEmail().isEmpty()) {
             log.error("*** user's email is not found or empty ***");
