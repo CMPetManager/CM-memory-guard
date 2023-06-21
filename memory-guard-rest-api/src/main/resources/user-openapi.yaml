@@ -8,7 +8,7 @@ servers:
   - description: Dev server
     url: http://localhost:8080
 paths:
-  /login:
+  /users/login:
     post:
       summary: Method for user authorization
       tags:

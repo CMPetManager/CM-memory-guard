@@ -40,6 +40,6 @@ public class JwtEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return true;
     }
 }
