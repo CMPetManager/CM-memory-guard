@@ -85,7 +85,7 @@ public class UserService implements UserDetailsService {
         User currentUser = userRepository.findUserById(userId)
                 .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND));
         log.info("*** User successfully found by ID ***");
-        userRepository.deleteById(currentUser.getId());
+        userRepository.deleteUserById(currentUser.getId());
         log.info("*** User successfully deleted ***");
     }
 }

@@ -3,6 +3,7 @@ package com.catchthemoment.repository;
 import com.catchthemoment.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -20,4 +21,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findUSerByConfirmationResetToken(String code);
 
     Optional<User> findUserByResetPasswordToken(String token);
+
+    @Modifying
+    @Query("delete from User usr where usr.id =:id")
+    void deleteUserById(@Param("id") Long id);
 }
