@@ -114,14 +114,19 @@ paths:
       description: method verify account
       operationId: verifyAccount
       parameters:
-        - name: code
+        - name: token
           in: query
-          required: true
+          required: false
           schema:
             type: string
       responses:
-        default:
+        '200':
           description: account verified within success
+          content:
+            application/json:
+              schema:
+                type: string
+
         '500':
           description: verifying went wrong
           content:

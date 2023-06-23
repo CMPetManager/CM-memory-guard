@@ -1,7 +1,6 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.entity.User;
-import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +12,10 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
+
+import static com.catchthemoment.exception.ApplicationErrorEnum.VERIFICATION_FAIL;
 
 @Slf4j
 @Service
@@ -30,14 +31,18 @@ public class UserConfirmMailService {
     @Value("application.url")
     private String urlValue;
 
-    private final static String URL_VERIFY = "/users/verify?code= ";
+    private final static String URL_VERIFY = "/users/verify?token= ";
 
-    public void verifyAccount(@NotNull String token) throws ServiceProcessingException {
-        User user = userRepository.findUSerByConfirmationResetToken(token).
-                orElseThrow(() -> new ServiceProcessingException(ApplicationErrorEnum.USER_NOT_FOUND));
-        user.setConfirmationResetToken(null);
-        user.setEnabled(true);
-        userRepository.save(user);
+    public void verifyAccount(String token) throws ServiceProcessingException {
+        Optional<User> optionalUser = this.userRepository.findUsersByConfirmationResetToken(token);
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+            user.setConfirmationResetToken(null);
+            user.setEnabled(true);
+            userRepository.save(user);
+        }
+        throw new ServiceProcessingException(VERIFICATION_FAIL);
+
     }
 
     public void sendVerificationEmail(User user, String urlValue)
@@ -48,9 +53,8 @@ public class UserConfirmMailService {
         String subject = "Please verify your email";
         String content = "Dear [[name]],<br>"
                 + "Thank you for registering on our website. Your account has been created and is now ready for use."
-                + "To complete your registration and activate your account, please click on the following link:" +
-                ":<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "To complete your registration and activate your account, please click on the following link:"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY EMAIL</a></h3>"
                 + "If you are unable to click the link, please copy and paste it into your web browser's address bar.\n" +
                 "Thank you for choosing our platform. We hope you enjoy using our services.\n" +
                 "Best regards,\n" +
@@ -63,7 +67,7 @@ public class UserConfirmMailService {
         helper.setSubject(subject);
         content = content.replace("[[name]]", user.getName());
         String verifyURL = urlValue + URL_VERIFY + user.getConfirmationResetToken();
-        content = content.replace("[[URL]]", verifyURL);
+        content = content.replace("[[URL]]",verifyURL);
         helper.setText(content, true);
         mailSender.send(message);
 
