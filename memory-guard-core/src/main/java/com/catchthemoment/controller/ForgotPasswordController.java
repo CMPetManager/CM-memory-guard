@@ -11,8 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -36,15 +35,16 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
     public ResponseEntity<Void> resetPassword(UpdatePassword updatePasswordModel) {
         String token = updatePasswordModel.getToken();
         String password = updatePasswordModel.getPassword();
-        //todo return user as optional, if user abscent throw exception
         Optional<User> userFromResetToken = resetPasswordService.getUserFromResetToken(token);
-        if (userFromResetToken.get() != null) {
+        if (userFromResetToken.isEmpty()) {
+            log.error("something goes wrong within" + userFromResetToken);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
             log.info("*** user changed password {} ***", userFromResetToken);
             resetPasswordService.updatePassword(userFromResetToken.get(), password);
 
-            return new ResponseEntity<>(HttpStatus.CREATED);
         }
-        return null;
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     /**
