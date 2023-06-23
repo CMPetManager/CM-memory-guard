@@ -20,7 +20,6 @@ public class UserLoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        //todo add matcher uri via regular expression
         final String currentMethod = request.getMethod();
         if (request.getRequestURI().equalsIgnoreCase(URI)&& HttpMethod.POST.matches(currentMethod)) {
             response.setStatus(HttpServletResponse.SC_OK);

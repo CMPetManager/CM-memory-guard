@@ -22,7 +22,7 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.MAIL_INCORRECT;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional(readOnly = true,rollbackFor = Exception.class)
 public class UserResetPasswordService {
 
     private final UserRepository repository;

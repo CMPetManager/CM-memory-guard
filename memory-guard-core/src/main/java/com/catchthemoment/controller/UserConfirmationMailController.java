@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -49,8 +49,9 @@ public class UserConfirmationMailController implements UserConfirmationMailContr
     }
 
     @Override
-    public ResponseEntity<Void> verifyAccount(@RequestParam  String code) throws ServiceProcessingException {
-        userConfirmMailService.verifyAccount(code);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> verifyAccount(@RequestPart String token) throws ServiceProcessingException {
+        userConfirmMailService.verifyAccount(token);
+        return ResponseEntity.ok().body("Account has been verified!!");
+
     }
 }
