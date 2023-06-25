@@ -1,7 +1,6 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.entity.User;
-import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +41,8 @@ public class UserResetPasswordService {
             repository.save(user);
     }
 
-    public Optional<User> getUserFromResetToken(String token) {
-        return repository.findUserByResetPasswordToken(token);
+    public Optional<User> getUserFromResetToken(String password) {
+        return repository.findUserByPassword(password);
     }
 
     @Transactional

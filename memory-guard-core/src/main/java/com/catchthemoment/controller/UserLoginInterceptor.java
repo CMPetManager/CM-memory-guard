@@ -26,7 +26,7 @@ public class UserLoginInterceptor implements HandlerInterceptor {
             return true;
 
         }
-        log.error("*** error occurred with incoming request params are empty");
+        log.error("*** error occurred with incoming request params..");
         throw new ServiceProcessingException(MAIL_INCORRECT);
 
     }

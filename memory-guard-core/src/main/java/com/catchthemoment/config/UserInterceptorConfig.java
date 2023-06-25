@@ -15,7 +15,6 @@ public class UserInterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         String pathVariable = "/users/confirm-account";
-        String pathPattern = "/Users/login";
-        registry.addInterceptor(userLoginInterceptor).addPathPatterns(pathVariable,pathPattern);
+        registry.addInterceptor(userLoginInterceptor).addPathPatterns(pathVariable);
     }
 }

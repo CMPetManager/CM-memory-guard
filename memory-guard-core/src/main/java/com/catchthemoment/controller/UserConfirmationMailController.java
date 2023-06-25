@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -33,7 +31,7 @@ public class UserConfirmationMailController implements UserConfirmationMailContr
     private final UserModelValidator validator;
 
     @Override
-    public ResponseEntity<UserModel> confirmUserAccount(@RequestBody @NotNull UserModel userModel)
+    public ResponseEntity<UserModel> confirmUserAccount(@NotNull UserModel userModel)
             throws Exception {
         log.info("*** Received a registration request by email: {} ***", userModel.getEmail());
         if (!validator.isValid(userModel)) {
@@ -49,8 +47,9 @@ public class UserConfirmationMailController implements UserConfirmationMailContr
     }
 
     @Override
-    public ResponseEntity<String> verifyAccount(@RequestPart String token) throws ServiceProcessingException {
+    public ResponseEntity<String> verifyAccount(String token) throws ServiceProcessingException {
         userConfirmMailService.verifyAccount(token);
+        log.info("**verification has been done well**");
         return ResponseEntity.ok().body("Account has been verified!!");
 
     }
