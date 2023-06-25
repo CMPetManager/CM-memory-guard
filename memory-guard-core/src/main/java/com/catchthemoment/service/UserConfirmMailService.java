@@ -5,6 +5,7 @@ import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -31,18 +32,18 @@ public class UserConfirmMailService {
     @Value("application.url")
     private String urlValue;
 
-    private final static String URL_VERIFY = "/users/verify?token= ";
+    private final static String URL_VERIFY = "/users/verify?token=";
 
     public void verifyAccount(String token) throws ServiceProcessingException {
-        Optional<User> optionalUser = this.userRepository.findUsersByConfirmationResetToken(token);
+        Optional<User> optionalUser =userRepository.findUsersByConfirmationResetToken(token);
         if (optionalUser.isPresent()){
             User user = optionalUser.get();
             user.setConfirmationResetToken(null);
             user.setEnabled(true);
             userRepository.save(user);
+            log.info("*** Confirmation has been success ***");
         }
         throw new ServiceProcessingException(VERIFICATION_FAIL);
-
     }
 
     public void sendVerificationEmail(User user, String urlValue)
@@ -67,7 +68,8 @@ public class UserConfirmMailService {
         helper.setSubject(subject);
         content = content.replace("[[name]]", user.getName());
         String verifyURL = urlValue + URL_VERIFY + user.getConfirmationResetToken();
-        content = content.replace("[[URL]]",verifyURL);
+        String newUrl = StringUtils.deleteWhitespace(verifyURL);
+        content = content.replace("[[URL]]",newUrl);
         helper.setText(content, true);
         mailSender.send(message);
 

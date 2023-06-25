@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findUsersByConfirmationResetToken(@Param("token") String token);
 
 
-    Optional<User> findUserByResetPasswordToken(String token);
+    Optional<User> findUserByPassword(String password);
 
     @Modifying
     @Query("delete from User usr where usr.id =:id")
