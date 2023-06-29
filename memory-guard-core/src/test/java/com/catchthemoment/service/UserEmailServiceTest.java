@@ -38,7 +38,7 @@ class UserEmailServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = new User(4L ,"Greg","greg041990@mail.ru","turn123ERT");
+        user = new User();
         readUser = new UserModel();
         readUser.setEmail(user.getEmail());
         repo.save(user);
@@ -50,7 +50,7 @@ class UserEmailServiceTest {
         doReturn(Optional.ofNullable(user)).when(repo).findUserById(user.getId());
         doNothing().when(userConfirmMailService).sendVerificationEmail(any(),any());
         readUser.setEmail("jellifish123@mail.ru");
-        emailService.changeUserEmail(user.getId(),readUser, any());
+        emailService.changeUserEmail(user.getId(),readUser);
         assertEquals(user.getEmail(),"jellifish123@mail.ru");
         verify(repo,times(1)).findUserById(user.getId());
         assertFalse(readUser.getEmail().isEmpty());

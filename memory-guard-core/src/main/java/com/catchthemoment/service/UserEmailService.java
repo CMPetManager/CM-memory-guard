@@ -7,11 +7,11 @@ import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
 
 import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
@@ -24,13 +24,15 @@ public class UserEmailService {
 
     private final UserRepository repository;
     private final UserConfirmMailService userConfirmMailService;
+    @Value("${application.url}")
+    private String siteUrl;
 
-    public void changeUserEmail(Long userId, @NotNull UserModel readUser, String sitUrl) throws ServiceProcessingException,
+    public void changeUserEmail(Long userId,  UserModel readUser) throws ServiceProcessingException,
 
             MessagingException, UnsupportedEncodingException {
         if (readUser.getEmail().isEmpty()) {
             log.error("*** user's email is  not found or empty ***");
-            throw new ServiceProcessingException(USER_NOT_FOUND.getCode(), USER_NOT_FOUND.getMessage());
+            throw new ServiceProcessingException(USER_NOT_FOUND);
         }
         var user = repository.findUserById(userId).orElse(new User());
         user.setEmail(readUser.getEmail());
@@ -40,6 +42,6 @@ public class UserEmailService {
         user.setEnabled(false);
         repository.save(user);
 
-        userConfirmMailService.sendVerificationEmail(user, sitUrl);
+        userConfirmMailService.sendVerificationEmail(user,siteUrl);
     }
 }

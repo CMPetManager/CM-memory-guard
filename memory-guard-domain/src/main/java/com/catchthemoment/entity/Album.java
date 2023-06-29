@@ -7,9 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,10 +16,9 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "album", indexes = @Index(name = "album_usr_ind", columnList = "id,user_id"))
+@Table(name = "album", indexes = @Index(name = "album_usr_ind", columnList = "id"))
 @NamedEntityGraph(name = "album-graph", attributeNodes = {
-        @NamedAttributeNode("id"),
-        @NamedAttributeNode("cover"),
+        @NamedAttributeNode("images"),
         @NamedAttributeNode("user")
 })
 public class Album {

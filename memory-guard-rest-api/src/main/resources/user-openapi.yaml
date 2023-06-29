@@ -8,7 +8,7 @@ servers:
   - description: Dev server
     url: http://localhost:8080
 paths:
-  /login:
+  /users/login:
     post:
       summary: Method for user authorization
       tags:
@@ -80,29 +80,59 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
-
-  /users/reset:
-    get:
-      summary: Get user token
+  /users/confirm-account:
+    post:
+      summary: Confirmation of user's account by email controller
       tags:
-        - ForgotPasswordController
-      description: Method for getting user token
-      operationId: resetPasswordForm
+        - UserConfirmationMailController
+      description: method for sending confirmation email to user's mail
+      operationId: confirmUserAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserModel'
+      responses:
+        '200':
+          description: success sending mail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+
+        '500':
+          description: something went wrong with user's email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+  /users/verify:
+    get:
+      summary: User verifies his account
+      tags:
+        - UserConfirmationMailController
+      description: method verify account
+      operationId: verifyAccount
       parameters:
         - name: token
           in: query
-          description: token for request user to reset password
+          required: false
           schema:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: account verified within success
           content:
             application/json:
               schema:
                 type: string
-        '400':
-          description: Invalid token value
+
+        '500':
+          description: verifying went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
 
   /users/reset-password:
     post:
@@ -115,12 +145,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdatePassword'
+              $ref: '#/components/schemas/ForgotPassword'
       responses:
         default:
           description: successful operation
         '400':
           description: something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+  /users/upgrade-password:
+    post:
+      summary: Method change old password
+      tags:
+        - ForgotPasswordController
+      description: changing old password of user
+      operationId: changePassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasswordModel'
+      responses:
+        '200':
+          description: password has been change
+        '500':
+          description: something went wrong with input form
           content:
             application/json:
               schema:
@@ -355,6 +406,14 @@ components:
           type: integer
           format: int64
         refreshToken:
+          type: string
+
+    UpdatePasswordModel:
+      type: object
+      properties:
+        oldPassword:
+          type: string
+        newPassword:
           type: string
 
     AlbumModel:

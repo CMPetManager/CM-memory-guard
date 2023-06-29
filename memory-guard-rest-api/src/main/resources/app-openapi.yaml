@@ -379,6 +379,7 @@ components:
         id:
           type: integer
           format: int64
+
         albumDescription:
           type: string
           example: some words about page
@@ -416,6 +417,7 @@ components:
         id:
           type: integer
           format: int64
+
         link:
           type: string
           example: photo link
@@ -431,6 +433,7 @@ components:
         albumId:
           type: integer
           format: int64
+
 
     ImageDescriptionModel:
       type: object
