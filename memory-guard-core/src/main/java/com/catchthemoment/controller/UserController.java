@@ -29,7 +29,6 @@ public class UserController implements UserControllerApiDelegate {
 
     private static final String RESPONSE_UPDATE_PASSWORD = "Password successfully updated";
     private static final String RESPONSE_DELETE_USER = "User successfully deleted";
-    // too much autowired classes
     private final UserResetPasswordService userResetPasswordService;
     private final UserService userService;
     private final UserEmailService userEmailservice;

@@ -19,7 +19,9 @@ import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import static com.catchthemoment.exception.ApplicationErrorEnum.*;
+import java.util.Optional;
+
+import static com.catchthemoment.exception.ApplicationErrorEnum.MAIL_INCORRECT;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +44,7 @@ public class UserResetPasswordService {
             user.setResetPasswordToken(token);
             repository.save(user);
     }
+  
     public void changeUserPasswords(@NotNull @Valid UpdatePasswordModel passwordModel) throws ServiceProcessingException {
         var newPassword = passwordModel.getNewPassword();
         var user = repository.findUserByPassword(passwordModel.getOldPassword());
@@ -56,7 +59,7 @@ public class UserResetPasswordService {
 
     public User getUserFromResetToken(String password) {
         return repository.findUserByPassword(password).
-                orElseThrow(()-> new ServerErrorException(USER_NOT_FOUND.getMessage()));
+              orElseThrow(()-> new ServerErrorException(USER_NOT_FOUND.getMessage()));
     }
 
     @Transactional
@@ -90,6 +93,4 @@ public class UserResetPasswordService {
         helper.setText(content, true);
         javaMailSender.send(message);
     }
-
-
 }
