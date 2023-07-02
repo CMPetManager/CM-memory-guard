@@ -42,9 +42,11 @@ public class UserConfirmMailService {
             user.setEnabled(true);
             userRepository.save(user);
             log.info("*** Confirmation has been success ***");
+        }else {
+            throw new ServiceProcessingException(VERIFICATION_FAIL);
         }
-        throw new ServiceProcessingException(VERIFICATION_FAIL);
-    }
+
+        }
 
     public void sendVerificationEmail(User user, String urlValue)
             throws MessagingException, UnsupportedEncodingException {

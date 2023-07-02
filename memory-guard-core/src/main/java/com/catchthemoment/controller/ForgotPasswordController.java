@@ -1,7 +1,13 @@
 package com.catchthemoment.controller;
 
+import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.ForgotPassword;
+import com.catchthemoment.model.UpdatePasswordModel;
+
+import com.catchthemoment.exception.ServiceProcessingException;
+import com.catchthemoment.model.ForgotPassword;
+
 import com.catchthemoment.service.UserResetPasswordService;
 import com.catchthemoment.util.SiteUrlUtil;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -27,6 +35,16 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
     private final UserResetPasswordService resetPasswordService;
     private final String siteUrl = "/users/reset_password?token=";
 
+
+
+    @Override
+    public ResponseEntity<Void> changePassword(UpdatePasswordModel updatePasswordModel) throws Exception {
+        resetPasswordService.changeUserPasswords(updatePasswordModel);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+  
+  
     /**
      * When user fill incoming input form , sending email starts to come up .
      * This method  charges of  sending email to user which changes email
@@ -39,14 +57,15 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
         String token = RandomString.make(20);
         try {
             resetPasswordService.updateResetPasswordToken(email, token);
-            String resetPasswordLink = SiteUrlUtil.getSiteURL(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest()) + siteUrl + token;
+
+            String resetUrl = "/users/reset_password?token=";
+            String resetPasswordLink = SiteUrlUtil.getSiteURL(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest()) + resetUrl + token
             resetPasswordService.sendResetPasswordEmail(email, resetPasswordLink);
             log.debug("*** email was sent to user: {} ***", resetPasswordLink);
         } catch (ServiceProcessingException e) {
-            throw new RuntimeException(e);
+            throw new ServiceProcessingException(ApplicationErrorEnum.INCORRECT_INPUT);
         }
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
-
     }
 
 }

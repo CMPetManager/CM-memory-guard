@@ -97,7 +97,8 @@ public class ImageService {
     public Resource downloadImage(String fileName) throws ServiceProcessingException, IOException {
         log.info("*** Find image name in the db ***");
         Image currentImage = imageRepository.findImageByName(fileName)
-                .orElseThrow(() -> new ServiceProcessingException(IMAGE_NOT_FOUND));
+                .orElseThrow(() -> new ServiceProcessingException(
+                        IMAGE_NOT_FOUND));
         log.info("*** Name successfully found in the db ***");
         Path filePath = Paths.get(FOLDER_PATH).resolve(currentImage.getName()).normalize();
         Resource resource = new UrlResource(filePath.toUri());

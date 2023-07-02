@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
 
 import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
@@ -26,10 +25,12 @@ public class UserEmailService {
     private final UserConfirmMailService userConfirmMailService;
     @Value("${application.url}")
     private String siteUrl;
+
     public void changeUserEmail(Long userId, @NotNull UserModel readUser) throws ServiceProcessingException,
             MessagingException, UnsupportedEncodingException {
         if (readUser.getEmail().isEmpty()) {
             log.error("*** user's email is not found or empty ***");
+
             throw new ServiceProcessingException(USER_NOT_FOUND);
         }
         var user = repository.findUserById(userId).orElseThrow();
@@ -39,7 +40,6 @@ public class UserEmailService {
         user.setConfirmationResetToken(randomCode);
         user.setEnabled(false);
         repository.save(user);
-
-        userConfirmMailService.sendVerificationEmail(user, siteUrl);
+        userConfirmMailService.sendVerificationEmail(user,siteUrl);
     }
 }

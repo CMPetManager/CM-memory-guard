@@ -42,7 +42,8 @@ public class AlbumService {
     public Iterable<AlbumModel> findAllAlbumsUser(@NotNull Long userId) throws ServiceProcessingException {
         log.info(" get user by incoming id");
         User user = userRepository.findUserById(userId)
-                .orElseThrow(() -> new ServiceProcessingException(ALBUM_ERROR_INPUT));
+                .orElseThrow(() -> new ServiceProcessingException(
+                        ALBUM_ERROR_INPUT));
         log.info("map album model list from incoming entity album list");
         return albumMapper.fromAlbumEntities(user.getAlbums());
     }

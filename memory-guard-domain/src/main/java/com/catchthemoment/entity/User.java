@@ -11,7 +11,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "users", indexes = @Index(name = "usr_index", columnList = "name"))
+@Table(name = "users", indexes = @Index(name = "usr_mail_index", columnList = "name"))
 @NamedEntityGraph(name = "user-graph",attributeNodes = @NamedAttributeNode(value = "albums"))
 public class User {
 

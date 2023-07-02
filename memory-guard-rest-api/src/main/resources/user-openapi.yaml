@@ -155,6 +155,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
+  /users/upgrade-password:
+    post:
+      summary: Method change old password
+      tags:
+        - ForgotPasswordController
+      description: changing old password of user
+      operationId: changePassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasswordModel'
+      responses:
+        '200':
+          description: password has been change
+        '500':
+          description: something went wrong with input form
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
 
   /users/{userId}:
     get:
@@ -385,6 +406,14 @@ components:
           type: integer
           format: int64
         refreshToken:
+          type: string
+
+    UpdatePasswordModel:
+      type: object
+      properties:
+        oldPassword:
+          type: string
+        newPassword:
           type: string
 
     AlbumModel:

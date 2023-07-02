@@ -38,7 +38,7 @@ class UserEmailServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = new User(4L ,"Greg","greg041990@mail.ru","turn123ERT");
+        user = new User();
         readUser = new UserModel();
         readUser.setEmail(user.getEmail());
         repo.save(user);
