@@ -30,5 +30,3 @@ public class UserLoginInterceptor implements HandlerInterceptor {
     }
 }
 
-
-
