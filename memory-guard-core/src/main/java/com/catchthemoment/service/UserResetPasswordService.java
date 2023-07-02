@@ -12,20 +12,17 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ServerErrorException;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import java.util.Optional;
-
-import static com.catchthemoment.exception.ApplicationErrorEnum.MAIL_INCORRECT;
+import static com.catchthemoment.exception.ApplicationErrorEnum.*;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true,rollbackFor = Exception.class)
+@Transactional(readOnly = true, rollbackFor = Exception.class)
 public class UserResetPasswordService {
 
     private final UserRepository repository;
@@ -41,25 +38,25 @@ public class UserResetPasswordService {
     public void updateResetPasswordToken(@NotNull String email, String token) throws ServiceProcessingException {
         var user = repository.findUserByEmail(email).orElseThrow(
                 () -> new ServiceProcessingException(MAIL_INCORRECT));
-            user.setResetPasswordToken(token);
-            repository.save(user);
+        user.setResetPasswordToken(token);
+        repository.save(user);
     }
-  
+
     public void changeUserPasswords(@NotNull @Valid UpdatePasswordModel passwordModel) throws ServiceProcessingException {
         var newPassword = passwordModel.getNewPassword();
         var user = repository.findUserByPassword(passwordModel.getOldPassword());
-        if (user.isPresent()){
+        if (user.isPresent()) {
             User newUser = user.get();
             newUser.setPassword(newPassword);
             repository.save(newUser);
-        }else {
+        } else {
             throw new ServiceProcessingException(PASSWORD_INPUT_FAILS);
         }
     }
 
-    public User getUserFromResetToken(String password) {
+    public User getUserFromResetToken(String password) throws ServiceProcessingException {
         return repository.findUserByPassword(password).
-              orElseThrow(()-> new ServerErrorException(USER_NOT_FOUND.getMessage()));
+                orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND));
     }
 
     @Transactional
@@ -79,15 +76,14 @@ public class UserResetPasswordService {
         helper.setTo(mailRecipient);
 
         String subject = "Here's the link to reset your password";
-        String content = """ 
-                <p>Hello,</p>
-                <p>You have requested to reset your password.</p>
-                <p>Click the link below to change your password:</p>
-                <p><a href=\"" + link + "\">Change my password</a></p>
-                <br>
-                <p>Ignore this email if you do remember your password,
-                or you have not made the request.</p>
-                """;
+        String content =
+                " <p>Hello,</p>" +
+                        "<p>You have requested to reset your password.</p>" +
+                        " <p>Click the link below to change your password:</p>" +
+                        "<p><a href=\"" + link + ">Change my password</a></p>" +
+                        " <br>" +
+                        " <p>Ignore this email if you do remember your password," +
+                        "or you have not made the request.</p>";
 
         helper.setSubject(subject);
         helper.setText(content, true);

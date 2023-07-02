@@ -26,11 +26,10 @@ public class UserEmailService {
     @Value("${application.url}")
     private String siteUrl;
 
-    public void changeUserEmail(Long userId, @NotNull UserModel readUser) throws ServiceProcessingException,
+    public void changeUserEmail(Long userId, UserModel readUser) throws ServiceProcessingException,
             MessagingException, UnsupportedEncodingException {
         if (readUser.getEmail().isEmpty()) {
             log.error("*** user's email is not found or empty ***");
-
             throw new ServiceProcessingException(USER_NOT_FOUND);
         }
         var user = repository.findUserById(userId).orElseThrow();
@@ -40,6 +39,6 @@ public class UserEmailService {
         user.setConfirmationResetToken(randomCode);
         user.setEnabled(false);
         repository.save(user);
-        userConfirmMailService.sendVerificationEmail(user,siteUrl);
+        userConfirmMailService.sendVerificationEmail(user, siteUrl);
     }
 }
