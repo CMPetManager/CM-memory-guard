@@ -24,11 +24,8 @@ public class UserLoginInterceptor implements HandlerInterceptor {
         if (request.getRequestURI().equalsIgnoreCase(URI)&& HttpMethod.POST.matches(currentMethod)) {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
-
         }
         log.error("*** error occurred with incoming request params..");
         throw new ServiceProcessingException(MAIL_INCORRECT);
-
     }
-
 }

@@ -12,7 +12,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ServerErrorException;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -54,9 +53,9 @@ public class UserResetPasswordService {
         }
     }
 
-    public User getUserFromResetToken(String password) {
+    public User getUserFromResetToken(String password) throws ServiceProcessingException {
         return repository.findUserByPassword(password).
-                orElseThrow(()-> new ServerErrorException(USER_NOT_FOUND.getMessage()));
+                orElseThrow(()-> new ServiceProcessingException(USER_NOT_FOUND));
     }
 
     @Transactional
@@ -76,15 +75,14 @@ public class UserResetPasswordService {
         helper.setTo(mailRecipient);
 
         String subject = "Here's the link to reset your password";
-        String content = """ 
-                <p>Hello,</p>
-                <p>You have requested to reset your password.</p>
-                <p>Click the link below to change your password:</p>
-                <p><a href=\"" + link + "\">Change my password</a></p>
-                <br>
-                <p>Ignore this email if you do remember your password,
-                or you have not made the request.</p>
-                """;
+        String content =
+               " <p>Hello,</p>"+
+                "<p>You have requested to reset your password.</p>"+
+               " <p>Click the link below to change your password:</p>"+
+                "<p><a href=\""+ link + ">Change my password</a></p>"+
+               " <br>"+
+               " <p>Ignore this email if you do remember your password,"+
+                "or you have not made the request.</p>";
 
         helper.setSubject(subject);
         helper.setText(content, true);
