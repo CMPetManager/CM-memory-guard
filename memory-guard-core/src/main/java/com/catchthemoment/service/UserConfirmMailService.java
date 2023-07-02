@@ -45,7 +45,8 @@ public class UserConfirmMailService {
         }else {
             throw new ServiceProcessingException(VERIFICATION_FAIL);
         }
-    }
+
+        }
 
     public void sendVerificationEmail(User user, String urlValue)
             throws MessagingException, UnsupportedEncodingException {

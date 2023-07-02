@@ -38,7 +38,6 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     /**
      * When user fill incoming input form , sending email starts to come .
      * This method  charges of for sending email to user

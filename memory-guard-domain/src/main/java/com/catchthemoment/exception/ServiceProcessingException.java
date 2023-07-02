@@ -7,10 +7,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ServiceProcessingException extends Exception {
 
-    private int code;
-    private String message;
+    private final int code;
+    private final String message;
 
     public ServiceProcessingException(ApplicationErrorEnum applicationErrorEnum) {
-        //todo
+        this.code= applicationErrorEnum.getCode();
+        this.message= applicationErrorEnum.getMessage();
     }
 }

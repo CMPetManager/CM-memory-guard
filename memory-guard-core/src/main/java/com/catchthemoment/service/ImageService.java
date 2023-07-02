@@ -50,7 +50,7 @@ public class ImageService {
             log.error("*** This image is already exists ***");
             throw new ServiceProcessingException(ILLEGAL_STATE);
         }
-        log.info("*** Validation passed, This imageName doesn't exist in the database ***");
+        log.info("*** Validation passed, the imageName doesn't exist in the database ***");
         Path filePath = getPath(file);
         Image buildImage = getBuildImage(file, filePath);
         Album currentAlbum = albumMapper.fromAlbumModel(albumModel);
@@ -124,13 +124,16 @@ public class ImageService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public Image addImageDescription(ImageDescriptionModel imageModel) {
+    public Image addImageDescription(ImageDescriptionModel imageModel) throws ServiceProcessingException {
         Optional<Image> currentImage = imageRepository.findImageByName(imageModel.getName());
         currentImage.ifPresent(image -> {
             image.setDescription(imageModel.getDescription());
             imageRepository.save(image);
         });
-        Image image = currentImage.get();
-        return image;
+        if(currentImage.isPresent()){
+            return currentImage.get();
+        }else
+            log.error("*** Image not found on the server ***");
+            throw new ServiceProcessingException(IMAGE_NOT_FOUND);
     }
 }

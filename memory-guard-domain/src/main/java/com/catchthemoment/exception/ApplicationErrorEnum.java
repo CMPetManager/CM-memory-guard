@@ -17,7 +17,7 @@ public enum ApplicationErrorEnum {
 
 	INCORRECT_INPUT(4001,"The entered data did not pass validation"),
 	MAIL_INCORRECT(4002,"The mail incorrect"),
-	VALID_ACCOUNT_ERROR(4003, "Verify account went wrong.."),
+	VALID_ACCOUNT_ERROR(4003, "Verify account went wrong incorrect input"),
 	EMPTY_REQUEST(4004,"The request is empty"),
 	ALBUM_ERROR_INPUT(4005,"Invalid processing of creation album");
 

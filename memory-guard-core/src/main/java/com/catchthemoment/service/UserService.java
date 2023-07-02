@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -24,7 +23,6 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
 
 
@@ -48,7 +46,7 @@ public class UserService implements UserDetailsService {
         return currentUser;
     }
 
-    @Transactional
+
     public User create(User user, String siteURL) throws ServiceProcessingException,
             UnsupportedEncodingException, MessagingException {
         log.info("*** Checking for mail uniqueness ***");
@@ -79,13 +77,13 @@ public class UserService implements UserDetailsService {
         return JwtEntityFactory.create(currentUser);
     }
 
-    @Transactional
+
     public void deleteUserById(Long userId) throws ServiceProcessingException {
         log.info("*** Request to delete a user by ID ***");
         User currentUser = userRepository.findUserById(userId)
                 .orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND));
         log.info("*** User successfully found by ID ***");
-        userRepository.deleteById(currentUser.getId());
+        userRepository.deleteUserById(currentUser.getId());
         log.info("*** User successfully deleted ***");
     }
 }
