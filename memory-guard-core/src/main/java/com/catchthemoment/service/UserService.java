@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -23,6 +25,7 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService implements UserDetailsService {
 
 
@@ -77,7 +80,7 @@ public class UserService implements UserDetailsService {
         return JwtEntityFactory.create(currentUser);
     }
 
-
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteUserById(Long userId) throws ServiceProcessingException {
         log.info("*** Request to delete a user by ID ***");
         User currentUser = userRepository.findUserById(userId)

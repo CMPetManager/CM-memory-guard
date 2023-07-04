@@ -54,7 +54,7 @@ class AlbumServiceTest {
         model1 = new AlbumModel();
         model2 = new AlbumModel();
         albumModelList = List.of(model1, model2);
-        user = new User(2L, "Phill", "nill@mail.ru", "327412ert");
+        user = new User();
         user.setAlbums(List.of(album));
         userRepository.save(user);
 
@@ -74,7 +74,7 @@ class AlbumServiceTest {
         doReturn(Optional.ofNullable(user)).when(userRepository).findUserById(user.getId());
         doReturn(albumModelList).when(mapper).fromAlbumEntities(user.getAlbums());
         var currentList = albumService.findAllAlbumsUser(user.getId());
-        assertTrue(currentList.size() > 0);
+        assertTrue(currentList.iterator().hasNext());
         verify(userRepository, times(1)).findUserById(user.getId());
     }
 
