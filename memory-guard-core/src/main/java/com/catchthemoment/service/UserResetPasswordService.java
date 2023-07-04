@@ -4,6 +4,7 @@ import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.UpdatePasswordModel;
 import com.catchthemoment.repository.UserRepository;
+import com.catchthemoment.validation.Password;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,7 +61,7 @@ public class UserResetPasswordService {
     }
 
     @Transactional
-    public void updatePassword(@NotNull User reqUser, String newPassword) {
+    public void updatePassword(@NotNull User reqUser, @Password String newPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(newPassword);
         reqUser.setPassword(encodedPassword);

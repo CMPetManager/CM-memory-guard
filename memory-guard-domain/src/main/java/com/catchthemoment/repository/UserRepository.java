@@ -27,6 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Query("delete from User usr where usr.id =:id")
+    @EntityGraph(value = "user-graph", attributePaths = {"albums"}, type = EntityGraph.EntityGraphType.LOAD)
     void deleteUserById(@Param("id") Long id);
 }
 

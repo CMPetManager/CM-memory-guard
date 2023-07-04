@@ -10,16 +10,14 @@ import com.catchthemoment.repository.AlbumRepository;
 import com.catchthemoment.repository.ImageRepository;
 import com.catchthemoment.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.Resource;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,7 +25,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -97,10 +94,10 @@ class ImageServiceTest {
         Image expectedImage = getImage(getMockMultipartFile());
         doReturn(Optional.of(expectedImage)).when(imageRepository).findImageByName(expectedImage.getName());
 
-        Resource resource = imageService.downloadImage(expectedImage.getName());
+        ByteArrayResource resource = (ByteArrayResource) imageService.downloadImage(expectedImage.getName());
 
         assertNotNull(resource);
-        assertEquals(resource.getContentAsByteArray().length, getMockMultipartFile().getBytes().length);
+        assertEquals(resource.getByteArray().length, getMockMultipartFile().getBytes().length);
 
     }
 

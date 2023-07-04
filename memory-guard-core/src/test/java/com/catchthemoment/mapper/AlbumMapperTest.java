@@ -15,7 +15,7 @@ class AlbumMapperTest {
 
     private final AlbumMapper albumMapper = Mappers.getMapper(AlbumMapper.class);
 
-    private final User user1 = new User(4L, "Marko", "hecler1990@mail.ru", "hecler1234");
+    private final User user1 = new User();
     private Album fakeALbum;
 
 
