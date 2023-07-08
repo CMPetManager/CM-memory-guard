@@ -59,7 +59,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
             resetPasswordService.updateResetPasswordToken(email, token);
 
             String resetUrl = "/users/reset_password?token=";
-            String resetPasswordLink = SiteUrlUtil.getSiteURL(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest()) + resetUrl + token
+            String resetPasswordLink = SiteUrlUtil.getSiteURL(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest()) + resetUrl + token;
             resetPasswordService.sendResetPasswordEmail(email, resetPasswordLink);
             log.debug("*** email was sent to user: {} ***", resetPasswordLink);
         } catch (ServiceProcessingException e) {
