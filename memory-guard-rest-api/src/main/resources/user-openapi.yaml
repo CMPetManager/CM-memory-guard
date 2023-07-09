@@ -126,6 +126,9 @@ paths:
             application/json:
               schema:
                 type: string
+            text/html:
+              schema:
+                type: string
 
         '500':
           description: verifying went wrong

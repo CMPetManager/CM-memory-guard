@@ -8,6 +8,7 @@ import com.catchthemoment.model.ImageDescriptionModel;
 import com.catchthemoment.model.ImageModel;
 import com.catchthemoment.service.AlbumService;
 import com.catchthemoment.service.ImageService;
+import com.catchthemoment.validation.LoginSuccess;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -45,6 +46,7 @@ public class ImageController implements ImageControllerApiDelegate {
         }
     }
 
+    @LoginSuccess
     @Override
     public ResponseEntity<List<ImageModel>> uploadImages(Long albumId, List<MultipartFile> images) throws Exception {
         log.info("*** Received an upload images request ***");

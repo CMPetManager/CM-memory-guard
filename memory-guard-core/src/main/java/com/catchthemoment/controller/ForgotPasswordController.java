@@ -10,13 +10,12 @@ import com.catchthemoment.model.ForgotPassword;
 
 import com.catchthemoment.service.UserResetPasswordService;
 import com.catchthemoment.util.SiteUrlUtil;
+import com.catchthemoment.validation.LoginSuccess;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -36,15 +35,13 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
     private final String siteUrl = "/users/reset_password?token=";
 
 
-
+    @LoginSuccess
     @Override
     public ResponseEntity<Void> changePassword(UpdatePasswordModel updatePasswordModel) throws Exception {
         resetPasswordService.changeUserPasswords(updatePasswordModel);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-  
-  
     /**
      * When user fill incoming input form , sending email starts to come up .
      * This method  charges of  sending email to user which changes email
@@ -52,6 +49,7 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
      * @param forgotPassword (optional)
      */
     @Override
+    @LoginSuccess
     public ResponseEntity<Void> resetPassword(ForgotPassword forgotPassword) throws Exception {
         String email = forgotPassword.getEmail();
         String token = RandomString.make(20);

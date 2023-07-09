@@ -4,6 +4,7 @@ import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.UpdatePasswordModel;
 import com.catchthemoment.repository.UserRepository;
+import com.catchthemoment.validation.LoginSuccess;
 import com.catchthemoment.validation.Password;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class UserResetPasswordService {
         repository.save(user);
     }
 
+    @LoginSuccess
     public void changeUserPasswords(@NotNull @Valid UpdatePasswordModel passwordModel) throws ServiceProcessingException {
         var newPassword = passwordModel.getNewPassword();
         var user = repository.findUserByPassword(passwordModel.getOldPassword());
@@ -61,6 +63,7 @@ public class UserResetPasswordService {
     }
 
     @Transactional
+    @LoginSuccess
     public void updatePassword(@NotNull User reqUser, @Password String newPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(newPassword);

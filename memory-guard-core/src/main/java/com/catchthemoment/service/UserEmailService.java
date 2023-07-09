@@ -42,3 +42,4 @@ public class UserEmailService {
         userConfirmMailService.sendVerificationEmail(user, siteUrl);
     }
 }
+
