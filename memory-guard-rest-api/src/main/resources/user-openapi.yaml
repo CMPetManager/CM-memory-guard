@@ -72,7 +72,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ForgotPassword'
       responses:
-        default:
+        '200':
           description: successful operation of creation new password
         '400':
           description: something wrong with password
@@ -348,6 +348,7 @@ components:
         name:
           type: string
           example: theUser
+          #comment email should be new value
         email:
           type: string
           example: egor@email.com
@@ -371,6 +372,9 @@ components:
         email:
           type: string
           example: egor@email.com
+        new_password:
+          type: string
+          example: 3274ert
 
     UpdatePassword:
       type: object

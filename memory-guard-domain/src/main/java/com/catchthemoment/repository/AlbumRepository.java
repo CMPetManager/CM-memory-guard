@@ -23,7 +23,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     void deleteAlbumById(@Param("id") Long id);
 
     @Query(value = "select al from Album al where al.albumName =:name ")
-    @EntityGraph(value = "album_graph", type = EntityGraph.EntityGraphType.FETCH,attributePaths = {"images,user"})
     Optional<Album> findAlbumByName(@Param("name") String name);
 
 

@@ -2,11 +2,13 @@ package com.catchthemoment.service;
 
 import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
+import com.catchthemoment.model.ForgotPassword;
 import com.catchthemoment.model.UpdatePasswordModel;
 import com.catchthemoment.repository.UserRepository;
 import com.catchthemoment.validation.LoginSuccess;
 import com.catchthemoment.validation.Password;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,6 +27,7 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.*;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true, rollbackFor = Exception.class)
+@Slf4j
 public class UserResetPasswordService {
 
     private final UserRepository repository;
@@ -60,6 +63,19 @@ public class UserResetPasswordService {
     public User getUserFromResetToken(String password) throws ServiceProcessingException {
         return repository.findUserByPassword(password).
                 orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND));
+    }
+
+    @Transactional
+    public void forgotPassword(@NotNull ForgotPassword forgotPassword) throws ServiceProcessingException {
+        var userOptional = repository.findUserByEmail(forgotPassword.getEmail());
+        if (userOptional.isPresent()) {
+            User currentUser = userOptional.get();
+            currentUser.setPassword(forgotPassword.getNewPassword());
+            repository.save(currentUser);
+            log.info("**new password updated well");
+        } else {
+            throw new ServiceProcessingException(PASSWORD_INPUT_FAILS);
+        }
     }
 
     @Transactional

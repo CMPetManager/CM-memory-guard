@@ -19,7 +19,7 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.ALBUM_ERROR_INPU
 
 @Service
 @Slf4j
-@Transactional(readOnly = true)
+@Transactional
 public class AlbumService {
     private final AlbumRepository albumRepository;
     private final UserRepository userRepository;
@@ -76,7 +76,6 @@ public class AlbumService {
     }
 
     public AlbumModel createAlbum(AlbumModel model) throws ServiceProcessingException {
-
         if (model == null) {
             throw new ServiceProcessingException(ALBUM_ERROR_INPUT);
         }
