@@ -38,6 +38,12 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<Void> forgotPassword(ForgotPassword forgotPassword) throws ServiceProcessingException {
+        resetPasswordService.forgotPassword(forgotPassword);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     /**
      * When user fill incoming input form , sending email starts to come up .
