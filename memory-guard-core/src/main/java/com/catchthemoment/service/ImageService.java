@@ -10,6 +10,7 @@ import com.catchthemoment.model.ImageDescriptionModel;
 import com.catchthemoment.repository.AlbumRepository;
 import com.catchthemoment.repository.ImageRepository;
 import com.catchthemoment.repository.UserRepository;
+import com.catchthemoment.validation.LoginSuccess;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -34,7 +35,7 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true,rollbackFor = Exception.class)
+@Transactional(readOnly = true, rollbackFor = Exception.class)
 public class ImageService {
     private static final String FOLDER_PATH = "C:\\Users\\Admin\\gitlab\\";
 
@@ -43,6 +44,7 @@ public class ImageService {
     private final AlbumRepository albumRepository;
     private final AlbumMapper albumMapper;
 
+    @LoginSuccess
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.REPEATABLE_READ)
     public Image uploadImage(AlbumModel albumModel, MultipartFile file) throws IOException, ServiceProcessingException {
         log.info("*** Checking the image name for uniqueness ***");
@@ -63,7 +65,7 @@ public class ImageService {
         return image;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class, isolation = Isolation.REPEATABLE_READ)
     public Image uploadImage(Long userId, MultipartFile file) throws IOException, ServiceProcessingException {
         Path filePath = getPath(file);
         Image buildImage = getBuildImage(file, filePath);
@@ -130,10 +132,10 @@ public class ImageService {
             image.setDescription(imageModel.getDescription());
             imageRepository.save(image);
         });
-        if(currentImage.isPresent()){
+        if (currentImage.isPresent()) {
             return currentImage.get();
-        }else
+        } else
             log.error("*** Image not found on the server ***");
-            throw new ServiceProcessingException(IMAGE_NOT_FOUND);
+        throw new ServiceProcessingException(IMAGE_NOT_FOUND);
     }
 }

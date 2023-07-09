@@ -22,6 +22,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select usr from User usr where usr.confirmationResetToken= :token")
     Optional<User> findUsersByConfirmationResetToken(@Param("token") String token);
 
+    @EntityGraph(value = "user-graph",attributePaths = {"albums"}, type = EntityGraph.EntityGraphType.LOAD)
+    @Query("select u from User u where u.name = :name")
+    Optional<User> findUsersByName(@Param("name") String name);
+
 
     Optional<User> findUserByPassword(String password);
 
