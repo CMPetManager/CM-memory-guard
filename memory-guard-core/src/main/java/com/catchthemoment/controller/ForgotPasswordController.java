@@ -4,6 +4,10 @@ import com.catchthemoment.exception.ApplicationErrorEnum;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.ForgotPassword;
 import com.catchthemoment.model.UpdatePasswordModel;
+
+import com.catchthemoment.exception.ServiceProcessingException;
+import com.catchthemoment.model.ForgotPassword;
+
 import com.catchthemoment.service.UserResetPasswordService;
 import com.catchthemoment.util.SiteUrlUtil;
 import com.catchthemoment.validation.LoginSuccess;
@@ -37,7 +41,6 @@ public class ForgotPasswordController implements ForgotPasswordControllerApiDele
         resetPasswordService.changeUserPasswords(updatePasswordModel);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
     /**
      * When user fill incoming input form , sending email starts to come up .
