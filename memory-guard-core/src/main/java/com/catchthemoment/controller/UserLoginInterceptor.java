@@ -29,3 +29,4 @@ public class UserLoginInterceptor implements HandlerInterceptor {
         throw new ServiceProcessingException(MAIL_INCORRECT);
     }
 }
+
