@@ -14,9 +14,10 @@ public enum ApplicationErrorEnum {
 	IMAGE_NOT_FOUND(2002,"Image not found"),
 	ACCESS_DENIED(2003,"Access denied"),
 	ILLEGAL_STATE(2004,"Already exists"),
+	MAIL_INCORRECT(4007,"User,s mail invalid"),
 
 	INCORRECT_INPUT(4001,"The entered data did not pass validation"),
-	MAIL_INCORRECT(4002,"The mail incorrect"),
+	USER_PARAMS_INCORRECT(4002,"Incoming parameters are invalid or empty"),
 	VALID_ACCOUNT_ERROR(4003, "Verify account went wrong incorrect input"),
 	INVALID_ACCOUNT(4006,"Apology, but yours account has not been verified"),
 	EMPTY_REQUEST(4004,"The request is empty"),
