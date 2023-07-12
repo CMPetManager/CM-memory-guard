@@ -8,7 +8,11 @@ import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.endpoint.annotation.Selector;
 import org.springframework.stereotype.Component;
 
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import static java.util.stream.Collectors.*;
 
 /**
  * Custom actuator  endpoints for
@@ -21,22 +25,26 @@ public class UserEndPointActuator {
 
     private final UserRepository repository;
 
+    /**
+     * This method get all users , filters items by email and populate user's map
+     * @return map of user filtering by user's email
+     */
     @ReadOperation
-    public Iterable<User> findAllUsers(){
-      return   repository.findAll()
+    public Map<String, Set<User>> findAllUsersByName() {
+        return repository.findAll()
                 .stream()
-                .filter(user -> !user.getEmail().isEmpty()&& !user.getName().isEmpty())
-                .collect(Collectors.toSet());
-    }
-    @ReadOperation
-    public Object selectCustomer(@Selector Long userId) {
-        Iterable<User> userList = repository.findAll();
-        for (User user : userList) {
-            if (user.getId().equals(userId)) {
-                return user;
-            }
-        }
-        return String.format("No avaliable user with  id %d", userId);
+                .filter(user -> !user.getEmail().isEmpty() && !user.getName().isEmpty())
+                .collect(groupingBy(User::getName
+                        , filtering(user -> !user.getEmail().isEmpty(), toSet())));
     }
 
+    @ReadOperation
+    public Object selectCustomer(@Selector Long userId) {
+        Optional<User> optionalUser = repository.findUserById(userId);
+        return optionalUser.isPresent() ? optionalUser.get() : String.format("No avaliable user with  id %d", userId);
+    }
 }
+
+
+
+

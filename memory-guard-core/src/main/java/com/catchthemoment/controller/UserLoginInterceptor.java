@@ -8,8 +8,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 
-import static com.catchthemoment.exception.ApplicationErrorEnum.MAIL_INCORRECT;
+import static com.catchthemoment.exception.ApplicationErrorEnum.USER_PARAMS_INCORRECT;
 
 @Component
 @Slf4j
@@ -21,12 +22,14 @@ public class UserLoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         final String currentMethod = request.getMethod();
-        if (request.getRequestURI().equalsIgnoreCase(URI)&& HttpMethod.POST.matches(currentMethod)) {
+        final Enumeration<String> params = request.getAttributeNames();
+        if (request.getRequestURI().equalsIgnoreCase(URI)&& HttpMethod.POST.matches(currentMethod)&&
+        params.hasMoreElements()) {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
         }
         log.error("*** error occurred with incoming request params..");
-        throw new ServiceProcessingException(MAIL_INCORRECT);
+        throw new ServiceProcessingException(USER_PARAMS_INCORRECT);
     }
 }
 
