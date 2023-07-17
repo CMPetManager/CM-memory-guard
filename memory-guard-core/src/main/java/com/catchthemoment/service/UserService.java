@@ -5,6 +5,7 @@ import com.catchthemoment.entity.Role;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.repository.UserRepository;
+import com.catchthemoment.validation.ReadDataTransactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
@@ -34,6 +35,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UserConfirmMailService confirmMailService;
 
+    @ReadDataTransactional
     public User getByEmail(String email) throws ServiceProcessingException {
         log.info("*** Request to get a user by email ***");
         User currentUser = userRepository.findUserByEmail(email)
@@ -42,6 +44,7 @@ public class UserService implements UserDetailsService {
         return currentUser;
     }
 
+    @ReadDataTransactional
     public User getById(Long userId) throws ServiceProcessingException {
         log.info("*** Request to get a user by ID ***");
         User currentUser = userRepository.findUserById(userId)

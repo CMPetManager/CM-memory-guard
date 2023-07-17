@@ -14,7 +14,7 @@ public enum ApplicationErrorEnum {
 	IMAGE_NOT_FOUND(2002,"Image not found"),
 	ACCESS_DENIED(2003,"Access denied"),
 	ILLEGAL_STATE(2004,"Already exists"),
-	MAIL_INCORRECT(4007,"User,s mail invalid"),
+	MAIL_INCORRECT(4007,"User's  email invalid"),
 
 	INCORRECT_INPUT(4001,"The entered data did not pass validation"),
 	USER_PARAMS_INCORRECT(4002,"Incoming parameters are invalid or empty"),

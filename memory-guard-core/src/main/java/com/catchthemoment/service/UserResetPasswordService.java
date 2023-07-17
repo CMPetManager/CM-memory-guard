@@ -26,7 +26,6 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.*;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true, rollbackFor = Exception.class)
 @Slf4j
 public class UserResetPasswordService {
 
