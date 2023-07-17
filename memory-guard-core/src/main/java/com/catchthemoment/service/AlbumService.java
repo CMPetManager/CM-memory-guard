@@ -8,6 +8,7 @@ import com.catchthemoment.mappers.AlbumMapperImpl;
 import com.catchthemoment.model.AlbumModel;
 import com.catchthemoment.repository.AlbumRepository;
 import com.catchthemoment.repository.UserRepository;
+import com.catchthemoment.validation.ReadDataTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,7 @@ public class AlbumService {
         this.albumMapper = new AlbumMapperImpl();
     }
 
+    @ReadDataTransactional
     public AlbumModel getByAlbum(@NotNull Long albumId) {
         log.info("get album by id from repo");
         Album currentAlbum = albumRepository.findAlbumById(albumId)
@@ -83,6 +85,7 @@ public class AlbumService {
         return albumMapper.fromAlbumEntity(albumRepository.save(album));
     }
 
+    @ReadDataTransactional
     public AlbumModel getAlbumByName(@NotNull @NotEmpty String name) throws ServiceProcessingException {
         var currentAlbum = albumRepository.findAlbumByName(name)
                 .orElseThrow(() -> new ServiceProcessingException(ALBUM_ERROR_INPUT));

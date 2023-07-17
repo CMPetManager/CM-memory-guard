@@ -3,12 +3,12 @@ package com.catchthemoment.service;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.UserModel;
 import com.catchthemoment.repository.UserRepository;
+import com.catchthemoment.validation.ReadDataTransactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -17,7 +17,7 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 
 @Service
 @Slf4j
-@Transactional(readOnly = true)
+@ReadDataTransactional
 @RequiredArgsConstructor
 public class UserEmailService {
 

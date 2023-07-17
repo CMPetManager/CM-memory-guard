@@ -1,5 +1,6 @@
 package com.catchthemoment.metrics.actuator;
 
+import com.catchthemoment.entity.Album;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +31,12 @@ public class UserEndPointActuator {
      * @return map of user filtering by user's email
      */
     @ReadOperation
-    public Map<String, Set<User>> findAllUsersByName() {
+    public Map<String, Set<Album>> findAllUsersByName() {
         return repository.findAll()
                 .stream()
                 .filter(user -> !user.getEmail().isEmpty() && !user.getName().isEmpty())
                 .collect(groupingBy(User::getName
-                        , filtering(user -> !user.getEmail().isEmpty(), toSet())));
+                        , flatMapping(user -> user.getAlbums().stream(), toSet())));
     }
 
     @ReadOperation
@@ -43,6 +44,7 @@ public class UserEndPointActuator {
         Optional<User> optionalUser = repository.findUserById(userId);
         return optionalUser.isPresent() ? optionalUser.get() : String.format("No avaliable user with  id %d", userId);
     }
+
 }
 
 
