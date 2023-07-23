@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,6 +26,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
 
     private final JwtTokenManager jwtTokenManager;
@@ -54,9 +56,8 @@ public class SecurityConfig {
                 }))
                 .and()
                 .authorizeHttpRequests()
-                .antMatchers("/v3/api-docs", "/swagger-ui/index.html", "/swagger-ui.html", "/verify/**", "/login",
-                        "/users**", "/users/**", "/refresh-token", "/users/forgot-password","/albums**","/albums/**").permitAll()
-                .antMatchers("users/reset-password").authenticated()
+                .antMatchers("/v3/api-docs", "/swagger-ui/index.html", "/swagger-ui.html", "/users/verify**", "/users/login",
+                         "/users/forgot-password","/users/confirm-account").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .anonymous().disable()

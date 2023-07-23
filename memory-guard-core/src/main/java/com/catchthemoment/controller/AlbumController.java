@@ -6,6 +6,7 @@ import com.catchthemoment.service.AlbumService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +24,7 @@ public class AlbumController implements AlbumControllerApiDelegate {
     private final AlbumService albumService;
 
     @Override
+    @PreAuthorize("@loginHandler.canAccessToAlbumActions()")
     public ResponseEntity<AlbumModel> getAlbum(Long albumId) {
         return ResponseEntity.ok(albumService.getByAlbum(albumId));
     }
@@ -39,17 +41,20 @@ public class AlbumController implements AlbumControllerApiDelegate {
     }
 
     @Override
+    @PreAuthorize("@loginHandler.canAccessToAlbumActions()")
     public ResponseEntity<AlbumModel> createAlbum(@ModelAttribute AlbumModel model) throws ServiceProcessingException {
         return ResponseEntity.ok().body(albumService.createAlbum(model));
     }
 
     @Override
+    @PreAuthorize("@loginHandler.canAccessToAlbumActions()")
     public ResponseEntity<AlbumModel> updateAlbum(Long albumId, AlbumModel albumModel) throws Exception {
         albumService.updateAlbum(albumId,albumModel);
         return (ResponseEntity<AlbumModel>) ResponseEntity.ok();
     }
 
     @Override
+    @PreAuthorize("@loginHandler.canAccessToAlbumActions()")
     public ResponseEntity<AlbumModel> getAlbumByName(String name) throws Exception {
         log.info("1");
         return ResponseEntity.ok().body(albumService.getAlbumByName(name));
