@@ -16,15 +16,18 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.USER_PARAMS_INCO
 @Slf4j
 public class UserLoginInterceptor implements HandlerInterceptor {
 
-    private static final String URI = "/users/confirm-account";
+    private static final String URI_CONFIRM = "/users/confirm-account";
+    private static final String URI_LOGIN="/users/login";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         final String currentMethod = request.getMethod();
         final Enumeration<String> params = request.getAttributeNames();
-        if (request.getRequestURI().equalsIgnoreCase(URI)&& HttpMethod.POST.matches(currentMethod)&&
-        params.hasMoreElements()) {
+        if (request.getRequestURI().equalsIgnoreCase(URI_CONFIRM) &&
+                request.getRequestURI().equalsIgnoreCase(URI_LOGIN)
+                && HttpMethod.POST.matches(currentMethod) &&
+                params.hasMoreElements()) {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
         }

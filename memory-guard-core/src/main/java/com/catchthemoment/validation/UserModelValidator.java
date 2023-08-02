@@ -48,7 +48,7 @@ public class UserModelValidator {
         if (!StringUtils.hasText(name)) {
             log.error("*** Name shouldn't be null ***");
             return false;
-        } else if (name.length() < 1 || name.length() > 64) {
+        } else if (name.isEmpty() || name.length() > 64) {
             log.error("*** Name length is not correct ***");
             return false;
         } else if (name.matches(REGEX_NAME)) {

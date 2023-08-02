@@ -64,7 +64,7 @@ public class UserResetPasswordService {
                 orElseThrow(() -> new ServiceProcessingException(USER_NOT_FOUND));
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void forgotPassword(@NotNull ForgotPassword forgotPassword) throws ServiceProcessingException {
         var userOptional = repository.findUserByEmail(forgotPassword.getEmail());
         if (userOptional.isPresent()) {
@@ -77,7 +77,7 @@ public class UserResetPasswordService {
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @LoginSuccess
     public void updatePassword(@NotNull User reqUser, @Password String newPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
