@@ -10,18 +10,18 @@ public enum ApplicationErrorEnum {
 
 	USER_NOT_FOUND(2001,"User not found"),
 	VERIFICATION_FAIL(3002,"User's verification has been failed"),
-	PASSWORD_INPUT_FAILS(3003,"Password inputs fails or must be empty"),
+	PASSWORD_INPUT_FAILS(3003,"Password inputs have been failed or must be empty"),
 	IMAGE_NOT_FOUND(2002,"Image not found"),
 	ACCESS_DENIED(2003,"Access denied"),
 	ILLEGAL_STATE(2004,"Already exists"),
 	MAIL_INCORRECT(4007,"User's  email invalid"),
 
-	INCORRECT_INPUT(4001,"The entered data did not pass validation"),
+	INCORRECT_INPUT(4001,"The inputs data did not pass validation"),
 	USER_PARAMS_INCORRECT(4002,"Incoming parameters are invalid or empty"),
-	VALID_ACCOUNT_ERROR(4003, "Verify account went wrong incorrect input"),
-	INVALID_ACCOUNT(4006,"Apology, but yours account has not been verified"),
+	VALID_ACCOUNT_ERROR(4003, "Verify account was incorrect input"),
+	INVALID_ACCOUNT(4006,"Apology, but yours account has not been verified yet"),
 	EMPTY_REQUEST(4004,"The request is empty"),
-	ALBUM_ERROR_INPUT(4005,"Invalid processing of creation album");
+	ALBUM_ERROR_INPUT(4005,"Invalid processing of creation of the album");
 
 	private final int code;
 	private final String message;

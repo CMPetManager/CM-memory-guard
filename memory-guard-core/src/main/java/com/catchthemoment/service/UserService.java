@@ -84,7 +84,7 @@ public class UserService implements UserDetailsService {
         return JwtEntityFactory.create(currentUser);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void deleteUserById(Long userId) throws ServiceProcessingException {
         log.info("*** Request to delete a user by ID ***");
         User currentUser = userRepository.findUserById(userId)

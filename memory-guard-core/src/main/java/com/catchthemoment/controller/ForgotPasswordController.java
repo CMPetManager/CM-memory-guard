@@ -30,7 +30,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class ForgotPasswordController implements ForgotPasswordControllerApiDelegate {
 
     private final UserResetPasswordService resetPasswordService;
-    private final String siteUrl = "/users/reset_password?token=";
 
 
     @LoginSuccess
