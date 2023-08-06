@@ -17,6 +17,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -96,6 +97,7 @@ public class ImageService {
                 .build();
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Resource downloadImage(String fileName) throws ServiceProcessingException, IOException {
         log.info("*** Find image name in the db ***");
         Image currentImage = imageRepository.findImageByName(fileName)
@@ -125,7 +127,7 @@ public class ImageService {
         }
     }
 
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.REPEATABLE_READ,propagation = Propagation.REQUIRES_NEW)
     public Image addImageDescription(ImageDescriptionModel imageModel) throws ServiceProcessingException {
         Optional<Image> currentImage = imageRepository.findImageByName(imageModel.getName());
         currentImage.ifPresent(image -> {

@@ -15,6 +15,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
@@ -47,6 +49,7 @@ public class UserResetPasswordService {
     }
 
     @LoginSuccess
+    @Transactional(propagation = Propagation.REQUIRES_NEW,isolation = Isolation.REPEATABLE_READ,rollbackFor = Exception.class)
     public void changeUserPasswords(@NotNull @Valid UpdatePasswordModel passwordModel) throws ServiceProcessingException {
         var newPassword = passwordModel.getNewPassword();
         var user = repository.findUserByPassword(passwordModel.getOldPassword());
@@ -77,7 +80,7 @@ public class UserResetPasswordService {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     @LoginSuccess
     public void updatePassword(@NotNull User reqUser, @Password String newPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

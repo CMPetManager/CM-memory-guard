@@ -27,7 +27,6 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserService implements UserDetailsService {
 
 
@@ -53,7 +52,7 @@ public class UserService implements UserDetailsService {
         return currentUser;
     }
 
-
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public User create(User user, String siteURL) throws ServiceProcessingException,
             UnsupportedEncodingException, MessagingException {
         log.info("*** Checking for mail uniqueness ***");

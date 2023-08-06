@@ -11,6 +11,7 @@ import com.catchthemoment.repository.UserRepository;
 import com.catchthemoment.validation.ReadDataTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotEmpty;
@@ -41,6 +42,7 @@ public class AlbumService {
         return albumMapper.fromAlbumEntity(currentAlbum);
     }
 
+    @ReadDataTransactional
     public Iterable<AlbumModel> findAllAlbumsUser(@NotNull Long userId) throws ServiceProcessingException {
         log.info(" get user by incoming id");
         User user = userRepository.findUserById(userId)
@@ -58,6 +60,7 @@ public class AlbumService {
         albumRepository.deleteAlbumById(albumId);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public AlbumModel updateAlbum(@NotNull Long albumId, AlbumModel albumModel) {
         Album requestAlbum = albumMapper.fromAlbumModel(albumModel);
         Album album = albumRepository.findAlbumById(albumId)
@@ -77,6 +80,7 @@ public class AlbumService {
         album.setTagPlace(requestAlbum.getTagPlace());
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public AlbumModel createAlbum(AlbumModel model) throws ServiceProcessingException {
         if (model == null) {
             throw new ServiceProcessingException(ALBUM_ERROR_INPUT);

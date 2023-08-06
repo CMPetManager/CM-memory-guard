@@ -15,6 +15,7 @@ public enum ApplicationErrorEnum {
 	ACCESS_DENIED(2003,"Access denied"),
 	ILLEGAL_STATE(2004,"Already exists"),
 	MAIL_INCORRECT(4007,"User's  email invalid"),
+	TOKEN_TIME_EXPIRED(4008,"Access token has been expired yet"),
 
 	INCORRECT_INPUT(4001,"The inputs data did not pass validation"),
 	USER_PARAMS_INCORRECT(4002,"Incoming parameters are invalid or empty"),
