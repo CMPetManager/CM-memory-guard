@@ -32,5 +32,6 @@ public class UserLoginInterceptor implements HandlerInterceptor {
         log.error("*** error occurred with incoming request params..");
         throw new ServiceProcessingException(USER_PARAMS_INCORRECT);
     }
+
 }
 
