@@ -4,6 +4,8 @@ import liquibase.repackaged.org.apache.commons.lang3.builder.ToStringBuilder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;
@@ -45,10 +47,11 @@ public class User {
     private Role role;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Album> albums;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    //@OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Image image;
 
     @Override

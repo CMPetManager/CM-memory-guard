@@ -337,6 +337,45 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
+  /users/update-photo:
+    patch:
+      summary: Update user's profile photo
+      tags:
+          - UserController
+      description: update existing profile-photo
+      operationId: updateProfilePhoto
+      parameters:
+        - name: usrId
+          in: path
+          description: for checks profile photo
+          required: true
+          schema:
+              type: integer
+              format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
+
 components:
   schemas:
     UserModel:

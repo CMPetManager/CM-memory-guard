@@ -20,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Objects;
+
 import static com.catchthemoment.exception.ApplicationErrorEnum.*;
 
 @Slf4j
@@ -29,6 +31,7 @@ public class UserController implements UserControllerApiDelegate {
 
     private static final String RESPONSE_UPDATE_PASSWORD = "Password successfully updated";
     private static final String RESPONSE_DELETE_USER = "User successfully deleted";
+    private static final String UPLOAD_IMAGE_CHANGE_SUCCESS = "Upload for changing profile photo was greate";
     private final UserResetPasswordService userResetPasswordService;
     private final UserService userService;
     private final UserEmailService userEmailservice;
@@ -66,6 +69,25 @@ public class UserController implements UserControllerApiDelegate {
 
         return ResponseEntity.ok(RESPONSE_UPDATE_PASSWORD);
     }
+
+    @Override
+    public ResponseEntity<Object> updateProfilePhoto(Long usrId, MultipartFile image) throws Exception {
+        log.info(" Take image request and image should not be null");
+        if (Objects.requireNonNull(image).isEmpty()) {
+            var currentUser = userService.getById(usrId);
+            log.info("** user found succeffully **", currentUser.getName());
+            imageService.deleteImage(currentUser.getImage().getName());
+            Image newImage = imageService.uploadImage(usrId, image);
+            var newUploadImageModel = imageMapper.toModel(newImage);
+            log.info("***" + UPLOAD_IMAGE_CHANGE_SUCCESS + "***");
+            return ResponseEntity.ok(newUploadImageModel);
+
+        } else {
+            log.error("Image not found or might be emty", image);
+            throw new ServiceProcessingException(EMPTY_REQUEST);
+        }
+    }
+
 
     @Override
     public ResponseEntity<String> deleteUser(Long userId) throws Exception {
