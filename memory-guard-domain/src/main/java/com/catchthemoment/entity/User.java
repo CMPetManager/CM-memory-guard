@@ -2,6 +2,7 @@ package com.catchthemoment.entity;
 
 import liquibase.repackaged.org.apache.commons.lang3.builder.ToStringBuilder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "users", indexes = @Index(name = "usr_mail_index", columnList = "name"))
+@Table(name = "users", indexes = @Index(name = "usr_mail_index", columnList = "email"))
 @NamedEntityGraph(name = "user-graph",attributeNodes = {@NamedAttributeNode(value = "albums")
        , @NamedAttributeNode(value = "image")})
 public class User {
@@ -24,7 +25,7 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password")
@@ -36,6 +37,7 @@ public class User {
     @Column(name = "reset_password_token", length = 20)
     private String resetPasswordToken;
 
+    @Getter
     @Column(name = "enabled")
     private boolean enabled;
 
@@ -46,6 +48,7 @@ public class User {
     private List<Album> albums;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    //@OnDelete(action = OnDeleteAction.CASCADE)
     private Image image;
 
     @Override
@@ -75,10 +78,6 @@ public class User {
                 .append("albums", albums)
                 .toString();
 
-    }
-
-    public boolean isEnabled() {
-        return enabled;
     }
 
     public void setEnabled(boolean enabled) {

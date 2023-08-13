@@ -16,7 +16,7 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "album", indexes = @Index(name = "album_usr_ind", columnList = "id,album_name"))
+@Table(name = "album", indexes = @Index(name = "album_usr_ind", columnList = "album_name"))
 @NamedEntityGraph(name = "album-graph", attributeNodes = {
         @NamedAttributeNode("images"),
         @NamedAttributeNode("user")

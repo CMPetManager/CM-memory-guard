@@ -32,7 +32,6 @@ public class ImageController implements ImageControllerApiDelegate {
     private final AlbumService albumService;
 
     @Override
-    @LoginSuccess
     public ResponseEntity<ImageModel> uploadImage(Long albumId, MultipartFile file) throws Exception {
         log.info("*** Received an upload image request with file name: {} ***", file.getOriginalFilename());
         if (!file.isEmpty()) {
@@ -47,7 +46,7 @@ public class ImageController implements ImageControllerApiDelegate {
         }
     }
 
-    @LoginSuccess
+
     @Override
     public ResponseEntity<List<ImageModel>> uploadImages(Long albumId, List<MultipartFile> images) throws Exception {
         log.info("*** Received an upload images request ***");
@@ -63,7 +62,6 @@ public class ImageController implements ImageControllerApiDelegate {
     }
 
     @Override
-    @LoginSuccess
     public ResponseEntity<Object> downloadImage(String name) throws Exception {
         log.info("*** Received a download image request by name: {} ***", name);
         Resource resource = imageService.downloadImage(name);
@@ -95,7 +93,7 @@ public class ImageController implements ImageControllerApiDelegate {
             log.error("Empty request");
             throw new ServiceProcessingException(EMPTY_REQUEST);
         }
-        for (String name : requestBody) {
+        for (String name : requestBody) { // refactor code
             imageService.deleteImage(name);
         }
         log.info("*** Images successfully deleted ***");

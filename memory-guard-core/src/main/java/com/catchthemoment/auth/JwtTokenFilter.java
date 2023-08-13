@@ -17,6 +17,7 @@ public class JwtTokenFilter extends GenericFilterBean {
 
     private final JwtTokenManager jwtTokenManager;
 
+
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
@@ -33,8 +34,10 @@ public class JwtTokenFilter extends GenericFilterBean {
             if (authentication != null) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+
+            filterChain.doFilter(servletRequest, servletResponse);
         }
-        filterChain.doFilter(servletRequest, servletResponse);
     }
 }
+
 

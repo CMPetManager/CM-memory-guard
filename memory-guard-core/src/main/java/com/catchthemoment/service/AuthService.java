@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -22,6 +23,7 @@ public class AuthService {
     private final JwtTokenManager jwtTokenManager;
     private final AuthenticationManager authenticationManager;
 
+    @Transactional
     public LoginResponse login(LoginRequest loginRequest) throws ServiceProcessingException {
         User currentUser = userService.getByEmail(loginRequest.getEmail());
         log.info("*** The beginning of authentication ***");

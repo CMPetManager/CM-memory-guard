@@ -10,7 +10,6 @@ import com.catchthemoment.model.ImageDescriptionModel;
 import com.catchthemoment.repository.AlbumRepository;
 import com.catchthemoment.repository.ImageRepository;
 import com.catchthemoment.repository.UserRepository;
-import com.catchthemoment.validation.LoginSuccess;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -38,14 +37,16 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.*;
 @RequiredArgsConstructor
 @Transactional(readOnly = true, rollbackFor = Exception.class)
 public class ImageService {
-    private static final String FOLDER_PATH = "C:\\Users\\Admin\\gitlab\\";
+   // private static final String FOLDER_PATH = "C:\\Users\\Admin\\gitlab\\";
 
+
+     private static final String FOLDER_PATH = "/home/shele/Pictures";
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
     private final AlbumRepository albumRepository;
     private final AlbumMapper albumMapper;
 
-    @LoginSuccess
+
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.REPEATABLE_READ)
     public Image uploadImage(AlbumModel albumModel, MultipartFile file) throws IOException, ServiceProcessingException {
         log.info("*** Checking the image name for uniqueness ***");

@@ -31,6 +31,7 @@ public class SecurityConfig {
 
     private final JwtTokenManager jwtTokenManager;
 
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
