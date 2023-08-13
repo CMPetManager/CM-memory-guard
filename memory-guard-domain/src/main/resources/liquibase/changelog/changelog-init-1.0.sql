@@ -38,5 +38,6 @@ CREATE TABLE IF NOT EXISTS image
     type VARCHAR(150) NOT NULL ,
     user_id INT UNIQUE,
     album_id INT UNIQUE REFERENCES album (id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
+

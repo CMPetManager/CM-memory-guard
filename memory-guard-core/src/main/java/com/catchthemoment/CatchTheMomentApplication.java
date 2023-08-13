@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class CatchTheMomentApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CatchTheMomentApplication.class);
+        SpringApplication.run(CatchTheMomentApplication.class,args);
     }
+
 }

@@ -1,9 +1,7 @@
 package com.catchthemoment.controller;
 
-import com.catchthemoment.auth.JwtUtils;
 import com.catchthemoment.exception.ServiceProcessingException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -18,8 +16,6 @@ import static com.catchthemoment.exception.ApplicationErrorEnum.ALBUM_ERROR_INPU
 @Slf4j
 public class AlbumInterceptor implements HandlerInterceptor {
     private static final String ALBUM_URI = "/albums";
-    @Autowired
-    private JwtUtils jwtUtils;
 
 
     @Override
@@ -27,9 +23,8 @@ public class AlbumInterceptor implements HandlerInterceptor {
         String requestMethod = request.getMethod();
         final Enumeration<String> attList = request.getAttributeNames();
         final String authorizationHeaderValue = request.getHeader("Authorization");
-        final String token = authorizationHeaderValue.substring(7, authorizationHeaderValue.length());
         if (request.getRequestURI().equalsIgnoreCase(ALBUM_URI) && HttpMethod.POST.matches(requestMethod) &&
-                attList.hasMoreElements()&& jwtUtils.isJwtExpiredTimeAt(token)) {
+                attList.hasMoreElements()) {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
         }

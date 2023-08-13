@@ -30,6 +30,7 @@ public class JwtTokenManager {
     private final JwtProperties jwtProperties;
     private final UserService userService;
 
+
     private Key key;
 
     @PostConstruct
@@ -92,49 +93,50 @@ public class JwtTokenManager {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
-
         return !claims.getBody().getExpiration().before(new Date());
+
+
+        }
+
+
+        public Authentication getAuthentication (String token){
+            String email = getEmail(token);
+            UserDetails userDetails = userService.loadUserByUsername(email);
+            return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        }
+
+        private Token createTokenForResponse (Long userId, User user){
+            Token token = new Token();
+            token.setAccessToken(createAccessToken(userId, user.getEmail(), user.getRole()));
+            token.setRefreshToken(createRefreshToken(userId, user.getEmail()));
+            token.setExpirationIn(jwtProperties.getAccess());
+
+            return token;
+        }
+
+        public Token getToken (User user){
+            Token token = new Token();
+            token.setAccessToken(createAccessToken(
+                    user.getId(),
+                    user.getEmail(),
+                    user.getRole()));
+            token.setRefreshToken(createRefreshToken(
+                    user.getId(),
+                    user.getEmail()));
+            token.setExpirationIn(jwtProperties.getAccess());
+            return token;
+        }
+
+        private String getEmail (String token){
+            return Jwts
+                    .parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+        }
     }
-
-    public Authentication getAuthentication(String token) {
-        String email = getEmail(token);
-        UserDetails userDetails = userService.loadUserByUsername(email);
-
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
-
-    private Token createTokenForResponse(Long userId, User user) {
-        Token token = new Token();
-        token.setAccessToken(createAccessToken(userId, user.getEmail(), user.getRole()));
-        token.setRefreshToken(createRefreshToken(userId, user.getEmail()));
-        token.setExpirationIn(jwtProperties.getAccess());
-
-        return token;
-    }
-
-    public Token getToken(User user) {
-        Token token = new Token();
-        token.setAccessToken(createAccessToken(
-                user.getId(),
-                user.getEmail(),
-                user.getRole()));
-        token.setRefreshToken(createRefreshToken(
-                user.getId(),
-                user.getEmail()));
-        token.setExpirationIn(jwtProperties.getAccess());
-        return token;
-    }
-
-    private String getEmail(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }
-}
 
 
 

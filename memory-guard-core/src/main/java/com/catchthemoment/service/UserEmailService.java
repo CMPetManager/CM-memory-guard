@@ -3,6 +3,7 @@ package com.catchthemoment.service;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.model.UserModel;
 import com.catchthemoment.repository.UserRepository;
+import com.catchthemoment.validation.LoginSuccess;
 import com.catchthemoment.validation.ReadDataTransactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class UserEmailService {
     @Value("${application.url}")
     private String siteUrl;
 
+    @LoginSuccess
     public void changeUserEmail(Long userId, UserModel readUser) throws ServiceProcessingException,
             MessagingException, UnsupportedEncodingException {
         if (readUser.getEmail().isEmpty()) {

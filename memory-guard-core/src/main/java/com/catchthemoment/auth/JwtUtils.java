@@ -25,10 +25,8 @@ public class JwtUtils {
         var time = decodedJWT.getExpiresAtAsInstant();
         if (time.getNano() > jwtExpirationTime) {
             throw new ServiceProcessingException(TOKEN_TIME_EXPIRED);
-
         }
         return true;
-
     }
 
 }

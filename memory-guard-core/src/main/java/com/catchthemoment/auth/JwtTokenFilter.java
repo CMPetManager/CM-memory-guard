@@ -1,6 +1,8 @@
 package com.catchthemoment.auth;
 
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -13,10 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @AllArgsConstructor
+@Slf4j
 public class JwtTokenFilter extends GenericFilterBean {
 
     private final JwtTokenManager jwtTokenManager;
 
+
+
+    @SneakyThrows
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
@@ -33,8 +39,12 @@ public class JwtTokenFilter extends GenericFilterBean {
             if (authentication != null) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+            log.warn("**authentication must be fall**", authentication);
+
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }
+
+
 
