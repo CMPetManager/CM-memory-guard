@@ -337,8 +337,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
 
-  /users/update-photo:
-    patch:
+  /users/update-photo/{usrId}:
+    put:
       summary: Update user's profile photo
       tags:
           - UserController

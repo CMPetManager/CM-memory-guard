@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService {
         return currentUser;
     }
 
-    @ReadDataTransactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public User getById(Long userId) throws ServiceProcessingException {
         log.info("*** Request to get a user by ID ***");
         User currentUser = userRepository.findUserById(userId)

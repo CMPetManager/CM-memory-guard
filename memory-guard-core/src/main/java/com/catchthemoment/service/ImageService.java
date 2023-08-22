@@ -95,6 +95,7 @@ public class ImageService {
                 .name(file.getOriginalFilename())
                 .link(filePath.toString())
                 .type(file.getContentType())
+                .description("")
                 .build();
     }
 
@@ -128,7 +129,7 @@ public class ImageService {
         }
     }
 
-    @Transactional(isolation = Isolation.REPEATABLE_READ,propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public Image addImageDescription(ImageDescriptionModel imageModel) throws ServiceProcessingException {
         Optional<Image> currentImage = imageRepository.findImageByName(imageModel.getName());
         currentImage.ifPresent(image -> {

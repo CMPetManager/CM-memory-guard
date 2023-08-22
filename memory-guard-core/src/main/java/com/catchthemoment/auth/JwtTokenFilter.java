@@ -1,5 +1,6 @@
 package com.catchthemoment.auth;
 
+import com.catchthemoment.exception.ServiceProcessingException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.time.LocalDateTime;
+
+import static com.catchthemoment.exception.ApplicationErrorEnum.TOKEN_TIME_EXPIRED;
 
 @AllArgsConstructor
 @Slf4j
@@ -20,6 +24,7 @@ public class JwtTokenFilter extends GenericFilterBean {
 
     private final JwtTokenManager jwtTokenManager;
 
+    private final JwtUtils utils;
 
 
     @SneakyThrows
@@ -28,6 +33,11 @@ public class JwtTokenFilter extends GenericFilterBean {
                          ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
 
+
+        int localTime = LocalDateTime.now().getSecond();
+        if (localTime > utils.getJwtExpirationTime()) {
+            throw new ServiceProcessingException(TOKEN_TIME_EXPIRED);
+        }
         String bearerToken = ((HttpServletRequest) servletRequest).getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             bearerToken = bearerToken.replace("Bearer ", "");
@@ -43,8 +53,11 @@ public class JwtTokenFilter extends GenericFilterBean {
 
         }
         filterChain.doFilter(servletRequest, servletResponse);
+
     }
+
 }
+
 
 
 

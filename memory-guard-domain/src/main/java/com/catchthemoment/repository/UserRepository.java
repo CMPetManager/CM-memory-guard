@@ -11,8 +11,9 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-
-    Optional<User> findUserById(Long userId);
+    @Query(value = "select u from User u where u.id = :id")
+    @EntityGraph(value = "user-graph",attributePaths = {"image"},type = EntityGraph.EntityGraphType.FETCH)
+    Optional<User> findUserById(@Param("id") Long userId);
 
     @Query(value = "select usr from User usr where usr.email = :email")
     @EntityGraph(value = "user-graph", type = EntityGraph.EntityGraphType.FETCH, attributePaths = {"albums,image"})

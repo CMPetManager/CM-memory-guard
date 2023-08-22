@@ -78,6 +78,7 @@ public class AlbumService {
         album.setAnimation(requestAlbum.getAnimation());
         album.setTagPeople(requestAlbum.getTagPeople());
         album.setTagPlace(requestAlbum.getTagPlace());
+
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

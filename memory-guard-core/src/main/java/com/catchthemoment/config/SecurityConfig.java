@@ -33,6 +33,9 @@ public class SecurityConfig {
 
     private final JwtTokenManager jwtTokenManager;
 
+    @Autowired
+    private JwtUtils utils;
+
 
 
 
@@ -66,7 +69,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .anonymous().disable()
-                .addFilterBefore(new JwtTokenFilter(jwtTokenManager), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtTokenFilter(jwtTokenManager,utils), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
