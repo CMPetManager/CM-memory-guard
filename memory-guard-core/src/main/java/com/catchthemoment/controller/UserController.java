@@ -20,9 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
-import static com.catchthemoment.exception.ApplicationErrorEnum.*;
+import static com.catchthemoment.exception.ApplicationErrorEnum.EMPTY_REQUEST;
+import static com.catchthemoment.exception.ApplicationErrorEnum.INCORRECT_INPUT;
 
 @Slf4j
 @Service
@@ -71,19 +72,18 @@ public class UserController implements UserControllerApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Object> updateProfilePhoto(Long usrId, MultipartFile image) throws Exception {
+    public ResponseEntity<Object> updateProfilePhoto(Long usrId, @NotNull MultipartFile image) throws Exception {
         log.info(" Take image request and image should not be null");
-        if (Objects.requireNonNull(image).isEmpty()) {
+        if (!image.isEmpty()) {
             var currentUser = userService.getById(usrId);
-            log.info("** user found succeffully **", currentUser.getName());
+            log.info("** user found successfully **", currentUser.getName());
             imageService.deleteImage(currentUser.getImage().getName());
             Image newImage = imageService.uploadImage(usrId, image);
             var newUploadImageModel = imageMapper.toModel(newImage);
             log.info("***" + UPLOAD_IMAGE_CHANGE_SUCCESS + "***");
             return ResponseEntity.ok(newUploadImageModel);
-
         } else {
-            log.error("Image not found or might be emty", image);
+            log.error("Image not found or might be empty", image);
             throw new ServiceProcessingException(EMPTY_REQUEST);
         }
     }

@@ -11,11 +11,14 @@ import java.util.Optional;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
-    @EntityGraph(value = "image-graph", attributePaths = {"album,user"}, type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "image-graph", attributePaths = {"user"}, type = EntityGraph.EntityGraphType.LOAD)
     Optional<Image> findImageByName(String fileName);
 
     @Modifying
     @Query("delete from Image img where img.id = :id")
     @EntityGraph(value = "image-graph",attributePaths = {"album,user"},type = EntityGraph.EntityGraphType.FETCH)
     void deleteImageById(@Param("id") Long id);
+
+    @EntityGraph(value = "image-graph",attributePaths = {"user"}, type = EntityGraph.EntityGraphType.LOAD)
+    Optional<Image> findImageByUserId(Long id);
 }
