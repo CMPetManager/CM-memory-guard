@@ -388,6 +388,7 @@ components:
           type: string
           example: theUser
           #comment email should be new value
+          x-constraints: "DuplicateNameCharsValid (required= true)"
         email:
           type: string
           example: egor@email.com
