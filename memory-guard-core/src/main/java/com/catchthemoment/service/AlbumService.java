@@ -71,6 +71,7 @@ public class AlbumService {
 
     private void setDataFromModelToEntity(Album requestAlbum, Album album) {
         album.setCover(requestAlbum.getCover());
+        album.setId(requestAlbum.getId());
         album.setAlbumDescription(requestAlbum.getAlbumDescription());
         album.setAlbumName(requestAlbum.getAlbumName());
         album.setColor(requestAlbum.getColor());
@@ -78,6 +79,7 @@ public class AlbumService {
         album.setAnimation(requestAlbum.getAnimation());
         album.setTagPeople(requestAlbum.getTagPeople());
         album.setTagPlace(requestAlbum.getTagPlace());
+
 
     }
 
