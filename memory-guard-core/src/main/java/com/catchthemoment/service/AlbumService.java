@@ -61,10 +61,10 @@ public class AlbumService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public AlbumModel updateAlbum(@NotNull Long albumId, AlbumModel albumModel) {
+    public AlbumModel updateAlbum(@NotNull Long albumId, AlbumModel albumModel) throws ServiceProcessingException {
         Album requestAlbum = albumMapper.fromAlbumModel(albumModel);
         Album album = albumRepository.findAlbumById(albumId)
-                .orElse(new Album());
+                .orElseThrow(() -> new ServiceProcessingException(ALBUM_ERROR_INPUT));
         setDataFromModelToEntity(requestAlbum, album);
         return albumMapper.fromAlbumEntity(albumRepository.save(album));
     }
@@ -93,7 +93,8 @@ public class AlbumService {
     }
 
     @ReadDataTransactional
-    public AlbumModel getAlbumByName(@NotNull @NotEmpty String name) throws ServiceProcessingException {
+    public AlbumModel getAlbumByName(@NotNull @NotEmpty  String name)
+            throws ServiceProcessingException {
         var currentAlbum = albumRepository.findAlbumByName(name)
                 .orElseThrow(() -> new ServiceProcessingException(ALBUM_ERROR_INPUT));
         return albumMapper.fromAlbumEntity(currentAlbum);

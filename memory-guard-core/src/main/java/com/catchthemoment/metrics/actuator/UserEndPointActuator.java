@@ -31,7 +31,7 @@ public class UserEndPointActuator {
      * @return map of user filtering by user's email
      */
     @ReadOperation
-    public Map<String, Set<Album>> findAllUsersByName() {
+    public Map<String, Set<Album>> findAllUsersByNameWithinAlbums() {
         return repository.findAll()
                 .stream()
                 .filter(user -> !user.getEmail().isEmpty() && !user.getName().isEmpty())
