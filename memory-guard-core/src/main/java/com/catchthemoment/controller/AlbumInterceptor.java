@@ -22,7 +22,6 @@ public class AlbumInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestMethod = request.getMethod();
         final Enumeration<String> attList = request.getAttributeNames();
-        final String authorizationHeaderValue = request.getHeader("Authorization");
         if (request.getRequestURI().equalsIgnoreCase(ALBUM_URI) && HttpMethod.POST.matches(requestMethod) &&
                 attList.hasMoreElements()) {
             response.setStatus(HttpServletResponse.SC_OK);

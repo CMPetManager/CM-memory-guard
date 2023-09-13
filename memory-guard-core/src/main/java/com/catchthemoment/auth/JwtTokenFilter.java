@@ -1,6 +1,6 @@
 package com.catchthemoment.auth;
 
-import com.catchthemoment.exception.ServiceProcessingException;
+import com.catchthemoment.exception.JwtTokenCustomExpiredException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -31,31 +31,30 @@ public class JwtTokenFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
-                         FilterChain filterChain) throws IOException, ServletException {
+                         FilterChain filterChain) throws IOException, ServletException ,JwtTokenCustomExpiredException{
 
 
-        int localTime = LocalDateTime.now().getSecond();
+        int localTime = LocalDateTime.now().getSecond()*1000;
         if (localTime > utils.getJwtExpirationTime()) {
-            throw new ServiceProcessingException(TOKEN_TIME_EXPIRED);
-        }
-        String bearerToken = ((HttpServletRequest) servletRequest).getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            bearerToken = bearerToken.replace("Bearer ", "");
-        }
-
-        if (bearerToken != null && jwtTokenManager.validateToken(bearerToken)) {
-
-            Authentication authentication = jwtTokenManager.getAuthentication(bearerToken);
-            if (authentication != null) {
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            throw new JwtTokenCustomExpiredException(TOKEN_TIME_EXPIRED);
+        } else {
+            String bearerToken = ((HttpServletRequest) servletRequest).getHeader("Authorization");
+            if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+                bearerToken = bearerToken.replace("Bearer ", "");
             }
-            log.warn("**authentication must be fall**", authentication);
 
+            if (bearerToken != null && jwtTokenManager.validateToken(bearerToken)) {
+
+                Authentication authentication = jwtTokenManager.getAuthentication(bearerToken);
+                if (authentication != null) {
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+                log.warn("**authentication must be fall**", authentication);
+
+            }
         }
         filterChain.doFilter(servletRequest, servletResponse);
-
     }
-
 }
 
 
