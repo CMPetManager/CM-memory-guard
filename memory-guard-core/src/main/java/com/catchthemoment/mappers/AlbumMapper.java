@@ -21,11 +21,24 @@ public interface AlbumMapper {
 
     List<AlbumModel> fromAlbumEntities(List<Album> albumList);
 
+    /**
+     * Mapping list of user model dto from incomes
+     * user entity
+     * @param user
+     * @return
+     */
     @Named("mapUserModel")
     default List<UserModel> mapUsers(User user) {
         return new ArrayList<>();
     }
 
+    /**
+     * Get specific user from list user's dto models
+     * via filtering by user's id then maps to entity
+     *
+     * @param models
+     * @return user entity
+     */
     @Named("mapUserEntity")
     default User mapFromUserModelList(List<UserModel> models) {
         UserModel model = models.stream()

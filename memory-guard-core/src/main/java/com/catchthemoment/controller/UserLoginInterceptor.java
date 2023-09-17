@@ -12,6 +12,11 @@ import java.util.Enumeration;
 
 import static com.catchthemoment.exception.ApplicationErrorEnum.USER_PARAMS_INCORRECT;
 
+/**
+ * Filter incoming request from ui , check it on
+ * valid params. The main purpose of it to filter
+ * requests before they go to service layer
+ */
 @Component
 @Slf4j
 public class UserLoginInterceptor implements HandlerInterceptor {

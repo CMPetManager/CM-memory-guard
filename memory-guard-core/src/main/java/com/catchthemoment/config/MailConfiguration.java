@@ -38,6 +38,5 @@ public class MailConfiguration {
         properties.put("mail.smtp.port", port); //TLS Port
         properties.put("mail.smtp.starttls.enable", "true");
         return mailSender;
-
     }
 }
