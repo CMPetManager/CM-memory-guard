@@ -7,6 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+/**
+ * This logic checks that user's has to be log in
+ * and his status in db should be enabled.
+ * If not user can not request endpoints except of login and registration
+ */
 @Component
 public class LoginHandler {
     @Autowired

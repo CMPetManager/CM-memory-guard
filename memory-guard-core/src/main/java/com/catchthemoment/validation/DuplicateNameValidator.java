@@ -6,6 +6,10 @@ import javax.validation.ConstraintValidatorContext;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
+/**
+ * Additional checks for restricts duplicate chars of
+ * incoming user's name
+ */
 public class DuplicateNameValidator implements ConstraintValidator<DuplicateNameCharsValid, String> {
 
     public static final int NUMBER_COUNTS_CHARS_ALLOW = 4;

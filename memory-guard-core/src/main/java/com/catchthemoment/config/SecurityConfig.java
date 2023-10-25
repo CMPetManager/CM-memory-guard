@@ -35,15 +35,10 @@ public class SecurityConfig {
 
     @Autowired
     private JwtUtils utils;
-
-
-
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -73,7 +68,6 @@ public class SecurityConfig {
 
         return httpSecurity.build();
     }
-
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();

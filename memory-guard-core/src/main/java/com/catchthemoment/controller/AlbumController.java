@@ -36,6 +36,7 @@ public class AlbumController implements AlbumControllerApiDelegate {
     }
 
     @Override
+    @PreAuthorize("@loginHandler.canAccessToAlbumActions()")
     public ResponseEntity<List<AlbumModel>> getUserAlbums(Long userId) throws ServiceProcessingException {
         return ResponseEntity.ok().body((List<AlbumModel>) albumService.findAllAlbumsUser(userId));
     }

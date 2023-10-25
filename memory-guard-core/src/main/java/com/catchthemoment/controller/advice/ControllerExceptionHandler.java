@@ -21,7 +21,6 @@ public class ControllerExceptionHandler {
                 .message(exception.getMessage());
         return ResponseEntity.internalServerError().body(applicationError);
     }
-
     @ExceptionHandler
     public ResponseEntity<ApplicationError> handleAll(Exception exception) {
         log.error("*** Exception: {} ***", exception.toString());
@@ -30,6 +29,4 @@ public class ControllerExceptionHandler {
                 .message(DEFAULT_EXCEPTION.getMessage() + " : " + exception.getMessage());
         return ResponseEntity.internalServerError().body(applicationError);
     }
-
-    //todo handle required properties abscense exception
 }
