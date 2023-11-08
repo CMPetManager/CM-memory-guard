@@ -11,5 +11,4 @@ public class CatchTheMomentApplication {
     public static void main(String[] args) {
         SpringApplication.run(CatchTheMomentApplication.class,args);
     }
-
 }

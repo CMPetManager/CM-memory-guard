@@ -31,10 +31,10 @@ public class JwtTokenFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
-                         FilterChain filterChain) throws IOException, ServletException ,JwtTokenCustomExpiredException{
+                         FilterChain filterChain) throws IOException, ServletException, JwtTokenCustomExpiredException {
 
 
-        int localTime = LocalDateTime.now().getSecond()*1000;
+        int localTime = LocalDateTime.now().getSecond() * 1000;
         if (localTime > utils.getJwtExpirationTime()) {
             throw new JwtTokenCustomExpiredException(TOKEN_TIME_EXPIRED);
         } else {

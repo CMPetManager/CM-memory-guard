@@ -14,15 +14,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
-import static com.catchthemoment.exception.ApplicationErrorEnum.*;
+import static com.catchthemoment.exception.ApplicationErrorEnum.EMPTY_REQUEST;
+import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -137,7 +136,7 @@ class UserControllerTest {
 
     private static MockMultipartFile getMockMultipartFile() {
         return new MockMultipartFile("foo", "foo.png", MediaType.IMAGE_PNG_VALUE,
-                "Hello World" .getBytes());
+                "Hello World".getBytes());
     }
 
     private Image getImage(MockMultipartFile file) {
