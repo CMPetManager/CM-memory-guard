@@ -1,7 +1,7 @@
 package com.catchthemoment.service;
 
 import com.catchthemoment.exception.ServiceProcessingException;
-import com.catchthemoment.model.UserModel;
+import com.catchthemoment.model.ChangeEmailRequestModel;
 import com.catchthemoment.repository.UserRepository;
 import com.catchthemoment.validation.LoginSuccess;
 import com.catchthemoment.validation.ReadDataTransactional;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 
-import static com.catchthemoment.exception.ApplicationErrorEnum.USER_NOT_FOUND;
+import static com.catchthemoment.exception.ApplicationErrorEnum.CHANGE_EMAIL_INCORRECT;
 
 @Service
 @Slf4j
@@ -28,14 +28,14 @@ public class UserEmailService {
     private String siteUrl;
 
     @LoginSuccess
-    public void changeUserEmail(Long userId, UserModel readUser) throws ServiceProcessingException,
+    public void changeUserEmail(Long userId, ChangeEmailRequestModel changeEmailRequestModel) throws ServiceProcessingException,
             MessagingException, UnsupportedEncodingException {
-        if (readUser.getEmail().isEmpty()) {
+        if (changeEmailRequestModel.getNewEmail().isEmpty()) {
             log.error("*** user's email is not found or empty ***");
-            throw new ServiceProcessingException(USER_NOT_FOUND);
+            throw new ServiceProcessingException(CHANGE_EMAIL_INCORRECT);
         }
         var user = repository.findUserById(userId).orElseThrow();
-        user.setEmail(readUser.getEmail());
+        user.setEmail(changeEmailRequestModel.getNewEmail());
 
         String randomCode = RandomString.make(20);
         user.setConfirmationResetToken(randomCode);

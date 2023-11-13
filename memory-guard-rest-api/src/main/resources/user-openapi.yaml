@@ -179,6 +179,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
+  /users/change-email:
+    post:
+      summary: Method for changing existing user's email
+      tags:
+        - UserChangeEmailController
+      description: change user's email
+      operationId: changeEmail
+      parameters:
+        - name: usrId
+          in: path
+          description: usrId for fetching existing user by its id from db
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application-json:
+            schema:
+              $ref: '#/components/schemas/ChangeEmailRequestModel'
+      responses:
+        '200':
+          description: email has been changed successfully
+        '500':
+          description: changing email goes wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationError'
+
 
   /users/{userId}:
     get:
@@ -461,6 +491,12 @@ components:
         oldPassword:
           type: string
         newPassword:
+          type: string
+
+    ChangeEmailRequestModel:
+      type: object
+      properties:
+        newEmail:
           type: string
 
     AlbumModel:
