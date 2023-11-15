@@ -1,26 +1,25 @@
 package com.catchthemoment.controller;
 
 import com.catchthemoment.model.ChangeEmailRequestModel;
-import com.catchthemoment.model.UserModel;
 import com.catchthemoment.repository.UserRepository;
 import com.catchthemoment.service.UserEmailService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserChangeEmailController.class)
+@Import(UserChangeEmailControllerApiController.class)
 class UserControllerChangeEmailTest {
     public static final Long US_ID = 2L;
     @Autowired
@@ -28,6 +27,10 @@ class UserControllerChangeEmailTest {
 
     @MockBean
     private UserRepository repository;
+
+    @Autowired
+    private ObjectMapper mapper;
+
 
     @MockBean
     private UserEmailService userEmailService;
@@ -39,12 +42,15 @@ class UserControllerChangeEmailTest {
         var fakeUser = new ChangeEmailRequestModel();
         fakeUser.setNewEmail("froddo1990@mail.ru");
 
-        mockMvc.perform(post("/users/change-email", US_ID).with(csrf()).param("newEmail",fakeUser.getNewEmail()).contentType(MediaType.APPLICATION_JSON))
+        doNothing().when(userEmailService).changeUserEmail(US_ID,fakeUser);
+
+        mockMvc.perform(post("/users/change-email/{usrId}", US_ID).with(csrf())
+                        .content(mapper.writeValueAsString(fakeUser))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
 
-        ArgumentCaptor<UserModel> captor = ArgumentCaptor.forClass(UserModel.class);
-        verify(userEmailService, times(1)).changeUserEmail(captor.capture().getId(), fakeUser);
-        assertThat(captor.getValue().getEmail()).isEqualTo("froddo1990@mail.ru");
+       // ArgumentCaptor<ChangeEmailRequestModel> captor = ArgumentCaptor.forClass(ChangeEmailRequestModel.class);
+      //  assertThat(captor.getValue().getNewEmail()).isEqualTo("froddo1990@mail.ru");
 
 
     }

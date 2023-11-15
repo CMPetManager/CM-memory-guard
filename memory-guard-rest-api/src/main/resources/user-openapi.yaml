@@ -179,7 +179,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplicationError'
-  /users/change-email:
+  /users/change-email/{usrId}:
     post:
       summary: Method for changing existing user's email
       tags:
@@ -196,7 +196,7 @@ paths:
             format: int64
       requestBody:
         content:
-          application-json:
+          application/json:
             schema:
               $ref: '#/components/schemas/ChangeEmailRequestModel'
       responses:
