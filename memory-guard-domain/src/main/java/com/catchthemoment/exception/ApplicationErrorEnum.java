@@ -20,7 +20,8 @@ public enum ApplicationErrorEnum {
 	USER_PARAMS_INCORRECT(4002,"Request body are invalid or empty"),
 	INVALID_ACCOUNT(4006,"Account not verified "),
 	EMPTY_REQUEST(4004,"The request is empty"),
-	ALBUM_ERROR_INPUT(4005,"Invalid processing of creation of the album");
+	ALBUM_ERROR_INPUT(4005,"Invalid processing of creation of the album"),
+	CHANGE_EMAIL_INCORRECT(4006,"Invalid email address of request");
 
 	private final int code;
 	private final String message;

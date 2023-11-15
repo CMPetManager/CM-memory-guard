@@ -3,7 +3,7 @@ package com.catchthemoment.service;
 import com.catchthemoment.entity.User;
 import com.catchthemoment.exception.ServiceProcessingException;
 import com.catchthemoment.mappers.UserModelMapper;
-import com.catchthemoment.model.UserModel;
+import com.catchthemoment.model.ChangeEmailRequestModel;
 import com.catchthemoment.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,13 +34,13 @@ class UserEmailServiceTest {
     @InjectMocks
     private UserEmailService emailService;
     private User user;
-    private UserModel readUser;
+    private ChangeEmailRequestModel model;
 
     @BeforeEach
     void setUp() {
         user = new User();
-        readUser = new UserModel();
-        readUser.setEmail(user.getEmail());
+        model = new ChangeEmailRequestModel();
+        model.setNewEmail(user.getEmail());
         repo.save(user);
     }
 
@@ -49,10 +49,10 @@ class UserEmailServiceTest {
     void changeUserEmail() throws ServiceProcessingException, MessagingException, UnsupportedEncodingException {
         doReturn(Optional.ofNullable(user)).when(repo).findUserById(user.getId());
         doNothing().when(userConfirmMailService).sendVerificationEmail(any(),any());
-        readUser.setEmail("jellifish123@mail.ru");
-        emailService.changeUserEmail(user.getId(),readUser);
+        model.setNewEmail("jellifish123@mail.ru");
+        emailService.changeUserEmail(user.getId(),model);
         assertEquals(user.getEmail(),"jellifish123@mail.ru");
         verify(repo,times(1)).findUserById(user.getId());
-        assertFalse(readUser.getEmail().isEmpty());
+        assertFalse(model.getNewEmail().isEmpty());
     }
 }

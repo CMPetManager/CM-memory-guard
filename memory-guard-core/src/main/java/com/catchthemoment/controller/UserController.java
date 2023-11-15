@@ -15,7 +15,6 @@ import com.catchthemoment.service.UserService;
 import com.catchthemoment.validation.UpdatePasswordValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,13 +40,6 @@ public class UserController implements UserControllerApiDelegate {
     private final ImageMapper imageMapper;
     private final UserModelMapper userModelMapper;
 
-
-    @Override
-    public ResponseEntity<Void> updateExistsEmail(Long userId, UserModel userModel) throws Exception {
-        log.info("*** change user's email from request create user model: {}", userModel.getEmail());
-        userEmailservice.changeUserEmail(userId, userModel);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
     @Override
     public ResponseEntity<UserModel> getUser(Long userId) throws Exception {
